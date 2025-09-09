@@ -7,38 +7,41 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f7f7f7;
+      background: linear-gradient(135deg, #06beb6, #48b1bf);
       color: #333;
       margin: 0;
-      padding: 0;
+      padding: 20px;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
       min-height: 100vh;
     }
 
     .card {
       background: #fff;
-      border-radius: 12px;
+      border-radius: 16px;
       padding: 20px;
       width: 90%;
-      max-width: 400px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      max-width: 500px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
       text-align: center;
+      margin-bottom: 40px;
     }
 
-    img {
+    img.profile {
       border-radius: 50%;
       width: 40%;
       max-width: 150px;
       height: auto;
       object-fit: cover;
       margin-bottom: 20px;
+      border: 4px solid #06beb6;
     }
 
     h1 {
-      font-size: 1.5rem;
+      font-size: 1.7rem;
       margin: 10px 0;
+      color: #06beb6;
     }
 
     p {
@@ -48,30 +51,47 @@
     }
 
     a {
-      color: #2c7a7b;
+      color: #06beb6;
       text-decoration: none;
+      font-weight: bold;
     }
 
     .btn {
       display: inline-block;
       margin-top: 20px;
       padding: 12px 20px;
-      background: #2c7a7b;
+      background: #06beb6;
       color: white;
       text-decoration: none;
-      border-radius: 6px;
+      border-radius: 8px;
       font-size: 1rem;
       transition: background 0.3s ease;
     }
 
     .btn:hover {
-      background: #225e5f;
+      background: #048f8b;
     }
 
-    /* Small screens */
+    .logo {
+      margin-top: auto;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .logo img {
+      max-width: 120px;
+      width: 40%;
+      height: auto;
+    }
+
+    /* Mobile */
     @media (max-width: 480px) {
+      .card {
+        width: 80%;
+        padding: 16px;
+      }
       h1 {
-        font-size: 1.3rem;
+        font-size: 1.4rem;
       }
       p {
         font-size: 0.95rem;
@@ -85,12 +105,16 @@
 </head>
 <body>
   <div class="card">
-    <img src="886ac0da-e95b-4489-af88-587dc4f60050.jpg" alt="Katherine Villa Cano">
+    <img src="886ac0da-e95b-4489-af88-587dc4f60050.jpg" alt="Katherine Villa Cano" class="profile">
     <h1>Katherine Villa Cano</h1>
     <p><strong>Company:</strong> Velvet Greens SAS</p>
     <p><strong>Phone:</strong> <a href="tel:+573023299675">+57 3023299675</a></p>
     <p><strong>Email:</strong> <a href="mailto:kvilla@velvetgreens.co">kvilla@velvetgreens.co</a></p>
     <a href="katherine.vcf" class="btn" download>📥 Download Contact</a>
+  </div>
+
+  <div class="logo">
+    <img src="velvetgreens-logo.png" alt="Velvet Greens Logo">
   </div>
 </body>
 </html>
