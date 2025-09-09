@@ -9,30 +9,49 @@
       font-family: Arial, sans-serif;
       background: #f7f7f7;
       color: #333;
-      text-align: center;
-      padding: 40px;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
     }
+
     .card {
       background: #fff;
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 20px;
+      width: 90%;
       max-width: 400px;
-      margin: auto;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
     }
+
     img {
       border-radius: 50%;
-      width: 150px;
-      height: 150px;
+      width: 40%;
+      max-width: 150px;
+      height: auto;
       object-fit: cover;
       margin-bottom: 20px;
     }
+
     h1 {
+      font-size: 1.5rem;
       margin: 10px 0;
     }
+
     p {
-      margin: 5px 0;
+      margin: 6px 0;
+      font-size: 1rem;
+      word-break: break-word;
     }
+
+    a {
+      color: #2c7a7b;
+      text-decoration: none;
+    }
+
     .btn {
       display: inline-block;
       margin-top: 20px;
@@ -41,10 +60,26 @@
       color: white;
       text-decoration: none;
       border-radius: 6px;
-      transition: background 0.3s;
+      font-size: 1rem;
+      transition: background 0.3s ease;
     }
+
     .btn:hover {
       background: #225e5f;
+    }
+
+    /* Small screens */
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.3rem;
+      }
+      p {
+        font-size: 0.95rem;
+      }
+      .btn {
+        font-size: 0.9rem;
+        padding: 10px 16px;
+      }
     }
   </style>
 </head>
