@@ -142,8 +142,30 @@
         padding: 1.5rem;
       }
     }
+
+    .wordcloud-title {
+      margin-top: 3rem;
+      margin-bottom: 1rem;
+      font-size: 1.4rem;
+      font-weight: 600;
+      background: linear-gradient(90deg, #38bdf8, #2ce4a0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    #wordcloud {
+      width: 750px;
+      height: 500px;
+      margin: 0 auto 3rem auto;
+      border-radius: 1.5rem;
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(14px) saturate(160%);
+      border: 1px solid rgba(255,255,255,0.15);
+      box-shadow: 0 10px 32px rgba(0,0,0,0.55);
+      overflow: hidden;
+    }
   </style>
 </head>
+  
 <body>
   <div class="container">
     <img src="TunjoWhite.png" alt="Tunjo Logo" class="logo">
@@ -155,6 +177,9 @@
       <button type="submit">🚀 ¡Enviar!</button>
     </form>
     <p id="status"></p>
+
+      <h2 class="wordcloud-title">🌌 Sueños Compartidos</h2>
+      <div id="wordcloud"></div>
   </div>
 
   <script>
@@ -204,8 +229,7 @@
     });
   </script>
 
-<!-- Wordcloud Container -->
-<div id="wordcloud"></div>
+<!-- Wordcloud Script Code -->
 
 <script src="https://cdn.jsdelivr.net/npm/wordcloud@1.2.2/src/wordcloud2.js"></script>
 <script>
