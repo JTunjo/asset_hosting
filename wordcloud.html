@@ -14,7 +14,12 @@
     }
     h1 { color: #2c6e49; }
     #counter { font-size: 1.2em; margin: 15px 0; color: #444; }
-    canvas { width: 100%; height: 80vh; }
+    #wordCloud {
+      width: 100%;
+      height: 600px; /* 🔒 fixed height */
+      max-width: 1000px;
+      margin: auto;
+    }
   </style>
 </head>
 <body>
@@ -23,6 +28,8 @@
   <canvas id="wordCloud"></canvas>
 
   <script>
+    let chartInstance = null; // store chart to destroy later
+
     async function loadData() {
       const sheetId = "1bATo8gpOfsV3_HgRbwnYnmteOFxh77sjqt2gpYkuuBk"; 
       const apiKey = "AIzaSyABzLxdigSjc8S2hii4bGv42XnTE_gNyzc"; 
@@ -34,18 +41,18 @@
 
       if (!data.values) return { words: [], total: 0 };
 
-      // Extract wishes
       const wishes = data.values.map(row => row[0]);
       const total = wishes.length;
 
-      // Flatten wishes into words
       const words = wishes.join(" ").split(/\s+/);
 
-      // Count frequency
+      // Stopwords to filter out
+      const stopwords = new Set(["quiero", "deseo", "sueño", "para"]);
+
       const counts = {};
       words.forEach(w => {
-        const word = w.toLowerCase().replace(/[^a-záéíóúüñ]/gi, ""); // clean
-        if (word.length > 3) { // ignore short words
+        const word = w.toLowerCase().replace(/[^a-záéíóúüñ]/gi, "");
+        if (word.length > 3 && !stopwords.has(word)) {
           counts[word] = (counts[word] || 0) + 1;
         }
       });
@@ -56,17 +63,20 @@
       };
     }
 
-    loadData().then(result => {
-      // Update counter
-      document.getElementById("counter").textContent = `✨ Total de deseos hasta ahora: ${result.total}`;
+    function drawWordCloud(result) {
+      const ctx = document.getElementById("wordCloud");
 
-      // Draw WordCloud
-      new Chart(document.getElementById("wordCloud"), {
+      // Destroy previous chart if exists
+      if (chartInstance) {
+        chartInstance.destroy();
+      }
+
+      chartInstance = new Chart(ctx, {
         type: "wordCloud",
         data: {
           labels: result.words.map(w => w.text),
           datasets: [{
-            label: "Deseos Sostenibles",
+            label: "Sustainable Wishes",
             data: result.words.map(w => w.weight),
           }]
         },
@@ -74,6 +84,11 @@
           plugins: { legend: { display: false } }
         }
       });
+    }
+
+    loadData().then(result => {
+      document.getElementById("counter").textContent = `✨ Total de deseos hasta ahora: ${result.total}`;
+      drawWordCloud(result);
     });
   </script>
 </body>
