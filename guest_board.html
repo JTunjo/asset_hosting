@@ -7,7 +7,7 @@
 <body>
   <h1>Guestbook Data</h1>
   <div id="output"></div>
-
+  
   <script>
     const API_KEY = "AIzaSyABzLxdigSjc8S2hii4bGv42XnTE_gNyzc"; // placeholder
     const SHEET_ID = "1bATo8gpOfsV3_HgRbwnYnmteOFxh77sjqt2gpYkuuBk"; // placeholder
@@ -15,6 +15,7 @@
 
     async function fetchGuestbook() {
       const url = https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY};
+      console.log(url);
       const res = await fetch(url);
       if (!res.ok) {
         console.error("Error fetching sheet:", res.status, res.statusText);
