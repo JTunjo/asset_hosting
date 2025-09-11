@@ -203,5 +203,74 @@
       reader.readAsDataURL(file);
     });
   </script>
+
+<!-- Wordcloud Container -->
+<div id="wordcloud"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/wordcloud@1.2.2/src/wordcloud2.js"></script>
+<script>
+  const SHEET_ID = "1bATo8gpOfsV3_HgRbwnYnmteOFxh77sjqt2gpYkuuBk";
+  const API_KEY = "AIzaSyABzLxdigSjc8S2hii4bGv42XnTE_gNyzc";
+  const RANGE = "Sheet1!D2:D1000";
+
+  const STOPWORDS = ["quiero", "deseo", "sueño", "para", "el", "los"];
+
+  async function fetchWishes() {
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`;
+    const res = await fetch(url);
+    const data = await res.json();
+
+    if (!data.values) return "";
+
+    // Join all wishes into one text
+    return data.values.map(row => row[0] || "").join(" ");
+  }
+
+  function generateWordcloud(text) {
+    const words = text
+      .toLowerCase()
+      .split(/\s+/)
+      .filter(word => word && !STOPWORDS.includes(word));
+
+    const freqMap = {};
+    words.forEach(w => {
+      freqMap[w] = (freqMap[w] || 0) + 1;
+    });
+
+    const entries = Object.entries(freqMap).map(([word, count]) => [word, count]);
+
+    WordCloud(document.getElementById('wordcloud'), {
+      list: entries,
+      gridSize: 12,
+      weightFactor: 10,
+      color: () => `hsl(${Math.random() * 360}, 100%, 70%)`,
+      backgroundColor: 'transparent',
+      rotateRatio: 0,
+      shuffle: true,
+      drawOutOfBound: false
+    });
+  }
+
+  (async () => {
+    const wishes = await fetchWishes();
+    generateWordcloud(wishes);
+  })();
+</script>
+
+<style>
+  #wordcloud {
+    width: 750px;
+    height: 500px;
+    margin: 3rem auto;
+    border-radius: 1.5rem;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(14px) saturate(160%);
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 10px 32px rgba(0,0,0,0.55);
+    overflow: hidden;
+  }
+</style>
+
+  
 </body>
 </html>
