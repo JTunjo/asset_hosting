@@ -242,7 +242,7 @@
   const API_KEY = "AIzaSyABzLxdigSjc8S2hii4bGv42XnTE_gNyzc";
   const RANGE = "Sheet1!D2:D1000";
 
-  const STOPWORDS = ["quiero", "deseo", "sueño", "para", "el", "los","las","un","de","mas","más","al","una","su","como","se","lo","mi","tenga","cada","del"];
+  const STOPWORDS = ["quiero", "deseo", "sueño", "para", "el", "los","las","un","de","mas","más","al","una","su","como","se","lo","mi","tenga","cada","del","sean"];
 
   async function fetchWishes() {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`;
