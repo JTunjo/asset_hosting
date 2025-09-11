@@ -164,6 +164,10 @@
       box-shadow: 0 10px 32px rgba(0,0,0,0.55);
       overflow: hidden;
     }
+    #wordcloud canvas {
+      display: block;
+      margin: 0 auto;   /* centers the canvas horizontally */
+    }
   </style>
 </head>
   
@@ -238,7 +242,7 @@
   const API_KEY = "AIzaSyABzLxdigSjc8S2hii4bGv42XnTE_gNyzc";
   const RANGE = "Sheet1!D2:D1000";
 
-  const STOPWORDS = ["quiero", "deseo", "sueño", "para", "el", "los","las","un","de","mas","más","al","una","su","como"];
+  const STOPWORDS = ["quiero", "deseo", "sueño", "para", "el", "los","las","un","de","mas","más","al","una","su","como","se","lo","mi","tenga","cada","del"];
 
   async function fetchWishes() {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`;
