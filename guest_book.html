@@ -168,6 +168,12 @@
       display: block;
       margin: 0 auto;   /* centers the canvas horizontally */
     }
+    #wishCount {
+      background: linear-gradient(90deg, #ff6ec7, #38bdf8, #2ce4a0, #ffdd00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+    }
   </style>
 </head>
   
@@ -183,7 +189,9 @@
     </form>
     <p id="status"></p>
 
-      <h2 class="wordcloud-title">🌌 Sueños Compartidos</h2>
+      <h2 class="wordcloud-title">
+        🌌 <span id="wishCount"></span> Sueños Compartidos
+      </h2>
       <div id="wordcloud"></div>
   </div>
 
@@ -248,9 +256,15 @@
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`;
     const res = await fetch(url);
     const data = await res.json();
-
+  
     if (!data.values) return "";
-
+  
+    // Count non-empty rows
+    const count = data.values.filter(row => row[0] && row[0].trim() !== "").length;
+  
+    // Update counter in title
+    document.getElementById("wishCount").textContent = count;
+  
     // Join all wishes into one text
     return data.values.map(row => row[0] || "").join(" ");
   }
