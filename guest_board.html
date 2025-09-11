@@ -9,8 +9,8 @@
   <div id="output"></div>
 
   <script>
-    const API_KEY = "YOUR_API_KEY_HERE"; // placeholder
-    const SHEET_ID = "YOUR_SHEET_ID_HERE"; // placeholder
+    const API_KEY = "AIzaSyABzLxdigSjc8S2hii4bGv42XnTE_gNyzc"; // placeholder
+    const SHEET_ID = "1bATo8gpOfsV3_HgRbwnYnmteOFxh77sjqt2gpYkuuBk"; // placeholder
     const RANGE = "Sheet1!B2:D1000";
 
     async function fetchGuestbook() {
@@ -21,7 +21,7 @@
         return [];
       }
       const data = await res.json();
-      // data.values is an array of arrays [ [picURL, name, quote], ... ]
+      // data.values is an array of arrays [ [name, picURL, quote], ... ]
       return data.values || [];
     }
 
