@@ -32,6 +32,18 @@
       padding: 2rem;
     }
 
+    .container {
+      text-align: center;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .logo {
+      max-height: 120px;
+      width: auto;
+      margin-bottom: 1.5rem;
+    }
+
     h1 {
       font-size: 1.8rem;
       font-weight: 600;
@@ -39,7 +51,6 @@
       background: linear-gradient(90deg, var(--primary), #38bdf8);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-align: center;
     }
 
     form {
@@ -50,8 +61,6 @@
       border: 1px solid var(--border-glass);
       box-shadow: 0 8px 32px rgba(0,0,0,0.4);
       padding: 2rem;
-      width: 100%;
-      max-width: 420px;
       display: flex;
       flex-direction: column;
       gap: 1rem;
@@ -136,7 +145,8 @@
   </style>
 </head>
 <body>
-  <div>
+  <div class="container">
+    <img src="TunjoWhite.png" alt="Tunjo Logo" class="logo">
     <h1>🌱 Guestbook para un Futuro Sostenible</h1>
     <form id="guestForm">
       <input type="text" name="name" placeholder="Tu Nombre" required>
