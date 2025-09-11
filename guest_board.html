@@ -14,7 +14,7 @@
     const RANGE = "Sheet1!B2:D1000";
 
     async function fetchGuestbook() {
-      const url = https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY};
+      const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`;
       console.log(url);
       const res = await fetch(url);
       if (!res.ok) {
