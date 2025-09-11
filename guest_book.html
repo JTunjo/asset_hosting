@@ -24,7 +24,7 @@
   <p id="status"></p>
 
   <script>
-    const scriptURL = "YOUR_GOOGLE_APPS_SCRIPT_URL"; // will create in Step 3
+    const scriptURL = "https://script.google.com/macros/s/AKfycbzavZs2P2kp2HwzBOIyJJB3fKop86Y2iNRFJUy-hXqWz_6IGL0nGjzIAWczgEpPpDwYkg/exec"; // will create in Step 3
     const form = document.getElementById("guestForm");
     const status = document.getElementById("status");
 
@@ -51,7 +51,7 @@
         });
 
         if (response.ok) {
-          status.textContent = "✅ Thank you for sharing!";
+          status.textContent = "✅ Gracias por compartir!";
           form.reset();
         } else {
           status.textContent = "⚠️ Error, please try again.";
