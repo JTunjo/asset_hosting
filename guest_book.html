@@ -1,41 +1,165 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <title>Tunjo Smart Guestbook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    body { font-family: Arial, sans-serif; background: #f2f7f3; text-align: center; padding: 30px; }
-    h1 { color: #2c6e49; }
-    form { max-width: 400px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; }
-    input, textarea, button { width: 100%; margin: 10px 0; padding: 10px; }
-    button { background: #2c6e49; color: #fff; border: none; border-radius: 5px; cursor: pointer; }
-    button:hover { background: #1f4c33; }
+    :root {
+      --primary: #2ce4a0;
+      --secondary: #1a1f2b;
+      --glass-bg: rgba(255, 255, 255, 0.08);
+      --border-glass: rgba(255, 255, 255, 0.15);
+      --text-color: #f5f5f5;
+      --error: #ff6b6b;
+      --success: #4ade80;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b, #0f172a);
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(90deg, var(--primary), #38bdf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-align: center;
+    }
+
+    form {
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px) saturate(160%);
+      -webkit-backdrop-filter: blur(16px) saturate(160%);
+      border-radius: 1.5rem;
+      border: 1px solid var(--border-glass);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      padding: 2rem;
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    form:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.55);
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      border-radius: 1rem;
+      border: none;
+      outline: none;
+      font-size: 0.95rem;
+      color: var(--text-color);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid transparent;
+      transition: all 0.25s ease;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: rgba(255,255,255,0.55);
+    }
+
+    input:focus, textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 12px var(--primary);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    button {
+      background: linear-gradient(135deg, var(--primary), #38bdf8);
+      border: none;
+      border-radius: 1rem;
+      color: #0f172a;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 16px rgba(56,189,248,0.5);
+    }
+
+    button:hover {
+      transform: scale(1.04);
+      box-shadow: 0 0 24px rgba(56,189,248,0.7);
+    }
+
+    #status {
+      margin-top: 1rem;
+      font-size: 0.95rem;
+      text-align: center;
+      min-height: 1.2em;
+    }
+
+    #status.success {
+      color: var(--success);
+    }
+
+    #status.error {
+      color: var(--error);
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+      form {
+        padding: 1.5rem;
+      }
+    }
   </style>
 </head>
 <body>
-  <h1>🌱 Guestbook para un Futuro Sostenible</h1>
-  <form id="guestForm">
-    <input type="text" name="name" placeholder="Tu Nombre" required>
-    <input type="file" name="photo" accept="image/*" capture="environment" required>
-    <textarea name="wish" placeholder="Comparte tus deseos para un mundo más sostenible..." required></textarea>
-    <button type="submit">¡Enviar!</button>
-  </form>
-
-  <p id="status"></p>
+  <div>
+    <h1>🌱 Guestbook para un Futuro Sostenible</h1>
+    <form id="guestForm">
+      <input type="text" name="name" placeholder="Tu Nombre" required>
+      <input type="file" name="photo" accept="image/*" capture="environment" required>
+      <textarea name="wish" placeholder="Comparte tus deseos para un mundo más sostenible..." required></textarea>
+      <button type="submit">🚀 ¡Enviar!</button>
+    </form>
+    <p id="status"></p>
+  </div>
 
   <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbzavZs2P2kp2HwzBOIyJJB3fKop86Y2iNRFJUy-hXqWz_6IGL0nGjzIAWczgEpPpDwYkg/exec"; // will create in Step 3
+    const scriptURL = "https://script.google.com/macros/s/AKfycbzavZs2P2kp2HwzBOIyJJB3fKop86Y2iNRFJUy-hXqWz_6IGL0nGjzIAWczgEpPpDwYkg/exec";
     const form = document.getElementById("guestForm");
     const status = document.getElementById("status");
 
     form.addEventListener("submit", async e => {
       e.preventDefault();
       status.textContent = "Enviando...";
-      
+      status.className = "";
+
       const formData = new FormData(form);
       const file = formData.get("photo");
-      
-      // Convert image to Base64
+
       const reader = new FileReader();
       reader.onloadend = async () => {
         const base64Image = reader.result;
@@ -45,20 +169,25 @@
           photo: base64Image
         };
 
-        const response = await fetch(scriptURL, {
-          method: "POST",
-          body: JSON.stringify(data)
-        });
-        const result = await response.json();
-        if (result.redirect) {
-          window.location.href = result.redirect;
-        }
-        
-        if (response.ok) {
-          status.textContent = "✅ Gracias por compartir!";
-          form.reset();
-        } else {
+        try {
+          const response = await fetch(scriptURL, {
+            method: "POST",
+            body: JSON.stringify(data)
+          });
+          const result = await response.json();
+          if (result.redirect) {
+            window.location.href = result.redirect;
+          }
+          if (response.ok) {
+            status.textContent = "✅ ¡Gracias por compartir!";
+            status.className = "success";
+            form.reset();
+          } else {
+            throw new Error();
+          }
+        } catch (err) {
           status.textContent = "⚠️ Error, intenta nuevamente.";
+          status.className = "error";
         }
       };
       reader.readAsDataURL(file);
