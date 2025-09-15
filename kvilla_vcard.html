@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Javier Chacon - Digital Card (clone)</title>
+<style>
+  :root{
+    --brand:#0aa2e8;
+    --brand-dark:#087fb1;
+    --card-bg: #ffffff;
+    --page-bg: linear-gradient(180deg,#e9f6fb 0%, #ffffff 80%);
+    --muted:#58606a;
+    --radius:18px;
+    --gap:14px;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+
+  /* Page */
+  html,body{height:100%}
+  body{
+    margin:0;
+    min-height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:var(--page-bg);
+  }
+
+  /* Center block that groups card + footer */
+  .wrap{
+    width:100%;
+    max-width:460px;
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    align-items:center;
+  }
+
+  /* Card */
+  .card{
+    width:100%;
+    background:var(--card-bg);
+    border-radius:var(--radius);
+    box-shadow: 0 10px 30px rgba(15,30,40,0.08);
+    padding:22px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:12px;
+  }
+
+  /* top row: logo right */
+  .card-top{
+    width:100%;
+    display:flex;
+    justify-content:flex-end;
+  }
+  .brand-logo{
+    height:34px;
+    width:auto;
+    opacity:0.95;
+  }
+
+  /* profile circle container that preserves aspect ratio */
+  .profile-container{
+    width:140px;
+    height:140px;
+    border-radius:50%;
+    overflow:hidden;
+    flex:0 0 auto;
+    border:5px solid rgba(10,162,232,0.12);
+    box-shadow:0 6px 18px rgba(10,162,232,0.12);
+  }
+  .profile-container img{
+    width:100%;
+    height:100%;
+    object-fit:cover; /* preserves original proportion while filling */
+    display:block;
+  }
+
+  h1{
+    margin:0;
+    font-size:1.375rem; /* ~22px */
+    color: #0b546b;
+    line-height:1.1;
+    text-align:center;
+  }
+  .meta{
+    font-size:0.95rem;
+    color:var(--muted);
+    margin:0;
+    text-align:center;
+  }
+  .company{
+    font-weight:600;
+    color: #0b7ea0;
+  }
+
+  /* actions */
+  .actions{
+    width:100%;
+    display:flex;
+    gap:10px;
+    margin-top:6px;
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 14px;
+    border-radius:10px;
+    font-weight:600;
+    text-decoration:none;
+    border:none;
+    cursor:pointer;
+    font-size:0.95rem;
+  }
+  .btn-call{
+    background:linear-gradient(180deg,var(--brand),var(--brand-dark));
+    color:#fff;
+    box-shadow:0 6px 16px rgba(10,162,232,0.18);
+  }
+  .btn-email{
+    background:transparent;
+    color:var(--brand-dark);
+    border:1px solid rgba(10,162,232,0.12);
+  }
+  .btn-vcard{
+    background:transparent;
+    color:var(--brand);
+    border:1px dashed rgba(10,162,232,0.12);
+  }
+
+  /* information rows */
+  .info{
+    width:100%;
+    display:flex;
+    gap:12px;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    padding-top:6px;
+  }
+  .info-row{
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    gap:8px;
+    padding:8px 12px;
+    border-radius:12px;
+    background: linear-gradient(180deg, rgba(10,162,232,0.03), transparent);
+  }
+  .info-row .label{ color:var(--muted); font-size:0.85rem }
+  .info-row .value{ font-weight:600; font-size:0.95rem; color:#12393f; word-break:break-word }
+
+  /* QR + small footer */
+  .card-foot{
+    width:100%;
+    display:flex;
+    gap:12px;
+    align-items:center;
+    justify-content:space-between;
+    margin-top:6px;
+  }
+  .qr{
+    width:84px;
+    height:84px;
+    border-radius:10px;
+    background:#f6f9fb;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow: 0 6px 18px rgba(15,30,40,0.04);
+  }
+  .qr img{ width:72px; height:72px; object-fit:contain }
+
+  .foot-text{ font-size:0.85rem; color:var(--muted); text-align:right }
+
+  /* bottom logo area (closer to card) */
+  .bottom-logo{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:12px;
+    padding:8px 10px;
+    border-radius:12px;
+    background:transparent;
+  }
+  .bottom-logo img{ max-height:44px; width:auto; }
+
+  /* Responsive tweaks */
+  @media (max-width:420px){
+    .profile-container{ width:108px; height:108px; border-width:4px }
+    h1{ font-size:1.125rem }
+    .btn{ padding:9px 12px; font-size:0.9rem }
+    .qr{ width:72px; height:72px }
+    .bottom-logo img{ max-height:34px }
+    .card{ padding:16px }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" role="region" aria-label="Digital business card">
+      <div class="card-top">
+        <!-- Replace with your logo (optional) -->
+        <img class="brand-logo" src="camcard-logo-placeholder.png" alt="Brand logo">
+      </div>
+
+      <div class="profile-container" aria-hidden="false">
+        <!-- Replace src with the profile image you want (portrait recommended) -->
+        <img src="profile-placeholder.jpg" alt="Javier Chacon">
+      </div>
+
+      <h1>Javier Chacon</h1>
+      <p class="meta"><span class="company">Tunjo Smart Solutions</span> — Head of Data</p>
+
+      <div class="actions">
+        <a class="btn btn-call" href="tel:+573012345678">📞 Call</a>
+        <a class="btn btn-email" href="mailto:javier@example.com">✉️ Email</a>
+        <a class="btn btn-vcard" href="javier-chacon.vcf" download>📥 vCard</a>
+      </div>
+
+      <div class="info" aria-hidden="false">
+        <div class="info-row">
+          <div class="label">Phone</div>
+          <div class="value"><a href="tel:+573012345678" style="color:inherit;text-decoration:none">+57 301 234 5678</a></div>
+        </div>
+
+        <div class="info-row">
+          <div class="label">Email</div>
+          <div class="value"><a href="mailto:javier@example.com" style="color:inherit;text-decoration:none">javier@example.com</a></div>
+        </div>
+      </div>
+
+      <div class="card-foot">
+        <div class="qr" title="Scan QR to download contact">
+          <!-- Replace QR with your generated QR image (points to hosted vcf or profile URL) -->
+          <img src="qr-placeholder.png" alt="QR code">
+        </div>
+        <div class="foot-text">Tap / Scan to save contact</div>
+      </div>
+    </div>
+
+    <div class="bottom-logo" aria-hidden="false">
+      <!-- company logo placed close to card -->
+      <img src="velvetgreens-logo.png" alt="Company logo">
+    </div>
+  </div>
+</body>
+</html>
