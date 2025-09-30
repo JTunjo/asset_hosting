@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Survey Form</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: #f7f8fa;
+      margin: 0;
+    }
+    form {
+      background: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+      max-width: 400px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      overflow: hidden;
+      position: relative;
+    }
+    h2 {
+      margin: 0;
+      font-size: 1.2rem;
+      text-align: center;
+    }
+    .progress {
+      font-size: 0.9rem;
+      color: #666;
+      text-align: center;
+      margin-bottom: -0.5rem;
+    }
+    .step {
+      display: none;
+      flex-direction: column;
+      gap: 1rem;
+      animation: fade 0.4s ease;
+    }
+    .step.active {
+      display: flex;
+    }
+    input, textarea, button {
+      font-size: 1rem;
+      padding: 0.8rem;
+      border-radius: 0.5rem;
+      border: 1px solid #ddd;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .back-btn {
+      background: #ccc;
+      color: #333;
+    }
+    .success, .error {
+      text-align: center;
+      font-weight: bold;
+    }
+    .success { color: green; }
+    .error { color: red; }
+    @keyframes fade {
+      from { opacity: 0; transform: translateX(20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+  </style>
+</head>
+<body>
+  <form id="survey-form">
+    <h2>Feedback Survey</h2>
+    <div class="progress" id="progress-text">Step 1 of 3</div>
+
+    <!-- Step 1 -->
+    <div class="step active">
+      <label>Your Name</label>
+      <input type="text" name="name" required>
+      <div class="nav-buttons">
+        <span></span>
+        <button type="button" class="next-btn">Next</button>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step">
+      <label>Your Email</label>
+      <input type="email" name="email" required>
+      <div class="nav-buttons">
+        <button type="button" class="back-btn">Back</button>
+        <button type="button" class="next-btn">Next</button>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step">
+      <label>Your Feedback</label>
+      <textarea name="feedback" rows="4" required></textarea>
+      <div class="nav-buttons">
+        <button type="button" class="back-btn">Back</button>
+        <button type="submit">Submit</button>
+      </div>
+    </div>
+
+    <p id="response"></p>
+  </form>
+
+  <script>
+    const form = document.getElementById('survey-form');
+    const steps = document.querySelectorAll('.step');
+    const progressText = document.getElementById('progress-text');
+    const responseEl = document.getElementById('response');
+    let currentStep = 0;
+
+    function showStep(index) {
+      steps.forEach((step, i) => {
+        step.classList.toggle('active', i === index);
+      });
+      currentStep = index;
+      progressText.textContent = `Step ${index + 1} of ${steps.length}`;
+    }
+
+    document.querySelectorAll('.next-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (form.checkValidity()) {
+          showStep(currentStep + 1);
+        } else {
+          form.reportValidity();
+        }
+      });
+    });
+
+    document.querySelectorAll('.back-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        showStep(currentStep - 1);
+      });
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(form).entries());
+
+      try {
+        const res = await fetch("YOUR_WEB_APP_URL_HERE", {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: { "Content-Type": "application/json" }
+        });
+
+        if (res.ok) {
+          responseEl.textContent = "✅ Thank you for your feedback!";
+          responseEl.className = "success";
+          form.reset();
+          showStep(0); // restart
+        } else {
+          throw new Error("Network error");
+        }
+      } catch (err) {
+        responseEl.textContent = "❌ Something went wrong. Try again.";
+        responseEl.className = "error";
+      }
+    });
+  </script>
+</body>
+</html>
