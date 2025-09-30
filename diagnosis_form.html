@@ -32,17 +32,10 @@
       font-size: 1.2rem;
       text-align: center;
     }
-    .progress {
-      font-size: 0.9rem;
-      color: #666;
-      text-align: center;
-      margin-bottom: -0.5rem;
-    }
     .step {
       display: none;
       flex-direction: column;
       gap: 1rem;
-      animation: fade 0.4s ease;
     }
     .step.active {
       display: flex;
@@ -74,22 +67,15 @@
       background: #ccc;
       color: #333;
     }
-    .success, .error {
-      text-align: center;
-      font-weight: bold;
-    }
-    .success { color: green; }
-    .error { color: red; }
-    @keyframes fade {
-      from { opacity: 0; transform: translateX(20px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
   </style>
 </head>
 <body>
-  <form id="survey-form">
+  <form 
+    id="survey-form"
+    action="https://script.google.com/macros/s/AKfycbwN9FZpLpDNnSHOwjdQohP1xjWPPY046_h2KIb4jDgHz3Jq5_SSp7bNVuFzuO7wadA/exec"
+    method="POST"
+  >
     <h2>Feedback Survey</h2>
-    <div class="progress" id="progress-text">Step 1 of 3</div>
 
     <!-- Step 1 -->
     <div class="step active">
@@ -120,30 +106,20 @@
         <button type="submit">Submit</button>
       </div>
     </div>
-
-    <p id="response"></p>
   </form>
 
   <script>
     const form = document.getElementById('survey-form');
     const steps = document.querySelectorAll('.step');
-    const progressText = document.getElementById('progress-text');
-    const responseEl = document.getElementById('response');
     let currentStep = 0;
 
     function showStep(index) {
       steps.forEach((step, i) => {
+        step.classList.toggle('active', i === index);
         const inputs = step.querySelectorAll("input, textarea");
-        if (i === index) {
-          step.classList.add("active");
-          inputs.forEach(el => el.disabled = false);
-        } else {
-          step.classList.remove("active");
-          inputs.forEach(el => el.disabled = true);
-        }
+        inputs.forEach(el => el.disabled = (i !== index));
       });
       currentStep = index;
-      progressText.textContent = `Step ${index + 1} of ${steps.length}`;
     }
 
     document.querySelectorAll('.next-btn').forEach(btn => {
@@ -167,32 +143,7 @@
       });
     });
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const data = Object.fromEntries(new FormData(form).entries());
-
-      try {
-        const res = await fetch("https://script.google.com/macros/s/AKfycbwN9FZpLpDNnSHOwjdQohP1xjWPPY046_h2KIb4jDgHz3Jq5_SSp7bNVuFzuO7wadA/exec", {
-          method: "POST",
-          body: JSON.stringify(data),
-          headers: { "Content-Type": "application/json" }
-        });
-
-        if (res.ok) {
-          responseEl.textContent = "✅ Thank you for your feedback!";
-          responseEl.className = "success";
-          form.reset();
-          showStep(0); // restart
-        } else {
-          throw new Error("Network error");
-        }
-      } catch (err) {
-        responseEl.textContent = "❌ Something went wrong. Try again.";
-        responseEl.className = "error";
-      }
-    });
-
-    // Initialize by disabling all hidden step fields
+    // initialize
     showStep(0);
   </script>
 </body>
