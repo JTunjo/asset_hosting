@@ -133,7 +133,14 @@
 
     function showStep(index) {
       steps.forEach((step, i) => {
-        step.classList.toggle('active', i === index);
+        const inputs = step.querySelectorAll("input, textarea");
+        if (i === index) {
+          step.classList.add("active");
+          inputs.forEach(el => el.disabled = false);
+        } else {
+          step.classList.remove("active");
+          inputs.forEach(el => el.disabled = true);
+        }
       });
       currentStep = index;
       progressText.textContent = `Step ${index + 1} of ${steps.length}`;
@@ -141,11 +148,16 @@
 
     document.querySelectorAll('.next-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        if (form.checkValidity()) {
-          showStep(currentStep + 1);
-        } else {
-          form.reportValidity();
+        const currentFields = steps[currentStep].querySelectorAll("input, textarea");
+        let valid = true;
+        for (const field of currentFields) {
+          if (!field.checkValidity()) {
+            field.reportValidity();
+            valid = false;
+            break;
+          }
         }
+        if (valid) showStep(currentStep + 1);
       });
     });
 
@@ -179,6 +191,9 @@
         responseEl.className = "error";
       }
     });
+
+    // Initialize by disabling all hidden step fields
+    showStep(0);
   </script>
 </body>
 </html>
