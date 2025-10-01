@@ -67,6 +67,22 @@
       margin-left: 0.3rem;
       word-break: break-word;    /* permite que el texto largo se rompa en varias líneas */
     }
+
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(0, 0, 0, 0.1);
+      border-top-color: #2563eb;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      vertical-align: middle;
+      margin-left: 8px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
@@ -158,7 +174,7 @@
       <div class="question">
         <textarea name="q9" rows="4" placeholder="Escribe aquí tu respuesta"></textarea>
       </div>
-      <button onclick="submitSurvey()">Enviar</button>
+      <button id="submit-btn" onclick="submitSurvey()">Enviar</button>
     </div>
 
     <!-- página final -->
@@ -219,19 +235,33 @@
     }
 
     async function submitSurvey(){
+      const btn = document.getElementById('submit-btn');
+      // deshabilitar botón
+      btn.disabled = true;
+    
+      // agregar spinner
+      const spinner = document.createElement('span');
+      spinner.className = 'spinner';
+      btn.appendChild(spinner);
+    
       const answers = collectAnswers();
       const qs = Object.keys(answers)
         .map(k => `${encodeURIComponent(k)}=${encodeURIComponent(answers[k]||'')}`)
         .join('&');
       const url = endpoint + '?' + qs;
+    
       try {
         await fetch(url, {method:'GET'});
       } catch(e){
         console.error(e);
+        alert("Ocurrió un error al enviar la encuesta.");
       }
+    
+      // ocultar todas las páginas y mostrar la página final
       document.querySelectorAll('.question-page').forEach(p=>p.classList.add('hidden'));
       document.getElementById('page-10').classList.remove('hidden');
     }
+
   </script>
 </body>
 </html>
