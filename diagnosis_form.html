@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Encuesta - Levantamiento para Proceso de Café con IOT</title>
+  <title>Encuesta - Prototipo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
@@ -43,7 +43,7 @@
 </head>
 <body>
   <div class="survey-container">
-    <!-- Pantalla 1: Nombre -->
+    <!-- Página 1 -->
     <div class="question-page" id="page-1">
       <h2>¿Cuál es tu nombre?</h2>
       <div class="question">
@@ -54,16 +54,16 @@
       <button onclick="nextPage()">Siguiente</button>
     </div>
 
-    <!-- Pantalla 2: Comentario -->
+    <!-- Página 2 -->
     <div class="question-page hidden" id="page-2">
       <h2>Escribe tu comentario</h2>
       <div class="question">
-        <textarea id="comentario" rows="4" style="width:100%"></textarea>
+        <textarea id="comentario" rows="4" style="width:100%" placeholder="Tu comentario..."></textarea>
       </div>
       <button onclick="submitSurvey()">Enviar</button>
     </div>
 
-    <!-- Pantalla 3: Gracias -->
+    <!-- Página 3 -->
     <div class="question-page hidden" id="page-3">
       <h2>¡Gracias por participar!</h2>
       <p>Tu respuesta ha sido registrada.</p>
@@ -71,7 +71,6 @@
   </div>
 
   <script>
-    let currentPage = 1;
     const endpoint = "https://script.google.com/macros/s/AKfycbwN9FZpLpDNnSHOwjdQohP1xjWPPY046_h2KIb4jDgHz3Jq5_SSp7bNVuFzuO7wadA/exec";
 
     function nextPage() {
@@ -82,21 +81,27 @@
       }
       document.getElementById("page-1").classList.add("hidden");
       document.getElementById("page-2").classList.remove("hidden");
-      currentPage = 2;
     }
 
     async function submitSurvey() {
       const nombre = document.querySelector('input[name="nombre"]:checked').value;
       const comentario = document.getElementById("comentario").value.trim();
 
-      const payload = { nombre, comentario };
+      if (!comentario) {
+        alert("Por favor escribe un comentario");
+        return;
+      }
+
+      // ✅ Enviamos como FormData para que llegue en e.parameter
+      const formData = new FormData();
+      formData.append("nombre", nombre);
+      formData.append("comentario", comentario);
 
       try {
         await fetch(endpoint, {
           method: "POST",
-          mode: "no-cors", // necesario para Google Apps Script
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
+          mode: "no-cors",
+          body: formData
         });
       } catch (e) {
         console.error("Error al enviar:", e);
