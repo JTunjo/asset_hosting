@@ -1,150 +1,110 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Survey Form</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Encuesta - Levantamiento para Proceso de Café con IOT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      font-family: system-ui, sans-serif;
+      font-family: sans-serif;
+      background: #f9fafb;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
-      background: #f7f8fa;
+      height: 100vh;
       margin: 0;
     }
-    form {
+    .survey-container {
       background: white;
       padding: 2rem;
-      border-radius: 1rem;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       max-width: 400px;
       width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-      overflow: hidden;
-      position: relative;
     }
-    h2 {
-      margin: 0;
-      font-size: 1.2rem;
-      text-align: center;
-    }
-    .step {
-      display: none;
-      flex-direction: column;
-      gap: 1rem;
-    }
-    .step.active {
-      display: flex;
-    }
-    input, textarea, button {
-      font-size: 1rem;
-      padding: 0.8rem;
-      border-radius: 0.5rem;
-      border: 1px solid #ddd;
-      width: 100%;
-      box-sizing: border-box;
+    .question {
+      margin-bottom: 1.5rem;
     }
     button {
-      background: #4CAF50;
+      padding: 0.6rem 1rem;
+      background: #2563eb;
       color: white;
       border: none;
+      border-radius: 8px;
       cursor: pointer;
-      transition: background 0.3s;
     }
     button:hover {
-      background: #45a049;
+      background: #1d4ed8;
     }
-    .nav-buttons {
-      display: flex;
-      justify-content: space-between;
-      gap: 1rem;
-    }
-    .back-btn {
-      background: #ccc;
-      color: #333;
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 <body>
-  <form 
-    id="survey-form"
-    action="https://script.google.com/macros/s/AKfycbwN9FZpLpDNnSHOwjdQohP1xjWPPY046_h2KIb4jDgHz3Jq5_SSp7bNVuFzuO7wadA/exec"
-    method="POST"
-  >
-    <h2>Feedback Survey</h2>
-
-    <!-- Step 1 -->
-    <div class="step active">
-      <label>Your Name</label>
-      <input type="text" name="name" required>
-      <div class="nav-buttons">
-        <span></span>
-        <button type="button" class="next-btn">Next</button>
+  <div class="survey-container">
+    <!-- Pantalla 1: Nombre -->
+    <div class="question-page" id="page-1">
+      <h2>¿Cuál es tu nombre?</h2>
+      <div class="question">
+        <label><input type="radio" name="nombre" value="Juan"> Juan</label><br>
+        <label><input type="radio" name="nombre" value="Jose"> Jose</label><br>
+        <label><input type="radio" name="nombre" value="Jaime"> Jaime</label>
       </div>
+      <button onclick="nextPage()">Siguiente</button>
     </div>
 
-    <!-- Step 2 -->
-    <div class="step">
-      <label>Your Email</label>
-      <input type="email" name="email" required>
-      <div class="nav-buttons">
-        <button type="button" class="back-btn">Back</button>
-        <button type="button" class="next-btn">Next</button>
+    <!-- Pantalla 2: Comentario -->
+    <div class="question-page hidden" id="page-2">
+      <h2>Escribe tu comentario</h2>
+      <div class="question">
+        <textarea id="comentario" rows="4" style="width:100%"></textarea>
       </div>
+      <button onclick="submitSurvey()">Enviar</button>
     </div>
 
-    <!-- Step 3 -->
-    <div class="step">
-      <label>Your Feedback</label>
-      <textarea name="feedback" rows="4" required></textarea>
-      <div class="nav-buttons">
-        <button type="button" class="back-btn">Back</button>
-        <button type="submit">Submit</button>
-      </div>
+    <!-- Pantalla 3: Gracias -->
+    <div class="question-page hidden" id="page-3">
+      <h2>¡Gracias por participar!</h2>
+      <p>Tu respuesta ha sido registrada.</p>
     </div>
-  </form>
+  </div>
 
   <script>
-    const form = document.getElementById('survey-form');
-    const steps = document.querySelectorAll('.step');
-    let currentStep = 0;
+    let currentPage = 1;
+    const endpoint = "https://script.google.com/macros/s/AKfycbwN9FZpLpDNnSHOwjdQohP1xjWPPY046_h2KIb4jDgHz3Jq5_SSp7bNVuFzuO7wadA/exec";
 
-    function showStep(index) {
-      steps.forEach((step, i) => {
-        step.classList.toggle('active', i === index);
-        const inputs = step.querySelectorAll("input, textarea");
-        inputs.forEach(el => el.disabled = (i !== index));
-      });
-      currentStep = index;
+    function nextPage() {
+      const selected = document.querySelector('input[name="nombre"]:checked');
+      if (!selected) {
+        alert("Por favor selecciona un nombre");
+        return;
+      }
+      document.getElementById("page-1").classList.add("hidden");
+      document.getElementById("page-2").classList.remove("hidden");
+      currentPage = 2;
     }
 
-    document.querySelectorAll('.next-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const currentFields = steps[currentStep].querySelectorAll("input, textarea");
-        let valid = true;
-        for (const field of currentFields) {
-          if (!field.checkValidity()) {
-            field.reportValidity();
-            valid = false;
-            break;
-          }
-        }
-        if (valid) showStep(currentStep + 1);
-      });
-    });
+    async function submitSurvey() {
+      const nombre = document.querySelector('input[name="nombre"]:checked').value;
+      const comentario = document.getElementById("comentario").value.trim();
 
-    document.querySelectorAll('.back-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        showStep(currentStep - 1);
-      });
-    });
+      const payload = { nombre, comentario };
 
-    // initialize
-    showStep(0);
+      try {
+        await fetch(endpoint, {
+          method: "POST",
+          mode: "no-cors", // necesario para Google Apps Script
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+      } catch (e) {
+        console.error("Error al enviar:", e);
+      }
+
+      document.getElementById("page-2").classList.add("hidden");
+      document.getElementById("page-3").classList.remove("hidden");
+    }
   </script>
 </body>
 </html>
