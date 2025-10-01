@@ -49,6 +49,21 @@
       display: block;
       margin-top: 0.3rem;
     }
+    .question label {
+      display: flex;
+      align-items: center;      /* centra verticalmente checkbox y texto */
+      gap: 0.5rem;              /* espacio entre checkbox y texto */
+      margin-top: 0.5rem;       /* espacio entre cada opción */
+    }
+    
+    .question label input[type="checkbox"] {
+      flex-shrink: 0;           /* evita que el checkbox se reduzca */
+    }
+    
+    .question label span {
+      flex: 1;                   /* el texto ocupa todo el espacio restante */
+      word-break: break-word;    /* permite que el texto largo se rompa en varias líneas */
+    }
   </style>
 </head>
 <body>
@@ -103,9 +118,9 @@
     <div class="question-page hidden" id="page-6" data-param="q6">
       <h2>Perfil deseado de Proceso</h2>
       <div class="question">
-        <label><input type="checkbox" name="q6" value="Lavado"> Lavado</label>
-        <label><input type="checkbox" name="q6" value="Honey"> Honey</label>
-        <label><input type="checkbox" name="q6" value="Natural"> Natural</label>
+        <label></span><input type="checkbox" name="q6" value="Lavado"><span>Lavado</span></label>
+        <label><input type="checkbox" name="q6" value="Honey"> <span>Honey</span></label>
+        <label><input type="checkbox" name="q6" value="Natural"><span>Natural</span></label>
       </div>
       <button onclick="nextPage()">Siguiente</button>
     </div>
