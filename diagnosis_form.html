@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Encuesta - Prototipo</title>
+  <title>Encuesta - Prototipo Café</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
@@ -19,11 +19,17 @@
       padding: 2rem;
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      max-width: 400px;
+      max-width: 500px;
       width: 100%;
     }
     .question {
       margin-bottom: 1.5rem;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 0.5rem;
+      box-sizing: border-box;
+      margin-top: 0.3rem;
     }
     button {
       padding: 0.6rem 1rem;
@@ -39,66 +45,174 @@
     .hidden {
       display: none;
     }
+    label {
+      display: block;
+      margin-top: 0.3rem;
+    }
   </style>
 </head>
 <body>
   <div class="survey-container">
-    <div class="question-page" id="page-1">
-      <h2>¿Cuál es tu nombre?</h2>
+
+    <!-- q1 -->
+    <div class="question-page" id="page-1" data-param="q1">
+      <h2>Nombre del Proyecto/Organización</h2>
       <div class="question">
-        <label><input type="radio" name="nombre" value="Juan"> Juan</label><br>
-        <label><input type="radio" name="nombre" value="Jose"> Jose</label><br>
-        <label><input type="radio" name="nombre" value="Jaime"> Jaime</label>
+        <input type="text" name="q1" placeholder="Escribe aquí tu respuesta"/>
       </div>
       <button onclick="nextPage()">Siguiente</button>
     </div>
 
-    <div class="question-page hidden" id="page-2">
-      <h2>Escribe tu comentario</h2>
+    <!-- q2 -->
+    <div class="question-page hidden" id="page-2" data-param="q2">
+      <h2>Por favor describa brevemente los problemas que tiene actualmente con el procesamiento de café</h2>
       <div class="question">
-        <textarea id="comentario" rows="4" style="width:100%" placeholder="Tu comentario..."></textarea>
+        <textarea name="q2" rows="4" placeholder="Escribe aquí tu respuesta"></textarea>
+      </div>
+      <button onclick="nextPage()">Siguiente</button>
+    </div>
+
+    <!-- q3 -->
+    <div class="question-page hidden" id="page-3" data-param="q3">
+      <h2>Objetivo de la implementación, ¿Qué buscamos mejorar en cifras?</h2>
+      <div class="question">
+        <textarea name="q3" rows="4" placeholder="Escribe aquí tu respuesta"></textarea>
+      </div>
+      <button onclick="nextPage()">Siguiente</button>
+    </div>
+
+    <!-- q4 -->
+    <div class="question-page hidden" id="page-4" data-param="q4">
+      <h2>Cantidad total de café a procesar, por cosecha</h2>
+      <div class="question">
+        <input type="number" name="q4" placeholder="Kg"/>
+      </div>
+      <button onclick="nextPage()">Siguiente</button>
+    </div>
+
+    <!-- q5 -->
+    <div class="question-page hidden" id="page-5" data-param="q5">
+      <h2>Cantidad de café a procesar por lote, Café máximo a llenar en Marquesina o en biorreactores</h2>
+      <div class="question">
+        <input type="number" name="q5" placeholder="Kg"/>
+      </div>
+      <button onclick="nextPage()">Siguiente</button>
+    </div>
+
+    <!-- q6 -->
+    <div class="question-page hidden" id="page-6" data-param="q6">
+      <h2>Perfil deseado de Proceso</h2>
+      <div class="question">
+        <label><input type="checkbox" name="q6" value="Lavado"> Lavado</label>
+        <label><input type="checkbox" name="q6" value="Honey"> Honey</label>
+        <label><input type="checkbox" name="q6" value="Natural"> Natural</label>
+      </div>
+      <button onclick="nextPage()">Siguiente</button>
+    </div>
+
+    <!-- q7 -->
+    <div class="question-page hidden" id="page-7" data-param="q7">
+      <h2>Perfil deseado de sabor</h2>
+      <div class="question">
+        <label><input type="checkbox" name="q7" value="Terroir (Lavados y Fermentación Espontánea)"> Terroir (Lavados y Fermentación Espontánea)</label>
+        <label><input type="checkbox" name="q7" value="Oxidaciones y Fermentaciones Inoculadas o Maceración Carbónica"> Oxidaciones y Fermentaciones Inoculadas o Maceración Carbónica</label>
+        <label><input type="checkbox" name="q7" value="Cofermentación"> Cofermentación</label>
+        <label><input type="checkbox" name="q7" value="Infusión"> Infusión</label>
+      </div>
+      <button onclick="nextPage()">Siguiente</button>
+    </div>
+
+    <!-- q8 -->
+    <div class="question-page hidden" id="page-8" data-param="q8">
+      <h2>¿Cuál es el mercado objetivo general para el café a procesar?</h2>
+      <div class="question">
+        <label><input type="checkbox" name="q8" value="Exportación - Exóticos"> Exportación - Exóticos</label>
+        <label><input type="checkbox" name="q8" value="Exportación - Regionales"> Exportación - Regionales</label>
+        <label><input type="checkbox" name="q8" value="Nacional - Exóticos"> Nacional - Exóticos</label>
+        <label><input type="checkbox" name="q8" value="Nacional - Regionales y Espresso"> Nacional - Regionales y Espresso</label>
+      </div>
+      <button onclick="nextPage()">Siguiente</button>
+    </div>
+
+    <!-- q9 -->
+    <div class="question-page hidden" id="page-9" data-param="q9">
+      <h2>¿Ha realizado experimentos previos o avances del proyecto? En caso afirmativo, agregue comentario.</h2>
+      <div class="question">
+        <textarea name="q9" rows="4" placeholder="Escribe aquí tu respuesta"></textarea>
       </div>
       <button onclick="submitSurvey()">Enviar</button>
     </div>
 
-    <div class="question-page hidden" id="page-3">
+    <!-- página final -->
+    <div class="question-page hidden" id="page-10">
       <h2>¡Gracias por participar!</h2>
       <p>Tu respuesta ha sido registrada.</p>
     </div>
+
   </div>
 
   <script>
-    const endpoint = "https://script.google.com/macros/s/AKfycbzIVHeSb-UPXRdBQbu__vhcQpl2Sg_6PaI1wDeZ0Tz2QkYGscSb3s6ArxmNkxFWOpbM/exec";
+    const endpoint = "https://script.google.com/macros/s/AKfycbxJH8nvkWBc6eCAJCKat904i0jUjmU_f5pD8tudHUQqHzHOsKe33h-4MoAMqhIRQJ8E/exec";
+    const pages = Array.from(document.querySelectorAll('.question-page')).filter(p => !p.id.includes('page-10'));
+    let currentIndex = 0;
+    showPage(currentIndex);
 
-    function nextPage() {
-      const selected = document.querySelector('input[name="nombre"]:checked');
-      if (!selected) {
-        alert("Por favor selecciona un nombre");
-        return;
-      }
-      document.getElementById("page-1").classList.add("hidden");
-      document.getElementById("page-2").classList.remove("hidden");
+    function showPage(i){
+      pages.forEach((p, idx) => p.classList.toggle('hidden', idx !== i));
     }
 
-    async function submitSurvey() {
-      const nombre = document.querySelector('input[name="nombre"]:checked').value;
-      const comentario = document.getElementById("comentario").value.trim();
-
-      if (!comentario) {
-        alert("Por favor escribe un comentario");
-        return;
+    function nextPage(){
+      const page = pages[currentIndex];
+      const param = page.dataset.param;
+      if(param){
+        // validación mínima para input/textarea
+        const input = page.querySelector('input, textarea');
+        if(input && !input.value.trim()){
+          alert('Por favor responde la pregunta antes de continuar.');
+          return;
+        }
+        // validación mínima para checkboxes
+        const cbs = page.querySelectorAll('input[type="checkbox"]');
+        if(cbs.length && ![...cbs].some(cb => cb.checked)){
+          alert('Por favor selecciona al menos una opción.');
+          return;
+        }
       }
+      if(currentIndex < pages.length -1){
+        currentIndex++;
+        showPage(currentIndex);
+      }
+    }
 
-      const url = `${endpoint}?nombre=${encodeURIComponent(nombre)}&comentario=${encodeURIComponent(comentario)}`;
+    function collectAnswers(){
+      const result = {};
+      pages.forEach(page=>{
+        const key = page.dataset.param;
+        if(!key) return;
+        const cbs = page.querySelectorAll('input[type="checkbox"]:checked');
+        if(cbs.length){
+          result[key] = [...cbs].map(cb=>cb.value).join(', ');
+          return;
+        }
+        const input = page.querySelector('input, textarea');
+        if(input) result[key] = input.value.trim();
+      });
+      return result;
+    }
 
+    async function submitSurvey(){
+      const answers = collectAnswers();
+      const qs = Object.keys(answers)
+        .map(k => `${encodeURIComponent(k)}=${encodeURIComponent(answers[k]||'')}`)
+        .join('&');
+      const url = endpoint + '?' + qs;
       try {
-        await fetch(url); // GET request
-      } catch (e) {
-        console.error("Error al enviar:", e);
+        await fetch(url, {method:'GET'});
+      } catch(e){
+        console.error(e);
       }
-
-      document.getElementById("page-2").classList.add("hidden");
-      document.getElementById("page-3").classList.remove("hidden");
+      document.querySelectorAll('.question-page').forEach(p=>p.classList.add('hidden'));
+      document.getElementById('page-10').classList.remove('hidden');
     }
   </script>
 </body>
