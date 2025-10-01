@@ -74,6 +74,57 @@
       word-break: break-word;    /* permite que el texto largo se rompa en varias líneas */
     }
 
+    /* Header */
+    .header {
+      background: #2563eb;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 10;
+    }
+    
+    .header-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .logo {
+      height: 40px;
+    }
+    
+    /* Barra de progreso */
+    .progress-wrapper {
+      position: relative;
+      width: 80%;
+      max-width: 500px;
+      height: 10px;
+      background: #e5e7eb; /* gris claro */
+      border-radius: 5px;
+      margin: 0.5rem auto 0; /* centrado debajo del header */
+    }
+    
+    #progress-bar {
+      width: 0%;
+      height: 100%;
+      background: #facc15; /* amarillo o color que quieras */
+      border-radius: 5px;
+      transition: width 0.3s;
+    }
+    
+    #progress-text {
+      position: absolute;
+      right: -40px;
+      top: -2px;
+      color: white;
+      font-weight: bold;
+      font-size: 0.8rem;
+    }
+    
     .spinner {
       display: inline-block;
       width: 20px;
@@ -98,6 +149,12 @@
     <div style="display:flex; flex-direction:column; align-items:center; gap:0.5rem;">
       <img src="Tunjo_bw.png" alt="Tunjo Logo" style="height:40px;"/>
       <h1 style="margin:0; font-size:1.5rem;">Encuesta - Café IOT</h1>
+    </div>
+
+      <!-- Barra de progreso -->
+    <div class="progress-wrapper">
+      <div id="progress-bar"></div>
+      <span id="progress-text">0%</span>
     </div>
   </header>
 
@@ -214,6 +271,7 @@
 
     function showPage(i){
       pages.forEach((p, idx) => p.classList.toggle('hidden', idx !== i));
+      updateProgress();
     }
 
     function nextPage(){
@@ -255,6 +313,17 @@
       return result;
     }
 
+    function updateProgress() {
+      const progressBar = document.getElementById('progress-bar');
+      const progressText = document.getElementById('progress-text');
+      const totalPages = pages.length;
+      const currentPage = currentIndex + 1;
+      const percent = Math.round((currentPage / totalPages) * 100);
+    
+      progressBar.style.width = percent + '%';
+      progressText.textContent = percent + '%';
+    }
+    
     async function submitSurvey(){
       const btn = document.getElementById('submit-btn');
       // deshabilitar botón
