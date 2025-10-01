@@ -93,11 +93,12 @@
 </head>
 <body>
   <!-- Header -->
-  <header style="background:#2563eb; color:white; text-align:center; padding:1rem; position:relative;">
-    <div style="position:absolute; top:0.5rem; left:50%; transform:translateX(-50%);">
+  <header style="background:#2563eb; color:white; text-align:center; padding:1rem; position:fixed; top:0; width:100%; z-index:10;">
+    <!-- Contenedor vertical para logo + título -->
+    <div style="display:flex; flex-direction:column; align-items:center; gap:0.5rem;">
       <img src="Tunjo_bw.png" alt="Tunjo Logo" style="height:40px;"/>
+      <h1 style="margin:0; font-size:1.5rem;">Encuesta Procesamiento Café IOT</h1>
     </div>
-    <h1 style="margin:0; font-size:1.5rem;">Encuesta Procesamiento Café IOT</h1>
   </header>
 
   <div class="main-content">
