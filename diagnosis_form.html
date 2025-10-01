@@ -87,110 +87,110 @@
 </head>
 <body>
   <!-- Header -->
-  <header style="background:#1e3a8a; color:white; text-align:center; padding:1rem; position:relative;">
+  <header style="background:#2563eb; color:white; text-align:center; padding:1rem; position:relative;">
     <div style="position:absolute; top:0.5rem; left:50%; transform:translateX(-50%);">
       <img src="Tunjo_bw.png" alt="Tunjo Logo" style="height:40px;"/>
     </div>
     <h1 style="margin:0; font-size:1.5rem;">Encuesta Procesamiento Café IOT</h1>
   </header>
 
-  <div class="survey-container">
-
-    <!-- q1 -->
-    <div class="question-page" id="page-1" data-param="q1">
-      <h2>Nombre del Proyecto/Organización</h2>
-      <div class="question">
-        <input type="text" name="q1" placeholder="Escribe aquí tu respuesta"/>
+  <div style="display:flex; justify-content:center; margin-top:100px; margin-bottom:80px; padding:1rem;">
+    <div class="survey-container" style="width:100%; max-width:500px;">
+      <!-- q1 -->
+      <div class="question-page" id="page-1" data-param="q1">
+        <h2>Nombre del Proyecto/Organización</h2>
+        <div class="question">
+          <input type="text" name="q1" placeholder="Escribe aquí tu respuesta"/>
+        </div>
+        <button onclick="nextPage()">Siguiente</button>
       </div>
-      <button onclick="nextPage()">Siguiente</button>
-    </div>
-
-    <!-- q2 -->
-    <div class="question-page hidden" id="page-2" data-param="q2">
-      <h2>Por favor describa brevemente los problemas que tiene actualmente con el procesamiento de café</h2>
-      <div class="question">
-        <textarea name="q2" rows="4" placeholder="Escribe aquí tu respuesta"></textarea>
+  
+      <!-- q2 -->
+      <div class="question-page hidden" id="page-2" data-param="q2">
+        <h2>Por favor describa brevemente los problemas que tiene actualmente con el procesamiento de café</h2>
+        <div class="question">
+          <textarea name="q2" rows="4" placeholder="Escribe aquí tu respuesta"></textarea>
+        </div>
+        <button onclick="nextPage()">Siguiente</button>
       </div>
-      <button onclick="nextPage()">Siguiente</button>
-    </div>
-
-    <!-- q3 -->
-    <div class="question-page hidden" id="page-3" data-param="q3">
-      <h2>Objetivo de la implementación, ¿Qué buscamos mejorar en cifras?</h2>
-      <div class="question">
-        <textarea name="q3" rows="4" placeholder="Escribe aquí tu respuesta"></textarea>
+  
+      <!-- q3 -->
+      <div class="question-page hidden" id="page-3" data-param="q3">
+        <h2>Objetivo de la implementación, ¿Qué buscamos mejorar en cifras?</h2>
+        <div class="question">
+          <textarea name="q3" rows="4" placeholder="Escribe aquí tu respuesta"></textarea>
+        </div>
+        <button onclick="nextPage()">Siguiente</button>
       </div>
-      <button onclick="nextPage()">Siguiente</button>
-    </div>
-
-    <!-- q4 -->
-    <div class="question-page hidden" id="page-4" data-param="q4">
-      <h2>Cantidad total de café a procesar, por cosecha</h2>
-      <div class="question">
-        <input type="number" name="q4" placeholder="Kg"/>
+  
+      <!-- q4 -->
+      <div class="question-page hidden" id="page-4" data-param="q4">
+        <h2>Cantidad total de café a procesar, por cosecha</h2>
+        <div class="question">
+          <input type="number" name="q4" placeholder="Kg"/>
+        </div>
+        <button onclick="nextPage()">Siguiente</button>
       </div>
-      <button onclick="nextPage()">Siguiente</button>
-    </div>
-
-    <!-- q5 -->
-    <div class="question-page hidden" id="page-5" data-param="q5">
-      <h2>Cantidad de café a procesar por lote, Café máximo a llenar en Marquesina o en biorreactores</h2>
-      <div class="question">
-        <input type="number" name="q5" placeholder="Kg"/>
+  
+      <!-- q5 -->
+      <div class="question-page hidden" id="page-5" data-param="q5">
+        <h2>Cantidad de café a procesar por lote, Café máximo a llenar en Marquesina o en biorreactores</h2>
+        <div class="question">
+          <input type="number" name="q5" placeholder="Kg"/>
+        </div>
+        <button onclick="nextPage()">Siguiente</button>
       </div>
-      <button onclick="nextPage()">Siguiente</button>
-    </div>
-
-    <!-- q6 -->
-    <div class="question-page hidden" id="page-6" data-param="q6">
-      <h2>Perfil deseado de Proceso</h2>
-      <div class="question">
-        <label></span><input type="checkbox" name="q6" value="Lavado"><span>Lavado</span></label>
-        <label><input type="checkbox" name="q6" value="Honey"> <span>Honey</span></label>
-        <label><input type="checkbox" name="q6" value="Natural"><span>Natural</span></label>
+  
+      <!-- q6 -->
+      <div class="question-page hidden" id="page-6" data-param="q6">
+        <h2>Perfil deseado de Proceso</h2>
+        <div class="question">
+          <label></span><input type="checkbox" name="q6" value="Lavado"><span>Lavado</span></label>
+          <label><input type="checkbox" name="q6" value="Honey"> <span>Honey</span></label>
+          <label><input type="checkbox" name="q6" value="Natural"><span>Natural</span></label>
+        </div>
+        <button onclick="nextPage()">Siguiente</button>
       </div>
-      <button onclick="nextPage()">Siguiente</button>
-    </div>
-
-    <!-- q7 -->
-    <div class="question-page hidden" id="page-7" data-param="q7">
-      <h2>Perfil deseado de sabor</h2>
-      <div class="question">
-        <label><input type="checkbox" name="q7" value="Terroir (Lavados y Fermentación Espontánea)"> Terroir (Lavados y Fermentación Espontánea)</label>
-        <label><input type="checkbox" name="q7" value="Oxidaciones y Fermentaciones Inoculadas o Maceración Carbónica"> Oxidaciones y Fermentaciones Inoculadas o Maceración Carbónica</label>
-        <label><input type="checkbox" name="q7" value="Cofermentación"> Cofermentación</label>
-        <label><input type="checkbox" name="q7" value="Infusión"> Infusión</label>
+  
+      <!-- q7 -->
+      <div class="question-page hidden" id="page-7" data-param="q7">
+        <h2>Perfil deseado de sabor</h2>
+        <div class="question">
+          <label><input type="checkbox" name="q7" value="Terroir (Lavados y Fermentación Espontánea)"> Terroir (Lavados y Fermentación Espontánea)</label>
+          <label><input type="checkbox" name="q7" value="Oxidaciones y Fermentaciones Inoculadas o Maceración Carbónica"> Oxidaciones y Fermentaciones Inoculadas o Maceración Carbónica</label>
+          <label><input type="checkbox" name="q7" value="Cofermentación"> Cofermentación</label>
+          <label><input type="checkbox" name="q7" value="Infusión"> Infusión</label>
+        </div>
+        <button onclick="nextPage()">Siguiente</button>
       </div>
-      <button onclick="nextPage()">Siguiente</button>
-    </div>
-
-    <!-- q8 -->
-    <div class="question-page hidden" id="page-8" data-param="q8">
-      <h2>¿Cuál es el mercado objetivo general para el café a procesar?</h2>
-      <div class="question">
-        <label><input type="checkbox" name="q8" value="Exportación - Exóticos"> Exportación - Exóticos</label>
-        <label><input type="checkbox" name="q8" value="Exportación - Regionales"> Exportación - Regionales</label>
-        <label><input type="checkbox" name="q8" value="Nacional - Exóticos"> Nacional - Exóticos</label>
-        <label><input type="checkbox" name="q8" value="Nacional - Regionales y Espresso"> Nacional - Regionales y Espresso</label>
+  
+      <!-- q8 -->
+      <div class="question-page hidden" id="page-8" data-param="q8">
+        <h2>¿Cuál es el mercado objetivo general para el café a procesar?</h2>
+        <div class="question">
+          <label><input type="checkbox" name="q8" value="Exportación - Exóticos"> Exportación - Exóticos</label>
+          <label><input type="checkbox" name="q8" value="Exportación - Regionales"> Exportación - Regionales</label>
+          <label><input type="checkbox" name="q8" value="Nacional - Exóticos"> Nacional - Exóticos</label>
+          <label><input type="checkbox" name="q8" value="Nacional - Regionales y Espresso"> Nacional - Regionales y Espresso</label>
+        </div>
+        <button onclick="nextPage()">Siguiente</button>
       </div>
-      <button onclick="nextPage()">Siguiente</button>
-    </div>
-
-    <!-- q9 -->
-    <div class="question-page hidden" id="page-9" data-param="q9">
-      <h2>¿Ha realizado experimentos previos o avances del proyecto? En caso afirmativo, agregue comentario.</h2>
-      <div class="question">
-        <textarea name="q9" rows="4" placeholder="Escribe aquí tu respuesta"></textarea>
+  
+      <!-- q9 -->
+      <div class="question-page hidden" id="page-9" data-param="q9">
+        <h2>¿Ha realizado experimentos previos o avances del proyecto? En caso afirmativo, agregue comentario.</h2>
+        <div class="question">
+          <textarea name="q9" rows="4" placeholder="Escribe aquí tu respuesta"></textarea>
+        </div>
+        <button id="submit-btn" onclick="submitSurvey()">Enviar</button>
       </div>
-      <button id="submit-btn" onclick="submitSurvey()">Enviar</button>
+  
+      <!-- página final -->
+      <div class="question-page hidden" id="page-10">
+        <h2>¡Gracias por participar!</h2>
+        <p>Tu respuesta ha sido registrada.</p>
+      </div>
     </div>
-
-    <!-- página final -->
-    <div class="question-page hidden" id="page-10">
-      <h2>¡Gracias por participar!</h2>
-      <p>Tu respuesta ha sido registrada.</p>
-    </div>
-
   </div>
 
   <!-- Footer -->
