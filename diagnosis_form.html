@@ -57,11 +57,14 @@
     }
     
     .question label input[type="checkbox"] {
-      flex-shrink: 0;           /* evita que el checkbox se reduzca */
+      flex-shrink: 0;        /* evita que el checkbox se reduzca */
+      width: 18px;            /* ancho fijo del checkbox */
+      height: 18px;           /* altura fija del checkbox */
     }
     
     .question label span {
       flex: 1;                   /* el texto ocupa todo el espacio restante */
+      margin-left: 0.3rem;
       word-break: break-word;    /* permite que el texto largo se rompa en varias líneas */
     }
   </style>
