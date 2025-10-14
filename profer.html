@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Manual de Fermentación - Protocolo Único (11 pasos)</title>
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --accent:#f59e0b; --muted:#94a3b8; --glass: rgba(255,255,255,0.04);
+      --max-width:1100px; font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(180deg,#071026 0%, #081828 60%);color:#e6eef8;display:flex;justify-content:center;padding:28px}
+    .wrap{width:100%;max-width:var(--max-width)}
+    header{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+    .brand{display:flex;flex-direction:column}
+    h1{margin:0;font-size:20px;letter-spacing:0.2px}
+    p.lead{margin:4px 0 0;color:var(--muted);font-size:13px}
+
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+    @media (max-width:880px){.grid{grid-template-columns:1fr}}
+
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;padding:14px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 6px 20px rgba(2,6,23,0.7)}
+    .card .num{width:42px;height:42px;border-radius:10px;background:var(--glass);display:inline-grid;place-items:center;font-weight:700;color:var(--accent);font-size:16px;margin-right:10px}
+    .card h3{margin:0;font-size:16px;display:flex;align-items:center}
+    .meta{margin-top:8px;color:var(--muted);font-size:13px}
+    .body{margin-top:10px;line-height:1.45;color:#e6eef8;font-size:14px}
+    .badge{display:inline-block;padding:6px 8px;border-radius:999px;background:rgba(245,158,11,0.12);color:var(--accent);font-weight:600;font-size:12px;margin-right:8px}
+    .warn{background:rgba(239,68,68,0.08);color:#fb7185;padding:6px 8px;border-radius:8px;font-size:13px;margin-top:10px;display:inline-block}
+
+    .sidebar{margin-top:10px;display:flex;gap:10px;flex-wrap:wrap}
+    .top-controls{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+    .btn{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px 12px;border-radius:10px;color:var(--muted);cursor:pointer}
+    .btn.primary{background:var(--accent);color:#071023;border:0}
+
+    nav.toc{position:sticky;top:18px}
+    .toc-list{display:flex;gap:8px;flex-wrap:wrap}
+    .toc-list a{font-size:13px;color:var(--muted);text-decoration:none;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.015)}
+
+    footer{margin-top:18px;color:var(--muted);font-size:13px;text-align:center}
+
+    /* print-friendly */
+    @media print{body{background:white;color:black} .card{box-shadow:none;border:1px solid #ccc} .btn, nav.toc, .top-controls{display:none}}
+
+    /* small helpers */
+    .small{font-size:13px;color:var(--muted)}
+    .note{margin-top:8px;padding:10px;border-radius:8px;background:rgba(255,255,255,0.02);font-size:13px;color:var(--muted)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo" style="width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#ef4444);display:grid;place-items:center;font-weight:800;color:#061023">Tunjo</div>
+      <div class="brand">
+        <h1>Manual: Protocolo de Fermentación — 11 pasos</h1>
+        <p class="lead">Protocolo único, claro y práctico para uso en finca. Imprime o usa en móvil. Incluye tiempos, dosificación y advertencias.</p>
+      </div>
+    </header>
+
+    <div class="top-controls">
+      <div class="sidebar">
+        <button class="btn" onclick="window.print()">Imprimir / PDF</button>
+        <button class="btn primary" onclick="toggleHints()">Mostrar / Ocultar Notas</button>
+      </div>
+      <nav class="toc">
+        <div class="toc-list">
+          <a href="#p1">1 Recolección</a>
+          <a href="#p2">2 Despulpado</a>
+          <a href="#p3">3 Flotación</a>
+          <a href="#p4">4 Limpieza</a>
+          <a href="#p5">5 Carga</a>
+          <a href="#p6">6 Agua</a>
+          <a href="#p7">7 Reposo</a>
+          <a href="#p8">8 Reactivación</a>
+          <a href="#p9">9 Inoculación</a>
+          <a href="#p10">10 Fermentación</a>
+          <a href="#p11">11 Finalización</a>
+        </div>
+      </nav>
+    </div>
+
+    <main class="grid">
+
+      <!-- Step 1 -->
+      <section id="p1" class="card">
+        <div style="display:flex;align-items:center">
+          <div class="num">1</div>
+          <h3>Recolección</h3>
+        </div>
+        <div class="meta">Objetivo: Seleccionar materia prima uniforme</div>
+        <div class="body">Selecciona únicamente <strong>cerezas maduras</strong>, firmes y de color uniforme. Evita frutos verdes o sobremaduros, ya que alteran la fermentación y reducen la consistencia del perfil sensorial.</div>
+        <div class="note hints">Consejo: Recolecta en cajas limpias y evita exponer la fruta al sol directo por tiempos largos.</div>
+      </section>
+
+      <!-- Step 2 -->
+      <section id="p2" class="card">
+        <div style="display:flex;align-items:center">
+          <div class="num">2</div>
+          <h3>Despulpado</h3>
+        </div>
+        <div class="meta">Objetivo: Retirar pulpa sin contaminar</div>
+        <div class="body">Despulpas las cerezas el mismo día de la cosecha. Asegúrate de limpiar bien el despulpador antes de usarlo y evitar contaminación cruzada con lotes previos.</div>
+        <div class="note hints">Checklist: máquina limpia, agua potable disponible, y personal con manos limpias o guantes.</div>
+      </section>
+
+      <!-- Step 3 -->
+      <section id="p3" class="card">
+        <div style="display:flex;align-items:center">
+          <div class="num">3</div>
+          <h3>Flotación</h3>
+        </div>
+        <div class="meta">Objetivo: Seleccionar granos densos</div>
+        <div class="body">Coloca el café despulpado en un tanque con agua limpia. Retira los granos que floten, ya que suelen ser defectuosos o inmaduros. Conserva los que se hunden, pues son los más densos y saludables. Luego escurre el exceso de agua antes del tratamiento químico.</div>
+        <div class="note hints">Sugerencia: realiza la flotación en agua fría y en lotes pequeños para mejor visibilidad.</div>
+      </section>
+
+      <!-- Step 4 -->
+      <section id="p4" class="card">
+        <div style="display:flex;align-items:center">
+          <div class="num">4</div>
+          <h3>Limpieza con Metabisulfito de Sodio</h3>
+        </div>
+        <div class="meta">Dosificación: 15 g de Metabisulfito en 30 L de agua</div>
+        <div class="body">Prepara una solución con 15 g de Metabisulfito de Sodio en 30 L de agua. Sumerge los granos durante <strong>5 minutos</strong> para reducir la carga microbiana superficial. Enjuaga ligeramente con agua limpia y pásalos al reactor de fermentación.</div>
+        <div class="warn">Advertencia: Manejar metabisulfito con cuidado. Evitar contacto directo y usar guantes. Mantener fuera del alcance de niños.</div>
+      </section>
+
+      <!-- Step 5 -->
+      <section id="p5" class="card">
+        <div style="display:flex;align-items:center">
+          <div class="num">5</div>
+          <h3>Carga del Reactor</h3>
+        </div>
+        <div class="meta">Volumen: 100 L granos en reactor 200 L</div>
+        <div class="body">Transfiere <strong>100 L</strong> de granos despulpados al reactor, asegurando una distribución uniforme sin compactarlos. Este reactor tiene una capacidad total de 200 L y trabajará con aproximadamente 120 L de agua.</div>
+        <div class="note hints">Nota operativa: evita apilar o compactar; deja espacio para circulación y gasificación.</div>
+      </section>
+
+      <!-- Step 6 -->
+      <section id="p6" class="card">
+        <div style="display:flex;align-items:center">
+          <div class="num">6</div>
+          <h3>Adición de Agua Tratada</h3>
+        </div>
+        <div class="meta">Dosificación agua: 0.8 g de Metabisulfito por cada 60 L</div>
+        <div class="body">Cubre los granos con agua previamente tratada con 0.8 g de Metabisulfito de Sodio por cada 60 L de agua, asegurando que queden apenas sumergidos. Este paso es importante dado que el agua de finca puede tener alta carga microbiana.</div>
+        <div class="note hints">Sugerencia: medir pH y asegurar temperatura del agua entre 18–25 °C si es posible.</div>
+      </section>
+
+      <!-- Step 7 -->
+      <section id="p7" class="card">
+        <div style="display:flex;align-items:center">
+          <div class="num">7</div>
+          <h3>Reposo Previo (Acondicionamiento)</h3>
+        </div>
+        <div class="meta">Tiempo: 2 horas (reactor cubierto)</div>
+        <div class="body">Deja reposar los granos durante <strong>2 horas</strong> en el reactor cubierto. Durante este tiempo, el metabisulfito actúa como sanitizante y estabiliza el entorno antes de inocular la levadura.</div>
+        <div class="note hints">Consejo: controla olores fuertes o cambios inesperados; si aparecen, inspeccionar antes de inocular.</div>
+      </section>
+
+      <!-- Step 8 -->
+      <section id="p8" class="card">
+        <div style="display:flex;align-items:center">
+          <div class="num">8</div>
+          <h3>Reactivación de Levadura</h3>
+        </div>
+        <div class="meta">Ingredientes: 60 g Saccharomyces cerevisiae (SafAle K-97)</div>
+        <div class="body">Mientras finaliza el reposo, prepara la levadura: pesa <strong>60 g</strong> de Saccharomyces cerevisiae (SafAle K-97), divididos en dos recipientes de 30 g. En cada recipiente, mezcla con agua tibia (35–38 °C) y 5 g de Springferm BR-2 como fuente de nutrientes. Deja reposar <strong>15 minutos</strong>, hasta que se observe espuma ligera o burbujeo.</div>
+        <div class="note hints">Tip: si la levadura no espumea, verifica temperatura y calidad del agua; puede ser necesario un tiempo adicional de activación.</div>
+      </section>
+
+      <!-- Step 9 -->
+      <section id="p9" class="card">
+        <div style="display:flex;align-items:center">
+          <div class="num">9</div>
+          <h3>Inoculación</h3>
+        </div>
+        <div class="meta">Método: Distribución suave sobre superficie</div>
+        <div class="body">Agrega la levadura activada suavemente sobre la superficie del café en el reactor, distribuyendo de manera uniforme sin agitar bruscamente. Esto inicia la fermentación controlada con población predominante de levaduras seleccionadas.</div>
+        <div class="note hints">Evita agitar: mover bruscamente puede reintroducir bacterias y alterar el desarrollo sensorial.</div>
+      </section>
+
+      <!-- Step 10 -->
+      <section id="p10" class="card">
+        <div style="display:flex;align-items:center">
+          <div class="num">10</div>
+          <h3>Fermentación Controlada</h3>
+        </div>
+        <div class="meta">Duración: 36–72 horas (monitoreo IoT)</div>
+        <div class="body">Cubre el reactor parcialmente (sin cierre hermético) y deja fermentar bajo monitoreo IoT, que registra y regula temperatura, pH y otras variables. La duración típica será entre <strong>36 y 72 horas</strong>, según los objetivos de sabor definidos.</div>
+        <div class="warn">Monitoreo: registrar temperatura y pH cada 2–6 horas. Suspende la fermentación si hay signos de contaminación (olor putrefacto, crecimiento anómalo).</div>
+      </section>
+
+      <!-- Step 11 -->
+      <section id="p11" class="card">
+        <div style="display:flex;align-items:center">
+          <div class="num">11</div>
+          <h3>Finalización y Lavado</h3>
+        </div>
+        <div class="meta">Acción: Retiro y lavado con agua limpia</div>
+        <div class="body">Una vez completado el tiempo de fermentación: retira los granos del reactor. Lava con agua limpia para eliminar residuos de mucílago y levadura. Continúa con el secado según tu método (patio, marquesina o secadora mecánica).</div>
+        <div class="note hints">Secado: secar uniformemente hasta alcanzar humedad objetivo (ej. 10–12%) antes de almacenar.</div>
+      </section>
+
+    </main>
+
+    <footer>
+      <div class="small">Creado para uso operativo — Ajusta dosis y tiempos según diagnóstico de laboratorio y condiciones locales.</div>
+    </footer>
+  </div>
+
+  <script>
+    function toggleHints(){
+      var els = document.querySelectorAll('.hints');
+      for(var i=0;i<els.length;i++){
+        var el=els[i]; el.style.display = (el.style.display==='none')? 'block':'none';
+      }
+    }
+    // hide hints by default on small screens
+    (function(){ if(window.innerWidth<700){ toggleHints(); }})();
+  </script>
+</body>
+</html>
