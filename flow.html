@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fases de la Fermentación Anaeróbica</title>
+<style>
+  body {
+    font-family: "Inter", sans-serif;
+    background: #0e1117;
+    color: #f8fafc;
+    margin: 0;
+    padding: 40px;
+  }
+
+  h1 {
+    text-align: center;
+    color: #22d3ee;
+    margin-bottom: 50px;
+    font-size: 2em;
+  }
+
+  .timeline {
+    position: relative;
+    max-width: 1000px;
+    margin: auto;
+  }
+
+  .phase {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 22%;
+    float: left;
+    text-align: center;
+    position: relative;
+  }
+
+  .phase:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 60px;
+    right: -11%;
+    width: 22%;
+    height: 4px;
+    background: linear-gradient(90deg, #22d3ee, #22c55e);
+    border-radius: 4px;
+  }
+
+  .circle {
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle at top left, #22d3ee, #164e63);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    margin-bottom: 15px;
+    box-shadow: 0 0 15px #22d3ee70;
+  }
+
+  .phase h2 {
+    color: #22d3ee;
+    font-size: 1.2em;
+    margin: 10px 0;
+  }
+
+  .phase p {
+    color: #cbd5e1;
+    font-size: 0.9em;
+    line-height: 1.4;
+    max-width: 200px;
+  }
+
+  .graph {
+    position: relative;
+    margin-top: 80px;
+    height: 200px;
+    width: 100%;
+  }
+
+  .curve {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-bottom: 1px dashed #334155;
+  }
+
+  svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .label {
+    position: absolute;
+    font-size: 0.85em;
+    color: #94a3b8;
+  }
+
+  .sugar { color: #f59e0b; }
+  .ph { color: #22c55e; }
+  .co2 { color: #38bdf8; }
+
+</style>
+</head>
+<body>
+
+<h1>Fases de la Fermentación Anaeróbica</h1>
+
+<div class="timeline">
+  <div class="phase">
+    <div class="circle">1</div>
+    <h2>Adaptación</h2>
+    <p>0–6 h<br>Microbios se adaptan. Sin CO₂ visible. Azúcar estable, pH neutro.</p>
+  </div>
+  <div class="phase">
+    <div class="circle">2</div>
+    <h2>Crecimiento</h2>
+    <p>6–30 h<br>Levaduras activas. Azúcar baja rápido, CO₂ y calor aumentan.</p>
+  </div>
+  <div class="phase">
+    <div class="circle">3</div>
+    <h2>Maduración</h2>
+    <p>30–60 h<br>Fermentación más lenta. Formación de ésteres y alcoholes.</p>
+  </div>
+  <div class="phase">
+    <div class="circle">4</div>
+    <h2>Declive</h2>
+    <p>60–90+ h<br>Nutrientes agotados. Riesgo de defectos si se prolonga.</p>
+  </div>
+</div>
+
+<div class="graph">
+  <svg width="1000" height="200" viewBox="0 0 1000 200">
+    <!-- Azúcar -->
+    <path d="M0,40 C200,50 400,130 1000,160" stroke="#f59e0b" stroke-width="3" fill="none"/>
+    <!-- pH -->
+    <path d="M0,90 C200,100 400,150 1000,130" stroke="#22c55e" stroke-width="3" fill="none"/>
+    <!-- CO2 -->
+    <path d="M0,160 C200,150 400,60 1000,80" stroke="#38bdf8" stroke-width="3" fill="none"/>
+  </svg>
+  <div class="label sugar" style="top:10px;left:10px;">Azúcar ↓</div>
+  <div class="label ph" style="top:90px;left:10px;">pH ↓ luego ↑</div>
+  <div class="label co2" style="top:150px;left:10px;">CO₂ ↑</div>
+</div>
+
+</body>
+</html>
