@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Saccharomyces Inoculation Protocol — 200 L (Coffee Cherry)</title>
+  <style>
+    :root{
+      --coffee-brown: #4b2e2a;
+      --coffee-light: #c69c6d;
+      --leaf-green: #2f6f3a;
+      --leaf-light: #7bb86b;
+      --bg: #fbfbf8;
+      --card: #ffffff;
+      --muted: #6b6b6b;
+      --max-width: 980px;
+      --radius: 12px;
+      --pad: 20px;
+    }
+    *{box-sizing:border-box}
+    body{
+      font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      background: linear-gradient(180deg,var(--bg),#f6fbf6);
+      color:#092018;
+      margin:0;
+      padding:32px; 
+      display:flex;
+      justify-content:center;
+    }
+    .container{
+      width:100%;
+      max-width:var(--max-width);
+      background:var(--card);
+      border-radius:var(--radius);
+      box-shadow: 0 8px 30px rgba(21, 30, 21, 0.08);
+      overflow:hidden;
+    }
+    header{
+      padding:24px var(--pad);
+      background: linear-gradient(90deg,var(--leaf-green),var(--coffee-brown));
+      color:#fff;
+      display:flex;
+      gap:16px;
+      align-items:center;
+    }
+    .logo{
+      width:64px;height:64px;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:14px;
+      background:rgba(255,255,255,0.08);backdrop-filter: blur(2px);
+      border:1px solid rgba(255,255,255,0.06)
+    }
+    header h1{margin:0;font-size:18px}
+    header p{margin:0;font-size:13px;opacity:0.95}
+
+    main{padding:28px var(--pad);}
+    .grid{display:grid;grid-template-columns: 1fr 320px;gap:20px}
+    .card{background:linear-gradient(180deg,var(--card),#fbfbfb);border-radius:10px;padding:18px;border:1px solid rgba(15,18,14,0.04)}
+    h2{color:var(--coffee-brown);margin:0 0 10px 0}
+    h3{margin:12px 0 8px 0;color:var(--leaf-green);font-size:15px}
+    p, li{line-height:1.45;color:#12241a}
+    ul{padding-left:18px}
+    .muted{color:var(--muted);font-size:13px}
+    pre{background:#0f1f14;color:#dff3e6;padding:12px;border-radius:8px;overflow:auto;font-size:13px}
+
+    /* minimal, subtle animation only for focus on code blocks */
+    pre:focus{outline:2px solid rgba(47,111,58,0.12)}
+
+    .sidebar .meta{display:flex;flex-direction:column;gap:8px}
+    .meta .row{display:flex;justify-content:space-between;font-size:14px}
+
+    footer{padding:18px var(--pad);border-top:1px solid rgba(10,12,10,0.03);background:linear-gradient(180deg,transparent,rgba(250,250,248,0.6));}
+
+    /* responsive */
+    @media (max-width:900px){
+      .grid{grid-template-columns:1fr;}
+      header{flex-direction:column;align-items:flex-start;gap:8px}
+      .logo{width:56px;height:56px}
+    }
+  </style>
+</head>
+<body>
+  <div class="container" role="document">
+    <header>
+            <div class="logo" style="width:64px;height:64px;border-radius:12px;display:grid;place-items:center;overflow:hidden;background:#061023;"><img src="TunjoWhite.png" alt="Tunjo Logo" style="width:100%;height:100%;object-fit:contain;"></div>
+      <div>
+        <h1>Saccharomyces Inoculation Protocol — 200 L (Coffee Cherry)</h1>
+        <p class="muted">Scaled field protocol for infiltrating Saccharomyces spp. into intact coffee cherries</p>
+      </div>
+    </header>
+
+    <main>
+      <div class="grid">
+        <section class="card">
+          <h2>Objective</h2>
+          <p>Enable internal colonization of coffee cherries by <em>Saccharomyces</em> spp. (e.g. <em>S. cerevisiae</em> K-97) using a field-adapted immersion/infiltration method. This protocol is optimized for a 200 L tank and avoids breaking the fruit skin while maximizing yeast establishment inside the mucilage.</p>
+
+          <h3>1. Inoculant preparation (200 L)</h3>
+          <ul>
+            <li><strong>Base (per L):</strong> boiled & cooled water 1 L; sugar/panela 20 g (2%); citric acid 0.5 g (≈pH 4.0–4.2).</li>
+            <li><strong>Yeast load:</strong> target <code>1×10<sup>6</sup>–1×10<sup>7</sup> cells/mL</code>. For the full tank, prepare ~200–300 g active dry yeast, rehydrated in warm sterile water (≈35 °C) for 15 min before mixing.</li>
+            <li>Hydrate and pre-activate yeast, then mix thoroughly into the warm inoculant.</li>
+          </ul>
+
+          <h3>2. Tank preparation</h3>
+          <ul>
+            <li>Use a tank ≥250 L to provide working headspace.</li>
+            <li>Clean with hot water and a mild oxidizer (1% peroxide or dilute chlorine), then rinse thoroughly with clean water to remove residues.</li>
+            <li>Avoid rusty or greasy surfaces.</li>
+          </ul>
+
+          <h3>3. Cherry pre-treatment</h3>
+          <ul>
+            <li>Select ripe, undamaged cherries only.</li>
+            <li>Wash with clean water + 0.1% citric acid or light vinegar solution; rinse well.</li>
+            <li>Optional stronger treatment: quick spray/dip with 70% ethanol and immediate rinse with boiled & cooled water (field-adapted asepsis).</li>
+            <li>Goal: reduce surface load while maintaining fruit integrity.</li>
+          </ul>
+
+          <h3>4. Passive infiltration (thermal + immersion)</h3>
+          <ol>
+            <li>Heat the inoculant to <strong>38–40 °C</strong> in the tank (use shaded area and controlled heating). Do not exceed 42 °C to avoid thermal stress to the yeast.</li>
+            <li>Fill the tank with the warm inoculant volume (200 L) and add cherries so they occupy ~60–70% of the tank volume.</li>
+            <li>Ensure cherries are completely submerged; use a clean perforated weight or mesh to keep them under the surface.</li>
+            <li>Allow the tank to cool slowly to ambient temperature (~24 °C). The cooling contraction of internal air spaces assists liquid infiltration.</li>
+            <li>Keep cherries submerged for <strong>24–48 h at 24–26 °C</strong>. Monitor for fine bubbling and a fruity aroma as signs of yeast activity.</li>
+          </ol>
+
+          <h3>5. Fermentation extension (optional)</h3>
+          <p>After the initial infiltration step you can:</p>
+          <ul>
+            <li>Remove the bulk liquid after 48 h if desired and keep cherries in a closed but not hermetic container to continue internal fermentation for another 24–36 h.</li>
+            <li>This step increases alcohol and fruity notes while limiting extended bacterial activity.</li>
+          </ul>
+
+          <h3>6. Basic monitoring & targets</h3>
+          <ul>
+            <li>Target pH start: 4.0–4.3; expected drop to 3.5–3.8 during fermentation.</li>
+            <li>Temperature: maintain 24–28 °C during active phase.</li>
+            <li>Signs of success: fine bubbling, clean fruity alcoholic aroma, absence of strong vinegar/putrid odors.</li>
+          </ul>
+
+          <h3>7. Sanitary considerations</h3>
+          <ul>
+            <li>Do not use rusty metal or containers with residues. Avoid chlorine residual in water.</li>
+            <li>Work with clean gloves and tools. Clean tank between batches and dry in sun where possible.</li>
+            <li>If contamination (foul odors, pellicle, excessive gas) appears, stop and sample for plating or discard safely.</li>
+          </ul>
+
+          <h3>8. Optional nutrient boost</h3>
+          <p>To support rapid yeast growth, add <strong>≈1 g/L melaza or cane juice</strong> (≈200 g for 200 L) to the inoculant before mixing. This provides nitrogen and micronutrients useful in field conditions.</p>
+
+          <h3>9. Controls & sampling</h3>
+          <ul>
+            <li>Run three parallel mini-controls where possible: (A) natural (no sterilization, no inoculum), (B) sterilized surface, no inoculum (to observe recolonization), (C) sterilized + inoculum.</li>
+            <li>Sample liquid or pulp daily for pH, Brix (if available), and plating to confirm yeast dominance.</li>
+          </ul>
+
+          <h3>10. Limitations & notes</h3>
+          <ul>
+            <li>Intact skin prevents full, uniform infiltration — method increases penetration but does not guarantee 100% internal colonization.</li>
+            <li>Aggressive surface sterilization can damage the fruit and change fermentation dynamics.</li>
+            <li>Seal any injection points if you choose to inject some fruits to boost colonization; injection is labor-intensive at scale.</li>
+          </ul>
+
+        </section>
+
+        <aside class="card sidebar">
+          <div class="meta">
+            <div class="row"><strong>Batch volume</strong><span>200 L</span></div>
+            <div class="row"><strong>Yeast load</strong><span>1×10⁶–1×10⁷ cells/mL</span></div>
+            <div class="row"><strong>Sugar</strong><span>2% (20 g/L)</span></div>
+            <div class="row"><strong>Citric acid</strong><span>0.5 g/L</span></div>
+            <div class="row"><strong>Temp (inoculation)</strong><span>38–40 °C (inoculant)</span></div>
+            <div class="row"><strong>Incubation</strong><span>24–48 h submerged; 24–36 h optional</span></div>
+          </div>
+
+          <hr style="margin:12px 0;border:none;border-top:1px solid rgba(15,18,14,0.04)">
+          <div>
+            <h3>Quick checklist</h3>
+            <ul>
+              <li>Tank cleaned & rinsed</li>
+              <li>Cherries sorted & washed</li>
+              <li>Inoculant prepared & warmed</li>
+              <li>Cherries submerged & weighted</li>
+              <li>Monitor pH, aroma, temp daily</li>
+            </ul>
+          </div>
+
+          <hr style="margin:12px 0;border:none;border-top:1px solid rgba(15,18,14,0.04)">
+          <div class="muted">Need co-inoculation guidance (LAB + yeast)? Ask to get a vetted recipe and timing for mixed cultures.</div>
+        </aside>
+      </div>
+    </main>
+
+    <footer>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+        <div class="muted">Protocol prepared for on-farm use. Adjust to local conditions and safety practice.</div>
+        <div style="font-size:13px;color:var(--leaf-green)">Tunjo • Field Fermentation Guide</div>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
