@@ -1,0 +1,43 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36" version="28.2.5">
+  <diagram name="Page-1" id="HMQt-MAaGtdYhL1KK3ba">
+    <mxGraphModel dx="1160" dy="705" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="CFxnlr3_B_XjnplBHUHx-1" value="Finca" style="swimlane;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="250" y="90" width="600" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="CFxnlr3_B_XjnplBHUHx-3" value="Cosecha" style="rounded=1;whiteSpace=wrap;html=1;" parent="CFxnlr3_B_XjnplBHUHx-1" vertex="1">
+          <mxGeometry x="10" y="50" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="CFxnlr3_B_XjnplBHUHx-4" value="Despulpado" style="rounded=1;whiteSpace=wrap;html=1;" parent="CFxnlr3_B_XjnplBHUHx-1" vertex="1">
+          <mxGeometry x="180" y="50" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="CFxnlr3_B_XjnplBHUHx-5" value="Secado" style="rounded=1;whiteSpace=wrap;html=1;" parent="CFxnlr3_B_XjnplBHUHx-1" vertex="1">
+          <mxGeometry x="460" y="50" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="CFxnlr3_B_XjnplBHUHx-6" value="Lavado" style="rounded=1;whiteSpace=wrap;html=1;" parent="CFxnlr3_B_XjnplBHUHx-1" vertex="1">
+          <mxGeometry x="360" y="50" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="CFxnlr3_B_XjnplBHUHx-8" value="Ferm Cereza" style="rounded=1;whiteSpace=wrap;html=1;" parent="CFxnlr3_B_XjnplBHUHx-1" vertex="1">
+          <mxGeometry x="90" y="90" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="CFxnlr3_B_XjnplBHUHx-9" value="Ferm Baba" style="rounded=1;whiteSpace=wrap;html=1;" parent="CFxnlr3_B_XjnplBHUHx-1" vertex="1">
+          <mxGeometry x="260" y="90" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="CFxnlr3_B_XjnplBHUHx-2" value="Planta" style="swimlane;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="310" y="470" width="390" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="CFxnlr3_B_XjnplBHUHx-7" value="Selección" style="rounded=1;whiteSpace=wrap;html=1;" parent="CFxnlr3_B_XjnplBHUHx-2" vertex="1">
+          <mxGeometry x="280" y="60" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="CFxnlr3_B_XjnplBHUHx-10" value="Enriquecimiento" style="rounded=1;whiteSpace=wrap;html=1;" parent="CFxnlr3_B_XjnplBHUHx-2" vertex="1">
+          <mxGeometry x="110" y="60" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="CFxnlr3_B_XjnplBHUHx-11" value="Trilla" style="rounded=1;whiteSpace=wrap;html=1;" parent="CFxnlr3_B_XjnplBHUHx-2" vertex="1">
+          <mxGeometry x="10" y="60" width="80" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
