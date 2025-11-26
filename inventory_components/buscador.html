@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prototype - Autocomplete + Inline Create/Edit</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    .autocomplete-container {
+      position: relative;
+      width: 100%;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    .results {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-top: 4px;
+      max-height: 200px;
+      overflow-y: auto;
+      display: none;
+    }
+    .result-item {
+      padding: 10px;
+      cursor: pointer;
+    }
+    .result-item:hover {
+      background: #f2f2f2;
+    }
+    .inline-form {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      display: none;
+    }
+    .inline-form input {
+      margin-top: 8px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 8px 16px;
+      font-size: 14px;
+      border-radius: 6px;
+      border: none;
+      background: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h2>🔍 Buscar o Crear Ítem</h2>
+  <div class="autocomplete-container">
+    <input id="searchBox" placeholder="Buscar producto..." autocomplete="off" />
+    <div id="results" class="results"></div>
+  </div>
+
+  <div id="itemForm" class="inline-form">
+    <h3 id="formTitle">Nuevo Ítem</h3>
+    <label>Nombre:</label>
+    <input id="itemName" />
+
+    <label>Categoría:</label>
+    <input id="itemCategory" />
+
+    <button onclick="saveItem()">Guardar</button>
+  </div>
+
+  <script>
+    // Fake database
+    const items = [
+      { name: "Azúcar", category: "Materia Prima" },
+      { name: "Harina", category: "Materia Prima" },
+      { name: "Chocolate", category: "Producto Final" }
+    ];
+
+    const searchBox = document.getElementById("searchBox");
+    const results = document.getElementById("results");
+    const form = document.getElementById("itemForm");
+    const itemName = document.getElementById("itemName");
+    const itemCategory = document.getElementById("itemCategory");
+    const formTitle = document.getElementById("formTitle");
+
+    let editingItem = null;
+
+    searchBox.addEventListener("input", () => {
+      const query = searchBox.value.toLowerCase();
+      results.innerHTML = "";
+
+      if (!query) {
+        results.style.display = "none";
+        return;
+      }
+
+      const filtered = items.filter(i => i.name.toLowerCase().includes(query));
+
+      if (filtered.length === 0) {
+        results.innerHTML = `<div class='result-item'>Crear "${searchBox.value}"</div>`;
+      } else {
+        filtered.forEach(item => {
+          const div = document.createElement("div");
+          div.className = "result-item";
+          div.textContent = item.name;
+          div.onclick = () => openEdit(item);
+          results.appendChild(div);
+        });
+      }
+
+      results.style.display = "block";
+    });
+
+    function openEdit(item) {
+      editingItem = item;
+      formTitle.innerText = "Editar Ítem";
+      itemName.value = item.name;
+      itemCategory.value = item.category;
+      form.style.display = "block";
+      results.style.display = "none";
+    }
+
+    function saveItem() {
+      if (editingItem) {
+        editingItem.name = itemName.value;
+        editingItem.category = itemCategory.value;
+      } else {
+        items.push({ name: itemName.value, category: itemCategory.value });
+      }
+      alert("Ítem guardado.");
+      form.style.display = "none";
+      searchBox.value = "";
+    }
+
+    // Handle create new
+    results.addEventListener("click", e => {
+      if (e.target.textContent.startsWith("Crear")) {
+        editingItem = null;
+        formTitle.innerText = "Crear Ítem";
+        itemName.value = searchBox.value;
+        itemCategory.value = "";
+        form.style.display = "block";
+        results.style.display = "none";
+      }
+    });
+  </script>
+</body>
+</html>
