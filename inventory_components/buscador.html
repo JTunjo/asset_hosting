@@ -11,61 +11,77 @@
       margin: 40px auto;
       padding: 0 20px;
     }
-    .autocomplete-container {
-      position: relative;
-      width: 100%;
-    }
+
+    .autocomplete-container { position: relative; width: 100%; }
+
     input {
-      width: 100%;
-      padding: 10px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+      width: 100%; padding: 10px; font-size: 16px;
+      border: 1px solid #ccc; border-radius: 6px;
     }
+
     .results {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      background: white;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      margin-top: 4px;
-      max-height: 200px;
-      overflow-y: auto;
+      position: absolute; top: 100%; left: 0; right: 0; background: white;
+      border: 1px solid #ccc; border-radius: 6px;
+      margin-top: 4px; max-height: 200px; overflow-y: auto;
       display: none;
     }
-    .result-item {
-      padding: 10px;
-      cursor: pointer;
-    }
-    .result-item:hover {
-      background: #f2f2f2;
-    }
+
+    .result-item { padding: 10px; cursor: pointer; }
+    .result-item:hover { background: #f2f2f2; }
+
+    /* Accordion container */
     .inline-form {
       margin-top: 20px;
-      padding: 15px;
       border: 1px solid #ccc;
       border-radius: 8px;
+      padding: 15px;
       display: none;
     }
-    .inline-form input {
-      margin-top: 8px;
+
+    /* Animated accordion panel */
+    #formFields {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
     }
-    button {
-      margin-top: 15px;
-      padding: 8px 16px;
-      font-size: 14px;
-      border-radius: 6px;
+
+    #formFields.open {
+      max-height: 500px;
+    }
+
+    /* Hamburger button */
+    #toggleForm {
+      background: none;
       border: none;
-      background: #007bff;
-      color: white;
       cursor: pointer;
+      font-size: 24px;
+      margin-bottom: 10px;
     }
+
+    .hamburger {
+      display: inline-block;
+      width: 24px;
+      height: 2px;
+      background: #333;
+      position: relative;
+    }
+    .hamburger::before,
+    .hamburger::after {
+      content: "";
+      position: absolute;
+      width: 24px;
+      height: 2px;
+      background: #333;
+      left: 0;
+      transition: 0.3s;
+    }
+    .hamburger::before { top: -7px; }
+    .hamburger::after { top: 7px; }
   </style>
 </head>
 <body>
   <h2>🔍 Buscar o Crear Ítem</h2>
+
   <div class="autocomplete-container">
     <input id="searchBox" placeholder="Buscar producto..." autocomplete="off" />
     <div id="results" class="results"></div>
@@ -73,31 +89,58 @@
 
   <div id="itemForm" class="inline-form">
     <h3 id="formTitle">Nuevo Ítem</h3>
-    <label>Nombre:</label>
-    <input id="itemName" />
 
-    <label>Categoría:</label>
-    <input id="itemCategory" />
+    <button id="toggleForm" type="button">
+      <div class="hamburger"></div>
+    </button>
 
-    <button onclick="saveItem()">Guardar</button>
+    <div id="formFields">
+      <label>Nombre:</label>
+      <input id="itemName" />
+
+      <label>Código:</label>
+      <input id="itemCod" />
+
+      <label>Unidad:</label>
+      <input id="itemUnidad" />
+
+      <label>Precio de compra:</label>
+      <input id="itemPrecioCompra" />
+
+      <label>Precio de venta:</label>
+      <input id="itemPrecioVenta" />
+
+      <button onclick="saveItem()">Guardar</button>
+    </div>
   </div>
 
   <script>
-    // Fake database
     const items = [
-      { name: "Azúcar", category: "Materia Prima" },
-      { name: "Harina", category: "Materia Prima" },
-      { name: "Chocolate", category: "Producto Final" }
+      { name: "Azúcar", cod: "", unidad: "Kilo", precio_de_compra: "17000"},
+      { name: "Harina", cod: "A34C5D", unidad: "Kilo", precio_de_compra: "7300"},
+      { name: "Torta de Chocolate", cod: "7701234567890", unidad: "unidad", precio_de_venta: "35000" }
     ];
 
     const searchBox = document.getElementById("searchBox");
     const results = document.getElementById("results");
     const form = document.getElementById("itemForm");
-    const itemName = document.getElementById("itemName");
-    const itemCategory = document.getElementById("itemCategory");
     const formTitle = document.getElementById("formTitle");
 
+    const itemName = document.getElementById("itemName");
+    const itemCod = document.getElementById("itemCod");
+    const itemUnidad = document.getElementById("itemUnidad");
+    const itemPrecioCompra = document.getElementById("itemPrecioCompra");
+    const itemPrecioVenta = document.getElementById("itemPrecioVenta");
+
+    const formFields = document.getElementById("formFields");
+    const toggleButton = document.getElementById("toggleForm");
+
     let editingItem = null;
+
+    // Toggle accordion manually
+    toggleButton.onclick = () => {
+      formFields.classList.toggle("open");
+    };
 
     searchBox.addEventListener("input", () => {
       const query = searchBox.value.toLowerCase();
@@ -128,32 +171,56 @@
     function openEdit(item) {
       editingItem = item;
       formTitle.innerText = "Editar Ítem";
+
       itemName.value = item.name;
-      itemCategory.value = item.category;
+      itemCod.value = item.cod || "";
+      itemUnidad.value = item.unidad || "";
+      itemPrecioCompra.value = item.precio_de_compra || "";
+      itemPrecioVenta.value = item.precio_de_venta || "";
+
       form.style.display = "block";
+      // formFields.classList.add("open"); // No auto-open for existing items
       results.style.display = "none";
     }
 
     function saveItem() {
       if (editingItem) {
         editingItem.name = itemName.value;
-        editingItem.category = itemCategory.value;
+        editingItem.cod = itemCod.value;
+        editingItem.unidad = itemUnidad.value;
+        editingItem.precio_de_compra = itemPrecioCompra.value;
+        editingItem.precio_de_venta = itemPrecioVenta.value;
       } else {
-        items.push({ name: itemName.value, category: itemCategory.value });
+        items.push({
+          name: itemName.value,
+          cod: itemCod.value,
+          unidad: itemUnidad.value,
+          precio_de_compra: itemPrecioCompra.value,
+          precio_de_venta: itemPrecioVenta.value
+        });
       }
+
       alert("Ítem guardado.");
       form.style.display = "none";
       searchBox.value = "";
+      formFields.classList.remove("open");
     }
 
-    // Handle create new
+    // Create new item
     results.addEventListener("click", e => {
       if (e.target.textContent.startsWith("Crear")) {
         editingItem = null;
         formTitle.innerText = "Crear Ítem";
+
         itemName.value = searchBox.value;
-        itemCategory.value = "";
+        itemCod.value = "";
+        itemUnidad.value = "";
+        itemPrecioCompra.value = "";
+        itemPrecioVenta.value = "";
+
         form.style.display = "block";
+        formFields.classList.add("open"); // Auto open accordion
+
         results.style.display = "none";
       }
     });
