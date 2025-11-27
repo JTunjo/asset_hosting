@@ -1,0 +1,456 @@
+
+Scottish Enterprise
+scottish-enterprise.com
+https://www.linkedin.com/company/scottish-enterprise/
+Carbogenics Ltd
+Biochar
+Novel CDR
+Seed
+United Kingdom
+–
+–
+–
+–
+Yes
+SFO (Startup Family Office)
+sfo.vc/en/
+https://www.linkedin.com/company/sfovc/
+ecoLocked GmbH
+Biochar
+Novel CDR
+Seed
+Germany
+–
+–
+–
+–
+Yes
+Shastra VC
+shastra.vc
+–
+Alt Carbon (Darjeeling Revival Project)
+Enhanced rock weathering
+Novel CDR
+Pre-seed
+India
+–
+–
+–
+–
+Yes
+Susquehanna Sustainable Investments
+sig-ssi.com/
+–
+Yama
+Direct air carbon capture & storage
+Novel CDR
+Seed
+France
+–
+–
+–
+–
+Yes
+Silverstrand Capital
+silverstrand.capital/
+–
+Planboo Eco AB
+Biochar
+Novel CDR
+Seed
+Sweden
+–
+–
+–
+–
+Yes
+Søren Jensen RaceToZero Invest ApS
+sj.dk
+–
+Soletair Power
+Direct air carbon capture & storage
+Novel CDR
+Seed
+Finland
+–
+–
+–
+–
+Yes
+SLB
+slb.com
+–
+Kanop
+MRV
+Enabler
+Pre-seed
+France
+–
+–
+–
+–
+Yes
+Speedinvest
+speedinvest.com
+https://www.linkedin.com/company/speedinvest/
+NeoCarbon GmbH
+Direct air carbon capture & storage
+Novel CDR
+Seed
+Germany
+–
+–
+–
+–
+Yes
+StartupLab Founders
+startuplab.no
+–
+Inherit Carbon Solutions [former Agero Carbon Solutions]
+Bioenergy with carbon capture & storage
+Novel CDR
+Seed
+Norway
+–
+2022
+–
+–
+Yes
+Stratel
+stratel.no
+–
+Inherit Carbon Solutions [former Agero Carbon Solutions]
+Bioenergy with carbon capture & storage
+Novel CDR
+Seed
+Norway
+–
+2022
+Yes
+–
+Yes
+Suffice International Limited
+suffice-group.com/
+–
+Soletair Power
+Direct air carbon capture & storage
+Novel CDR
+Seed
+Finland
+–
+–
+–
+–
+Yes
+Super Capital VC
+supercapital.vc
+–
+Kanop
+MRV
+Enabler
+Pre-seed
+France
+–
+–
+–
+–
+Yes
+SWEN Capital Partners
+swen-cp.fr/en/
+–
+Novocarbo GmbH
+Biochar
+Novel CDR
+Series-A
+Germany
+–
+2024
+–
+–
+Yes
+Symbia VC
+symbia-vc.com/
+–
+Tree.ly
+Project Finance
+Enabler
+Seed
+Austria
+–
+–
+–
+–
+Yes
+Syndicate One
+syndicate.one/
+–
+Sirona Technologies
+Direct air carbon capture & storage
+Novel CDR
+Pre-seed
+Belgium
+–
+–
+–
+–
+Yes
+Tyrolean Business Angel Network
+tba.network/en/
+–
+Tree.ly
+Project Finance
+Enabler
+Seed
+Austria
+–
+–
+–
+–
+Yes
+TD Veen
+tdveen.no/en/
+–
+Made of Air
+Mineral products
+Novel CDR
+Seed
+Germany
+–
+–
+Yes
+–
+Yes
+Teampact.ventures
+teampact.ventures
+–
+MORFO
+Afforestation, reforestation, agroforestry, forest management
+Conventional CDR
+Seed
+France
+–
+–
+–
+–
+Yes
+Techstart Ventures
+techstart.vc
+https://www.linkedin.com/company/techstart-ventures/about/
+Carbogenics Ltd
+Biochar
+Novel CDR
+Seed
+United Kingdom
+–
+–
+Yes
+–
+Yes
+Catalyst Fund
+thecatalystfund.com
+–
+Octavia Carbon
+Direct air carbon capture & storage
+Novel CDR
+Seed
+Kenya
+–
+–
+–
+–
+Yes
+Theia Venture
+theia-ventures.com/
+–
+Varaha
+Enhanced rock weathering
+Novel CDR
+Seed
+India
+–
+–
+–
+–
+Yes
+Trellis Road
+trellisroad.com
+–
+Inplanet [former Woonderlands]
+Enhanced rock weathering
+Novel CDR
+Pre-seed
+Germany
+–
+2023
+–
+–
+Yes
+Tuesday Capital
+tuesday.vc
+–
+Made of Air
+Mineral products
+Novel CDR
+Seed
+Germany
+–
+–
+–
+–
+Yes
+Majra
+uaemajra.ae/
+–
+HyveGeo
+Biochar
+Novel CDR
+Pre-seed
+United Kingdom
+–
+2023
+–
+–
+Yes
+UBS
+ubs.com
+–
+neustark AG
+Mineral products
+Novel CDR
+Series-B
+Switzerland
+–
+–
+–
+–
+Yes
+UVC Partners
+uvcpartners.com
+–
+Reverion GmbH
+Bioenergy with carbon capture & storage
+Novel CDR
+Series-A
+Germany
+–
+–
+–
+–
+Yes
+Vantaa Energy
+vantaanenergia.fi
+–
+Carbonaide
+Mineral products
+Novel CDR
+Seed
+Finland
+–
+–
+–
+–
+Yes
+Verve Ventures
+verve.vc
+–
+neustark AG
+Mineral products
+Novel CDR
+Series-B
+Switzerland
+–
+–
+–
+–
+Yes
+Verve Ventures
+verve.vc
+–
+Phlair [former Carbon Atlantis]
+Direct air carbon capture & storage
+Novel CDR
+Seed
+Germany
+–
+–
+–
+–
+Yes
+Vækstfonden (The Danish Growth Fund)
+vf.dk
+–
+Klimate
+Marketplace
+Enabler
+Pre-seed
+Denmark
+–
+–
+–
+–
+Yes
+VR Ventures
+vr-ventures.vc/
+–
+ClimeFi [former Carbonˣ]
+Project Finance
+Enabler
+Pre-seed
+France
+–
+2022
+–
+–
+Yes
+Wärtsilä Corporation
+wartsila.com
+–
+Soletair Power
+Direct air carbon capture & storage
+Novel CDR
+Seed
+Finland
+–
+–
+Yes
+–
+Yes
+XAnge
+xange.vc
+–
+Pina
+MRV
+Enabler
+Seed
+Germany
+–
+–
+Yes
+–
+Yes
+XAnge
+xange.vc
+–
+Sirona Technologies
+Direct air carbon capture & storage
+Novel CDR
+Seed
+Belgium
+–
+–
+Yes
+–
+Yes
+YB Startup
+ybstartup.com
+–
+Qaptis
+Bioenergy with carbon capture & storage
+Novel CDR
+Seed
+Switzerland
+–
+–
+–
+–
+Yes
