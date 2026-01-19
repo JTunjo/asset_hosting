@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Encuesta - Café IOT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --accent: #facc15;
+    --bg: #f9fafb;
+    --surface: #ffffff;
+    --border: #e5e7eb;
+    --text: #111827;
+    --muted: #6b7280;
+    }
+
+    * {
+    box-sizing: border-box;
+    }
+
+    body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, Inter, Ubuntu, sans-serif;
+    background: linear-gradient(180deg, #f9fafb 0%, #eef2ff 100%);
+    margin: 0;
+    color: var(--text);
+    }
+
+    /* ===== Header ===== */
+    .header {
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
+    }
+
+    .header-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    }
+
+    .header h1 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    margin: 0;
+    }
+
+    /* ===== Progress bar ===== */
+    .progress-wrapper {
+    position: relative;
+    width: 80%;
+    max-width: 500px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 999px;
+    margin: 0.7rem auto 0;
+    overflow: hidden;
+    }
+
+    #progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), #fde047);
+    border-radius: 999px;
+    transition: width 0.35s ease;
+    }
+
+    #progress-text {
+    position: absolute;
+    right: -42px;
+    top: -4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    opacity: 0.9;
+    }
+
+    /* ===== Main layout ===== */
+    .main-content {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+    margin-top: 130px;
+    margin-bottom: 90px;
+    }
+
+    /* ===== Survey card ===== */
+    .survey-container {
+    background: var(--surface);
+    width: 100%;
+    max-width: 520px;
+    padding: 2.2rem;
+    border-radius: 18px;
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    border: 1px solid var(--border);
+    }
+
+    /* ===== Question pages ===== */
+    .question-page h2 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 1.2rem;
+    }
+
+    /* ===== Inputs ===== */
+    input,
+    textarea {
+    width: 100%;
+    padding: 0.65rem 0.7rem;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    font-size: 0.95rem;
+    background: #f9fafb;
+    transition: all 0.2s ease;
+    }
+
+    input:focus,
+    textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    /* ===== Checkboxes ===== */
+    .question label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    padding: 0.55rem 0.6rem;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #f9fafb;
+    cursor: pointer;
+    transition: background 0.2s ease, border 0.2s ease;
+    font-size: 0.9rem;
+    }
+
+    .question label:hover {
+    background: #eef2ff;
+    border-color: var(--primary);
+    }
+
+    .question input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary);
+    margin-top: 2px;
+    }
+
+    /* ===== Buttons ===== */
+    button {
+    margin-top: 1.4rem;
+    width: 100%;
+    padding: 0.7rem 1rem;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.35);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 28px rgba(37, 99, 235, 0.45);
+    }
+
+    button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    }
+
+    /* ===== Spinner ===== */
+    .spinner {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 3px solid rgba(255, 255, 255, 0.4);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    vertical-align: middle;
+    margin-left: 10px;
+    }
+
+    @keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+    }
+
+    /* ===== Footer ===== */
+    footer {
+    background: #f3f4f6;
+    text-align: center;
+    padding: 1rem;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    font-size: 0.85rem;
+    color: var(--muted);
+    }
+
+    .hidden {
+    display: none;
+    }
+
+
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header style="background:#2563eb; color:white; text-align:center; padding:1rem; position:fixed; top:0; width:100%; z-index:10;">
+    <!-- Contenedor vertical para logo + título -->
+    <div style="display:flex; flex-direction:column; align-items:center; gap:0.5rem;">
+      <img src="TunjoWhite.png" alt="Tunjo Logo" style="height:40px;"/>
+      <h1 style="margin:0; font-size:1.5rem;">Encuesta - Café IOT</h1>
+    </div>
+
+      <!-- Barra de progreso -->
+    <div class="progress-wrapper">
+      <div id="progress-bar"></div>
+      <span id="progress-text">0%</span>
+    </div>
+  </header>
+
+  <div class="main-content">
+    <div class="survey-container" style="width:100%; max-width:500px;">
+      <!-- q1 -->
+      <div class="question-page" id="page-1" data-param="q1">
+        <h2>Nombre del Proyecto/Organización</h2>
+        <div class="question">
+          <input type="text" name="q1" placeholder="Escribe aquí tu respuesta"/>
+        </div>
+        <button onclick="nextPage()">Siguiente</button>
+      </div>
+
+      <!-- q2 -->
+      <div class="question-page hidden" id="page-2" data-param="q2">
+        <h2>Por favor describa brevemente los problemas que tiene actualmente con el procesamiento de café</h2>
+        <div class="question">
+          <textarea name="q2" rows="4" placeholder="Escribe aquí tu respuesta"></textarea>
+        </div>
+        <button onclick="nextPage()">Siguiente</button>
+      </div>
+
+      <!-- q3 -->
+      <div class="question-page hidden" id="page-3" data-param="q3">
+        <h2>Objetivo de la implementación, ¿Qué buscamos mejorar en cifras?</h2>
+        <div class="question">
+          <textarea name="q3" rows="4" placeholder="Escribe aquí tu respuesta"></textarea>
+        </div>
+        <button onclick="nextPage()">Siguiente</button>
+      </div>
+
+      <!-- q4 -->
+      <div class="question-page hidden" id="page-4" data-param="q4">
+        <h2>Cantidad total de Kg café a procesar, por cosecha</h2>
+        <div class="question">
+          <input type="number" name="q4" placeholder="Kg"/>
+        </div>
+        <button onclick="nextPage()">Siguiente</button>
+      </div>
+
+      <!-- q5 -->
+      <div class="question-page hidden" id="page-5" data-param="q5">
+        <h2>Cantidad de Kg café a procesar por lote, Café máximo a llenar en Marquesina o en biorreactores</h2>
+        <div class="question">
+          <input type="number" name="q5" placeholder="Kg"/>
+        </div>
+        <button onclick="nextPage()">Siguiente</button>
+      </div>
+
+      <!-- q6 -->
+      <div class="question-page hidden" id="page-6" data-param="q6">
+        <h2>Perfil deseado de Proceso</h2>
+        <div class="question">
+          <label></span><input type="checkbox" name="q6" value="Lavado"><span>Lavado</span></label>
+          <label><input type="checkbox" name="q6" value="Honey"> <span>Honey</span></label>
+          <label><input type="checkbox" name="q6" value="Natural"><span>Natural</span></label>
+        </div>
+        <button onclick="nextPage()">Siguiente</button>
+      </div>
+
+      <!-- q7 -->
+      <div class="question-page hidden" id="page-7" data-param="q7">
+        <h2>Perfil deseado de sabor</h2>
+        <div class="question">
+          <label><input type="checkbox" name="q7" value="Terroir (Lavados y Fermentación Espontánea)"> Terroir (Lavados y Fermentación Espontánea)</label>
+          <label><input type="checkbox" name="q7" value="Oxidaciones y Fermentaciones Inoculadas o Maceración Carbónica"> Oxidaciones y Fermentaciones Inoculadas o Maceración Carbónica</label>
+          <label><input type="checkbox" name="q7" value="Cofermentación"> Cofermentación</label>
+          <label><input type="checkbox" name="q7" value="Infusión"> Infusión</label>
+        </div>
+        <button onclick="nextPage()">Siguiente</button>
+      </div>
+
+      <!-- q8 -->
+      <div class="question-page hidden" id="page-8" data-param="q8">
+        <h2>¿Cuál es el mercado objetivo general para el café a procesar?</h2>
+        <div class="question">
+          <label><input type="checkbox" name="q8" value="Exportación - Exóticos"> Exportación - Exóticos</label>
+          <label><input type="checkbox" name="q8" value="Exportación - Regionales"> Exportación - Regionales</label>
+          <label><input type="checkbox" name="q8" value="Nacional - Exóticos"> Nacional - Exóticos</label>
+          <label><input type="checkbox" name="q8" value="Nacional - Regionales y Espresso"> Nacional - Regionales y Espresso</label>
+        </div>
+        <button onclick="nextPage()">Siguiente</button>
+      </div>
+
+      <!-- q9 -->
+      <div class="question-page hidden" id="page-9" data-param="q9">
+        <h2>¿Ha realizado experimentos previos o avances del proyecto? En caso afirmativo, agregue comentario.</h2>
+        <div class="question">
+          <textarea name="q9" rows="4" placeholder="Escribe aquí tu respuesta"></textarea>
+        </div>
+        <button id="submit-btn" onclick="submitSurvey()">Enviar</button>
+      </div>
+
+      <!-- página final -->
+      <div class="question-page hidden" id="page-10">
+        <h2>¡Gracias por participar!</h2>
+        <p>Tu respuesta ha sido registrada.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer style="background:#f3f4f6; text-align:center; padding:1rem; position:fixed; bottom:0; width:100%; font-size:0.9rem; color:#374151;">
+    Tunjo Smart Solutions, 2025 © Todos los derechos reservados
+  </footer>
+
+
+  <script>
+    const endpoint = "https://script.google.com/macros/s/AKfycbwILfGGg_WBQfkGz_asScqwRRhvtsJ3sJNiB_kRcRyk8lIoAAXbSP9HIkL4EihUf6jM/exec";
+    const pages = Array.from(document.querySelectorAll('.question-page')).filter(p => !p.id.includes('page-10'));
+    let currentIndex = 0;
+    showPage(currentIndex);
+
+    function showPage(i){
+      pages.forEach((p, idx) => p.classList.toggle('hidden', idx !== i));
+      updateProgress();
+    }
+
+    function nextPage(){
+      const page = pages[currentIndex];
+      const param = page.dataset.param;
+      if(param){
+        // validación mínima para input/textarea
+        const input = page.querySelector('input, textarea');
+        if(input && !input.value.trim()){
+          alert('Por favor responde la pregunta antes de continuar.');
+          return;
+        }
+        // validación mínima para checkboxes
+        const cbs = page.querySelectorAll('input[type="checkbox"]');
+        if(cbs.length && ![...cbs].some(cb => cb.checked)){
+          alert('Por favor selecciona al menos una opción.');
+          return;
+        }
+      }
+      if(currentIndex < pages.length -1){
+        currentIndex++;
+        showPage(currentIndex);
+      }
+    }
+
+    function collectAnswers(){
+      const result = {};
+      pages.forEach(page=>{
+        const key = page.dataset.param;
+        if(!key) return;
+        const cbs = page.querySelectorAll('input[type="checkbox"]:checked');
+        if(cbs.length){
+          result[key] = [...cbs].map(cb=>cb.value).join(', ');
+          return;
+        }
+        const input = page.querySelector('input, textarea');
+        if(input) result[key] = input.value.trim();
+      });
+      return result;
+    }
+
+    function updateProgress() {
+      const progressBar = document.getElementById('progress-bar');
+      const progressText = document.getElementById('progress-text');
+      const totalPages = pages.length;
+      const currentPage = currentIndex + 1;
+      const percent = Math.round((currentPage / totalPages) * 100);
+
+      progressBar.style.width = percent + '%';
+      progressText.textContent = percent + '%';
+    }
+
+    async function submitSurvey(){
+      const btn = document.getElementById('submit-btn');
+      // deshabilitar botón
+      btn.disabled = true;
+
+      // agregar spinner
+      const spinner = document.createElement('span');
+      spinner.className = 'spinner';
+      btn.appendChild(spinner);
+
+      const answers = collectAnswers();
+      const qs = Object.keys(answers)
+        .map(k => `${encodeURIComponent(k)}=${encodeURIComponent(answers[k]||'')}`)
+        .join('&');
+      const url = endpoint + '?' + qs;
+
+      try {
+        await fetch(url, {method:'GET'});
+      } catch(e){
+        console.error(e);
+        alert("Ocurrió un error al enviar la encuesta.");
+      }
+
+      // ocultar todas las páginas y mostrar la página final
+      document.querySelectorAll('.question-page').forEach(p=>p.classList.add('hidden'));
+      document.getElementById('page-10').classList.remove('hidden');
+    }
+
+  </script>
+</body>
+</html>
