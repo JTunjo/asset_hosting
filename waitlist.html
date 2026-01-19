@@ -1,248 +1,210 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Registro a la Lista de espera</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Registro a la Lista de Espera</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        Roboto, Inter, Ubuntu, sans-serif;
-      background: linear-gradient(180deg, #f9fafb 0%, #eef2ff 100%);
-      margin: 0;
-    }
+<style>
+body{
+  font-family: system-ui, sans-serif;
+  background: linear-gradient(180deg,#f9fafb,#eef2ff);
+  margin:0;
+}
+.hidden{display:none !important;}
 
-    .hidden { display: none; }
+header{
+  background:#2563eb;
+  color:white;
+  text-align:center;
+  padding:1rem;
+  position:fixed;
+  top:0;
+  width:100%;
+}
 
-    header {
-      background: linear-gradient(135deg, #2563eb, #1e40af);
-      color: white;
-      text-align: center;
-      padding: 1rem;
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 10;
-    }
+.main{
+  margin-top:130px;
+  margin-bottom:80px;
+  display:flex;
+  justify-content:center;
+}
 
-    .progress-wrapper {
-      width: 80%;
-      max-width: 500px;
-      height: 10px;
-      background: rgba(255,255,255,0.3);
-      border-radius: 999px;
-      margin: 0.5rem auto 0;
-      overflow: hidden;
-      position: relative;
-    }
+.card{
+  background:white;
+  padding:2rem;
+  border-radius:16px;
+  width:100%;
+  max-width:520px;
+  box-shadow:0 20px 40px rgba(0,0,0,.08);
+}
 
-    #progress-bar {
-      height: 100%;
-      width: 0%;
-      background: #facc15;
-      transition: width 0.3s;
-    }
+input,textarea{
+  width:100%;
+  padding:.6rem;
+  margin-top:.5rem;
+  border-radius:10px;
+  border:1px solid #e5e7eb;
+}
 
-    #progress-text {
-      position: absolute;
-      right: -40px;
-      top: -4px;
-      font-size: 0.75rem;
-    }
+button{
+  margin-top:1.4rem;
+  width:100%;
+  padding:.7rem;
+  border-radius:12px;
+  border:none;
+  background:#2563eb;
+  color:white;
+  font-weight:600;
+  cursor:pointer;
+}
 
-    .main-content {
-      display: flex;
-      justify-content: center;
-      margin-top: 130px;
-      margin-bottom: 90px;
-      padding: 1rem;
-    }
+/* SUCCESS ANIMATION — HARD HIDDEN */
+#success-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(255,255,255,.8);
+  backdrop-filter:blur(4px);
+  align-items:center;
+  justify-content:center;
+  z-index:100;
+}
 
-    .survey-container {
-      background: white;
-      max-width: 520px;
-      width: 100%;
-      padding: 2rem;
-      border-radius: 16px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-    }
+.check{
+  width:90px;
+  height:90px;
+  background:#2563eb;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  animation:pop .3s ease-out;
+}
 
-    input, textarea {
-      width: 100%;
-      padding: 0.6rem;
-      margin-top: 0.5rem;
-      border-radius: 10px;
-      border: 1px solid #e5e7eb;
-    }
+.check svg{
+  width:48px;
+  height:48px;
+  fill:none;
+  stroke:white;
+  stroke-width:5;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  stroke-dasharray:50;
+  stroke-dashoffset:50;
+  animation:draw .4s ease-out forwards .2s;
+}
 
-    button {
-      margin-top: 1.5rem;
-      width: 100%;
-      padding: 0.7rem;
-      border-radius: 12px;
-      border: none;
-      background: #2563eb;
-      color: white;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    /* Success animation */
-    .success-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(255,255,255,0.75);
-      backdrop-filter: blur(4px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 50;
-    }
-
-    .check-circle {
-      width: 90px;
-      height: 90px;
-      background: #2563eb;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      animation: pop 0.3s ease-out;
-    }
-
-    .check-circle svg {
-      width: 48px;
-      height: 48px;
-      fill: none;
-      stroke: white;
-      stroke-width: 5;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      stroke-dasharray: 50;
-      stroke-dashoffset: 50;
-      animation: draw 0.4s ease-out forwards 0.2s;
-    }
-
-    @keyframes draw { to { stroke-dashoffset: 0; } }
-    @keyframes pop {
-      from { transform: scale(0.6); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-  </style>
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+</style>
 </head>
 
 <body>
 
 <header>
   <img src="TunjoWhite.png" height="40">
-  <h1>Encuesta - Café IOT</h1>
-  <div class="progress-wrapper">
-    <div id="progress-bar"></div>
-    <span id="progress-text">0%</span>
-  </div>
+  <h2>Registro a la Lista de Espera</h2>
 </header>
 
-<div class="main-content">
-  <div class="survey-container">
+<div class="main">
+<div class="card">
 
-    <div class="question-page" data-param="q1">
-      <h2>Nombre de la Organización</h2>
-      <input name="q1" type="text">
-      <button onclick="nextPage()">Siguiente</button>
-    </div>
-
-    <div class="question-page hidden" data-param="q2">
-      <h2>Nombre del Proyecto</h2>
-      <textarea name="q2"></textarea>
-      <button onclick="nextPage()">Siguiente</button>
-    </div>
-
-    <div class="question-page hidden" data-param="q3">
-      <h2>Correo electrónico</h2>
-      <input name="q3" type="email">
-      <button onclick="nextPage()">Siguiente</button>
-    </div>
-
-    <div class="question-page hidden" data-param="q4">
-      <h2>Teléfono</h2>
-      <input name="q4" type="text">
-      <button onclick="nextPage()">Siguiente</button>
-    </div>
-
-    <div class="question-page hidden" data-param="q5">
-      <h2>¿Por qué le sería útil?</h2>
-      <textarea name="q5"></textarea>
-      <button id="submit-btn" onclick="submitSurvey()">Enviar</button>
-    </div>
-
-    <div class="question-page hidden" id="page-10">
-      <h2>¡Gracias por participar!</h2>
-      <p>Tu respuesta ha sido registrada.</p>
-    </div>
-
-  </div>
+<div class="page" data-q="q1">
+<h3>Nombre de la Organización</h3>
+<input name="q1">
+<button onclick="next()">Siguiente</button>
 </div>
 
-<div id="success-overlay" class="success-overlay hidden">
-  <div class="check-circle">
+<div class="page hidden" data-q="q2">
+<h3>Nombre del Proyecto</h3>
+<textarea name="q2"></textarea>
+<button onclick="next()">Siguiente</button>
+</div>
+
+<div class="page hidden" data-q="q3">
+<h3>Email</h3>
+<input name="q3">
+<button onclick="next()">Siguiente</button>
+</div>
+
+<div class="page hidden" data-q="q4">
+<h3>Teléfono</h3>
+<input name="q4">
+<button onclick="next()">Siguiente</button>
+</div>
+
+<div class="page hidden" data-q="q5">
+<h3>Motivo de interés</h3>
+<textarea name="q5"></textarea>
+<button onclick="next()">Siguiente</button>
+</div>
+
+<div class="page hidden" data-q="q6">
+<h3>Perfil deseado</h3>
+<textarea name="q6"></textarea>
+<button onclick="submitSurvey()">Enviar</button>
+</div>
+
+<div class="page hidden" id="thanks">
+<h2>¡Gracias por participar!</h2>
+<p>Tu respuesta ha sido registrada.</p>
+</div>
+
+</div>
+</div>
+
+<!-- SUCCESS OVERLAY -->
+<div id="success-overlay">
+  <div class="check">
     <svg viewBox="0 0 52 52">
-      <path d="M14 27 L23 36 L38 18" />
+      <path d="M14 27 L23 36 L38 18"/>
     </svg>
   </div>
 </div>
 
 <script>
-  const endpoint = "https://script.google.com/macros/s/AKfycbywXF69-sKQ7NBi8kXkYNDlq1m68Ov5ICx2HC16Z7rwW9BFlXN89__p_CQcIxBWlc4sRg/exec";
-  const pages = [...document.querySelectorAll('.question-page')].filter(p => p.id !== 'page-10');
-  let currentIndex = 0;
+const endpoint="YOUR_APPS_SCRIPT_URL";
+const pages=[...document.querySelectorAll(".page:not(#thanks)")];
+let idx=0;
 
-  showPage(0);
+function show(){
+  pages.forEach((p,i)=>p.classList.toggle("hidden",i!==idx));
+}
+show();
 
-  function showPage(i) {
-    pages.forEach((p, idx) => p.classList.toggle('hidden', idx !== i));
-    updateProgress();
-  }
+function next(){
+  idx++;
+  show();
+}
 
-  function nextPage() {
-    currentIndex++;
-    showPage(currentIndex);
-  }
+function collect(){
+  const data={};
+  pages.forEach(p=>{
+    const k=p.dataset.q;
+    if(!k)return;
+    data[k]=p.querySelector("input,textarea").value.trim();
+  });
+  return data;
+}
 
-  function collectAnswers() {
-    const data = {};
-    pages.forEach(p => {
-      const key = p.dataset.param;
-      if (!key) return;
-      const input = p.querySelector('input, textarea');
-      data[key] = input.value.trim();
-    });
-    return data;
-  }
+async function submitSurvey(){
+  const data=collect();
+  const qs=Object.entries(data)
+    .map(([k,v])=>`${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
+    .join("&");
 
-  function updateProgress() {
-    const percent = Math.round(((currentIndex + 1) / pages.length) * 100);
-    document.getElementById('progress-bar').style.width = percent + '%';
-    document.getElementById('progress-text').textContent = percent + '%';
-  }
+  await fetch(endpoint+"?"+qs);
 
-  async function submitSurvey() {
-    const answers = collectAnswers();
-    const qs = Object.entries(answers)
-      .map(([k,v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
-      .join('&');
+  const overlay=document.getElementById("success-overlay");
+  overlay.style.display="flex";
 
-    await fetch(endpoint + "?" + qs, { method: "GET" });
-
-    const overlay = document.getElementById('success-overlay');
-    overlay.classList.remove('hidden');
-
-    setTimeout(() => {
-      overlay.classList.add('hidden');
-      pages.forEach(p => p.classList.add('hidden'));
-      document.getElementById('page-10').classList.remove('hidden');
-    }, 800);
-  }
+  setTimeout(()=>{
+    overlay.style.display="none";
+    pages.forEach(p=>p.classList.add("hidden"));
+    document.getElementById("thanks").classList.remove("hidden");
+  },800);
+}
 </script>
 
 </body>
