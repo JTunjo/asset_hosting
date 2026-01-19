@@ -4,469 +4,248 @@
   <meta charset="UTF-8">
   <title>Registro a la Lista de espera</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
     :root {
-    --primary: #2563eb;
-    --primary-dark: #1d4ed8;
-    --accent: #facc15;
-    --bg: #f9fafb;
-    --surface: #ffffff;
-    --border: #e5e7eb;
-    --text: #111827;
-    --muted: #6b7280;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --accent: #facc15;
+      --bg: #f9fafb;
+      --surface: #ffffff;
+      --border: #e5e7eb;
+      --text: #111827;
+      --muted: #6b7280;
     }
 
-    * {
-    box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
         Roboto, Inter, Ubuntu, sans-serif;
-    background: linear-gradient(180deg, #f9fafb 0%, #eef2ff 100%);
-    margin: 0;
-    color: var(--text);
+      background: linear-gradient(180deg, #f9fafb 0%, #eef2ff 100%);
+      margin: 0;
+      color: var(--text);
     }
+
+    .hidden { display: none !important; }
 
     /* ===== Header ===== */
     .header {
-    background: linear-gradient(135deg, #2563eb, #1e40af);
-    color: white;
-    text-align: center;
-    padding: 1rem;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 10;
-    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
+      background: linear-gradient(135deg, #2563eb, #1e40af);
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 10;
+      box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
     }
 
-    .header-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.4rem;
-    }
-
-    .header h1 {
-    font-size: 1.4rem;
-    font-weight: 600;
-    letter-spacing: 0.3px;
-    margin: 0;
-    }
-
-    /* ===== Progress bar ===== */
     .progress-wrapper {
-    position: relative;
-    width: 80%;
-    max-width: 500px;
-    height: 10px;
-    background: rgba(255, 255, 255, 0.25);
-    border-radius: 999px;
-    margin: 0.7rem auto 0;
-    overflow: hidden;
+      position: relative;
+      width: 80%;
+      max-width: 500px;
+      height: 10px;
+      background: rgba(255,255,255,0.25);
+      border-radius: 999px;
+      margin: 0.7rem auto 0;
+      overflow: hidden;
     }
 
     #progress-bar {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent), #fde047);
-    border-radius: 999px;
-    transition: width 0.35s ease;
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), #fde047);
+      transition: width 0.35s ease;
     }
 
     #progress-text {
-    position: absolute;
-    right: -42px;
-    top: -4px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    opacity: 0.9;
+      position: absolute;
+      right: -42px;
+      top: -4px;
+      font-size: 0.75rem;
+      font-weight: 600;
     }
 
-    /* ===== Main layout ===== */
     .main-content {
-    display: flex;
-    justify-content: center;
-    padding: 1rem;
-    margin-top: 130px;
-    margin-bottom: 90px;
+      display: flex;
+      justify-content: center;
+      padding: 1rem;
+      margin-top: 130px;
+      margin-bottom: 90px;
     }
 
-    /* ===== Survey card ===== */
     .survey-container {
-    background: var(--surface);
-    width: 100%;
-    max-width: 520px;
-    padding: 2.2rem;
-    border-radius: 18px;
-    box-shadow:
-        0 20px 40px rgba(0, 0, 0, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.6);
-    border: 1px solid var(--border);
+      background: var(--surface);
+      width: 100%;
+      max-width: 520px;
+      padding: 2.2rem;
+      border-radius: 18px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+      border: 1px solid var(--border);
     }
 
-    /* ===== Question pages ===== */
-    .question-page h2 {
-    font-size: 1.15rem;
-    font-weight: 600;
-    line-height: 1.4;
-    margin-bottom: 1.2rem;
+    input, textarea {
+      width: 100%;
+      padding: 0.65rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #f9fafb;
     }
 
-    /* ===== Inputs ===== */
-    input,
-    textarea {
-    width: 100%;
-    padding: 0.65rem 0.7rem;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    font-size: 0.95rem;
-    background: #f9fafb;
-    transition: all 0.2s ease;
-    }
-
-    input:focus,
-    textarea:focus {
-    outline: none;
-    border-color: var(--primary);
-    background: white;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-    }
-
-    /* ===== Checkboxes ===== */
-    .question label {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.6rem;
-    padding: 0.55rem 0.6rem;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    background: #f9fafb;
-    cursor: pointer;
-    transition: background 0.2s ease, border 0.2s ease;
-    font-size: 0.9rem;
-    }
-
-    .question label:hover {
-    background: #eef2ff;
-    border-color: var(--primary);
-    }
-
-    .question input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    accent-color: var(--primary);
-    margin-top: 2px;
-    }
-
-    /* ===== Buttons ===== */
     button {
-    margin-top: 1.4rem;
-    width: 100%;
-    padding: 0.7rem 1rem;
-    background: linear-gradient(135deg, #2563eb, #1d4ed8);
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-size: 0.95rem;
-    font-weight: 600;
-    letter-spacing: 0.3px;
-    cursor: pointer;
-    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.35);
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-
-    button:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 14px 28px rgba(37, 99, 235, 0.45);
-    }
-
-    button:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-    }
-
-    /* ===== Spinner ===== */
-    .spinner {
-    display: inline-block;
-    width: 18px;
-    height: 18px;
-    border: 3px solid rgba(255, 255, 255, 0.4);
-    border-top-color: white;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    vertical-align: middle;
-    margin-left: 10px;
-    }
-
-    @keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-    }
-
-    /* ===== Footer ===== */
-    footer {
-    background: #f3f4f6;
-    text-align: center;
-    padding: 1rem;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    font-size: 0.85rem;
-    color: var(--muted);
-    }
-
-    .hidden {
-    display: none;
+      margin-top: 1.4rem;
+      width: 100%;
+      padding: 0.7rem;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
     }
 
     /* ===== Success animation ===== */
     .success-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(4px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 50;
+      position: fixed;
+      inset: 0;
+      background: rgba(255,255,255,0.75);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+    }
+
+    .success-overlay.hidden {
+      display: none !important;
     }
 
     .check-circle {
-    width: 90px;
-    height: 90px;
-    background: #2563eb;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    animation: pop 0.3s ease-out;
+      width: 90px;
+      height: 90px;
+      background: #2563eb;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: pop 0.3s ease-out;
     }
 
     .check-circle svg {
-    width: 48px;
-    height: 48px;
-    fill: none;
-    stroke: white;
-    stroke-width: 5;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    stroke-dasharray: 50;
-    stroke-dashoffset: 50;
-    animation: draw-check 0.4s ease-out forwards;
-    animation-delay: 0.2s;
+      width: 48px;
+      height: 48px;
+      fill: none;
+      stroke: white;
+      stroke-width: 5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 50;
+      stroke-dashoffset: 50;
+      animation: draw-check 0.4s ease-out forwards;
+      animation-delay: 0.2s;
     }
 
-    @keyframes draw-check {
-    to {
-        stroke-dashoffset: 0;
-    }
-    }
-
+    @keyframes draw-check { to { stroke-dashoffset: 0; } }
     @keyframes pop {
-    0% {
-        transform: scale(0.6);
-        opacity: 0;
+      from { transform: scale(0.6); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
     }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-    }
-
   </style>
 </head>
+
 <body>
-  <!-- Header -->
-  <header style="background:#2563eb; color:white; text-align:center; padding:1rem; position:fixed; top:0; width:100%; z-index:10;">
-    <!-- Contenedor vertical para logo + título -->
-    <div style="display:flex; flex-direction:column; align-items:center; gap:0.5rem;">
-      <img src="TunjoWhite.png" alt="Tunjo Logo" style="height:40px;"/>
-      <h1 style="margin:0; font-size:1.5rem;">Encuesta - Café IOT</h1>
-    </div>
 
-      <!-- Barra de progreso -->
-    <div class="progress-wrapper">
-      <div id="progress-bar"></div>
-      <span id="progress-text">0%</span>
-    </div>
-  </header>
-
-  <div class="main-content">
-    <div class="survey-container" style="width:100%; max-width:500px;">
-      <!-- q1 -->
-      <div class="question-page" id="page-1" data-param="q1">
-        <h2>Nombre de la Organización</h2>
-        <div class="question">
-          <input type="text" name="q1" placeholder="Escribe aquí tu respuesta"/>
-        </div>
-        <button onclick="nextPage()">Siguiente</button>
-      </div>
-
-      <!-- q2 -->
-      <div class="question-page hidden" id="page-2" data-param="q2">
-        <h2>Nombre del Proyecto</h2>
-        <div class="question">
-          <textarea name="q2" rows="4" placeholder="Escribe aquí tu respuesta"></textarea>
-        </div>
-        <button onclick="nextPage()">Siguiente</button>
-      </div>
-
-      <!-- q3 -->
-      <div class="question-page hidden" id="page-3" data-param="q3">
-        <h2>Correo electrónico corporativo</h2>
-        <div class="question">
-          <input type="email" name="q3" placeholder="correo@dominio.com"/>
-        </div>
-        <button onclick="nextPage()">Siguiente</button>
-      </div>
-
-      <!-- q4 -->
-      <div class="question-page hidden" id="page-4" data-param="q4">
-        <h2>Teléfono de contacto</h2>
-        <div class="question">
-          <input type="number" name="q4" placeholder="0000000000"/>
-        </div>
-        <button onclick="nextPage()">Siguiente</button>
-      </div>
-
-      <!-- q5 -->
-      <div class="question-page hidden" id="page-5" data-param="q5">
-        <h2>Razón por la cual la aplicación le sería de valor</h2>
-        <div class="question">
-          <textarea name="q5" rows="4" placeholder="Escribe aquí tu respuesta"></textarea>
-        </div>
-        <button onclick="nextPage()">Siguiente</button>
-      </div>
-
-      <!-- q6 -->
-      <div class="question-page hidden" id="page-6" data-param="q6">
-        <h2>Perfil deseado de Proceso</h2>
-        <div class="question">
-          <textarea name="q6" rows="4" placeholder="Escribe aquí tu respuesta"></textarea>
-        </div>
-        <button onclick="nextPage()">Siguiente</button>
-      </div>
-
-      <!-- página final -->
-      <div class="question-page hidden" id="page-10">
-        <h2>¡Gracias por participar!</h2>
-        <p>Tu respuesta ha sido registrada.</p>
-      </div>
-    </div>
+<header class="header">
+  <img src="TunjoWhite.png" height="40">
+  <h1>Encuesta - Café IOT</h1>
+  <div class="progress-wrapper">
+    <div id="progress-bar"></div>
+    <span id="progress-text">0%</span>
   </div>
+</header>
 
-    <!-- Success animation overlay -->
-    <div id="success-overlay" class="success-overlay hidden">
-    <div class="check-circle">
-        <svg viewBox="0 0 52 52">
-        <path d="M14 27 L23 36 L38 18" />
-        </svg>
+<div class="main-content">
+  <div class="survey-container">
+
+    <div class="question-page" data-param="q1">
+      <h2>Nombre de la Organización</h2>
+      <input type="text">
+      <button onclick="nextPage()">Siguiente</button>
     </div>
+
+    <div class="question-page hidden" data-param="q2">
+      <h2>Nombre del Proyecto</h2>
+      <textarea></textarea>
+      <button onclick="nextPage()">Siguiente</button>
     </div>
 
-  <!-- Footer -->
-  <footer style="background:#f3f4f6; text-align:center; padding:1rem; position:fixed; bottom:0; width:100%; font-size:0.9rem; color:#374151;">
-    Tunjo Smart Solutions, 2026 © Todos los derechos reservados
-  </footer>
+    <div class="question-page hidden" data-param="q3">
+      <h2>Correo electrónico corporativo</h2>
+      <input type="email">
+      <button onclick="nextPage()">Siguiente</button>
+    </div>
 
-  <script>
-    const endpoint = "https://script.google.com/macros/s/AKfycbywXF69-sKQ7NBi8kXkYNDlq1m68Ov5ICx2HC16Z7rwW9BFlXN89__p_CQcIxBWlc4sRg/exec";
-    const pages = Array.from(document.querySelectorAll('.question-page')).filter(p => !p.id.includes('page-10'));
-    let currentIndex = 0;
+    <div class="question-page hidden" data-param="q4">
+      <h2>Teléfono de contacto</h2>
+      <input type="number">
+      <button onclick="nextPage()">Siguiente</button>
+    </div>
+
+    <div class="question-page hidden" data-param="q5">
+      <h2>Razón por la cual la aplicación le sería de valor</h2>
+      <textarea></textarea>
+      <button onclick="submitSurvey()" id="submit-btn">Enviar</button>
+    </div>
+
+    <div class="question-page hidden" id="page-10">
+      <h2>¡Gracias por participar!</h2>
+      <p>Tu respuesta ha sido registrada.</p>
+    </div>
+
+  </div>
+</div>
+
+<div id="success-overlay" class="success-overlay hidden">
+  <div class="check-circle">
+    <svg viewBox="0 0 52 52">
+      <path d="M14 27 L23 36 L38 18"/>
+    </svg>
+  </div>
+</div>
+
+<script>
+  const pages = document.querySelectorAll('.question-page:not(#page-10)');
+  let currentIndex = 0;
+  showPage(0);
+
+  function showPage(i) {
+    pages.forEach((p, idx) => p.classList.toggle('hidden', idx !== i));
+    updateProgress();
+  }
+
+  function nextPage() {
+    currentIndex++;
     showPage(currentIndex);
+  }
 
-    function showPage(i){
-      pages.forEach((p, idx) => p.classList.toggle('hidden', idx !== i));
-      updateProgress();
-    }
+  function updateProgress() {
+    const percent = Math.round(((currentIndex + 1) / pages.length) * 100);
+    document.getElementById('progress-bar').style.width = percent + '%';
+    document.getElementById('progress-text').textContent = percent + '%';
+  }
 
-    function nextPage(){
-      const page = pages[currentIndex];
-      const param = page.dataset.param;
-      if(param){
-        // validación mínima para input/textarea
-        const input = page.querySelector('input, textarea');
-        if(input && !input.value.trim()){
-          alert('Por favor responde la pregunta antes de continuar.');
-          return;
-        }
-        // validación mínima para checkboxes
-        const cbs = page.querySelectorAll('input[type="checkbox"]');
-        if(cbs.length && ![...cbs].some(cb => cb.checked)){
-          alert('Por favor selecciona al menos una opción.');
-          return;
-        }
-      }
-      if(currentIndex < pages.length -1){
-        currentIndex++;
-        showPage(currentIndex);
-      }
-    }
-
-    function collectAnswers(){
-      const result = {};
-      pages.forEach(page=>{
-        const key = page.dataset.param;
-        if(!key) return;
-        const cbs = page.querySelectorAll('input[type="checkbox"]:checked');
-        if(cbs.length){
-          result[key] = [...cbs].map(cb=>cb.value).join(', ');
-          return;
-        }
-        const input = page.querySelector('input, textarea');
-        if(input) result[key] = input.value.trim();
-      });
-      return result;
-    }
-
-    function updateProgress() {
-      const progressBar = document.getElementById('progress-bar');
-      const progressText = document.getElementById('progress-text');
-      const totalPages = pages.length;
-      const currentPage = currentIndex + 1;
-      const percent = Math.round((currentPage / totalPages) * 100);
-
-      progressBar.style.width = percent + '%';
-      progressText.textContent = percent + '%';
-    }
-
-    async function submitSurvey(){
-      const btn = document.getElementById('submit-btn');
-      // deshabilitar botón
-      btn.disabled = true;
-
-      // agregar spinner
-      const spinner = document.createElement('span');
-      spinner.className = 'spinner';
-      btn.appendChild(spinner);
-
-      const answers = collectAnswers();
-      const qs = Object.keys(answers)
-        .map(k => `${encodeURIComponent(k)}=${encodeURIComponent(answers[k]||'')}`)
-        .join('&');
-      const url = endpoint + '?' + qs;
-
-      try {
-        await fetch(url, {method:'GET'});
-      } catch(e){
-        console.error(e);
-        alert("Ocurrió un error al enviar la encuesta.");
-      }
-
-    // mostrar animación de éxito
+  async function submitSurvey() {
     const overlay = document.getElementById('success-overlay');
     overlay.classList.remove('hidden');
 
-    // después de 800 ms, mostrar pantalla final
     setTimeout(() => {
-    overlay.classList.add('hidden');
-    document.querySelectorAll('.question-page').forEach(p => p.classList.add('hidden'));
-    document.getElementById('page-10').classList.remove('hidden');
+      overlay.classList.add('hidden');
+      pages.forEach(p => p.classList.add('hidden'));
+      document.getElementById('page-10').classList.remove('hidden');
     }, 800);
-    }
+  }
+</script>
 
-  </script>
 </body>
 </html>
