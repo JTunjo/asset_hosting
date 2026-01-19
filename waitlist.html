@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Registro a la Lista de Espera</title>
+<title>Registro a Lista de Espera</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -59,7 +59,7 @@ button{
   cursor:pointer;
 }
 
-/* SUCCESS ANIMATION — HARD HIDDEN */
+/* SUCCESS OVERLAY — NEVER VISIBLE ON LOAD */
 #success-overlay{
   display:none;
   position:fixed;
@@ -104,7 +104,7 @@ button{
 
 <header>
   <img src="TunjoWhite.png" height="40">
-  <h2>Registro a la Lista de Espera</h2>
+  <h2>Registro a Lista de Espera</h2>
 </header>
 
 <div class="main">
@@ -112,19 +112,19 @@ button{
 
 <div class="page" data-q="q1">
 <h3>Nombre de la Organización</h3>
-<input name="q1">
+<input name="q1" placeholder="Escriba su respuesta aquí">
 <button onclick="next()">Siguiente</button>
 </div>
 
 <div class="page hidden" data-q="q2">
 <h3>Nombre del Proyecto</h3>
-<textarea name="q2"></textarea>
+<textarea name="q2" placeholder="Escriba su respuesta aquí"></textarea>
 <button onclick="next()">Siguiente</button>
 </div>
 
 <div class="page hidden" data-q="q3">
 <h3>Email</h3>
-<input name="q3">
+<input email="q3">
 <button onclick="next()">Siguiente</button>
 </div>
 
@@ -135,14 +135,14 @@ button{
 </div>
 
 <div class="page hidden" data-q="q5">
-<h3>Motivo de interés</h3>
-<textarea name="q5"></textarea>
+<h3>¿Qué valor que espera obtener de la aplicación?</h3>
+<textarea name="q5" placeholder="Escriba su respuesta aquí"></textarea>
 <button onclick="next()">Siguiente</button>
 </div>
 
 <div class="page hidden" data-q="q6">
-<h3>Perfil deseado</h3>
-<textarea name="q6"></textarea>
+<h3>¿Por qué medio tuvo conocimiento de la aplicación?</h3>
+<textarea name="q6" placeholder="Redes Sociales, Evento, Publicación, etc."></textarea>
 <button onclick="submitSurvey()">Enviar</button>
 </div>
 
@@ -164,7 +164,7 @@ button{
 </div>
 
 <script>
-const endpoint="YOUR_APPS_SCRIPT_URL";
+const endpoint="https://script.google.com/macros/s/AKfycbywXF69-sKQ7NBi8kXkYNDlq1m68Ov5ICx2HC16Z7rwW9BFlXN89__p_CQcIxBWlc4sRg/exec";
 const pages=[...document.querySelectorAll(".page:not(#thanks)")];
 let idx=0;
 
@@ -190,15 +190,19 @@ function collect(){
 
 async function submitSurvey(){
   const data=collect();
+
   const qs=Object.entries(data)
     .map(([k,v])=>`${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
     .join("&");
 
-  await fetch(endpoint+"?"+qs);
+  // 1️⃣ SEND DATA FIRST
+  await fetch(endpoint + "?" + qs, { method:"GET" });
 
+  // 2️⃣ SHOW ANIMATION ONLY AFTER SUCCESS
   const overlay=document.getElementById("success-overlay");
   overlay.style.display="flex";
 
+  // 3️⃣ AFTER 800ms → THANK YOU
   setTimeout(()=>{
     overlay.style.display="none";
     pages.forEach(p=>p.classList.add("hidden"));
