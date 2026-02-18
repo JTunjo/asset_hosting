@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coffee Fermentation Protocols</title>
+<style>
+  :root {
+    --blue: #3a70cc;
+    --green: #0ffca0;
+    --white: #fefcfd;
+    --lavender: #aab2e7;
+    --dark: #0d1117;
+    --dark2: #161b24;
+    --card: #1a2133;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--dark);
+    color: var(--white);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.6;
+  }
+
+  /* HERO */
+  header {
+    background: linear-gradient(135deg, var(--dark2) 0%, #0d1a30 100%);
+    border-bottom: 1px solid rgba(58,112,204,0.3);
+    padding: 60px 24px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 60% at 50% 0%, rgba(15,252,160,0.08) 0%, transparent 70%);
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(15,252,160,0.12);
+    border: 1px solid rgba(15,252,160,0.4);
+    color: var(--green);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+  header h1 {
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 800;
+    letter-spacing: -1px;
+    background: linear-gradient(120deg, var(--white) 40%, var(--lavender));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+  header p {
+    color: var(--lavender);
+    font-size: 15px;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  /* NAV TABS */
+  .tabs {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 28px 24px 0;
+    flex-wrap: wrap;
+  }
+  .tab {
+    background: var(--card);
+    border: 1px solid rgba(170,178,231,0.2);
+    color: var(--lavender);
+    padding: 10px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: all 0.2s;
+  }
+  .tab:hover { border-color: var(--blue); color: var(--white); }
+  .tab.active {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: var(--white);
+    box-shadow: 0 0 20px rgba(58,112,204,0.4);
+  }
+
+  /* MAIN */
+  main { max-width: 900px; margin: 0 auto; padding: 32px 24px 60px; }
+
+  .protocol { display: none; }
+  .protocol.active { display: block; }
+
+  /* SECTION HEADER */
+  .proto-header {
+    background: linear-gradient(135deg, var(--card), #1e2a44);
+    border: 1px solid rgba(58,112,204,0.35);
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .proto-header::after {
+    content: '';
+    position: absolute;
+    top: -30px; right: -30px;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(15,252,160,0.15), transparent 70%);
+  }
+  .proto-num {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--green);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .proto-header h2 { font-size: 22px; font-weight: 700; margin-bottom: 12px; }
+  .obj-list { display: flex; flex-wrap: wrap; gap: 8px; }
+  .obj-pill {
+    background: rgba(58,112,204,0.15);
+    border: 1px solid rgba(58,112,204,0.3);
+    color: var(--lavender);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+  }
+
+  /* GRID INFO CARDS */
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .info-card {
+    background: var(--card);
+    border: 1px solid rgba(170,178,231,0.15);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .info-card h4 {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 10px;
+  }
+  .info-card ul { list-style: none; }
+  .info-card ul li {
+    font-size: 13px;
+    color: var(--lavender);
+    padding: 3px 0;
+    padding-left: 14px;
+    position: relative;
+  }
+  .info-card ul li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--blue);
+    font-weight: 700;
+  }
+
+  /* STEPS */
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(15,252,160,0.2);
+  }
+
+  .steps { display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; }
+  .step {
+    background: var(--card);
+    border: 1px solid rgba(170,178,231,0.12);
+    border-radius: 12px;
+    padding: 18px 20px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    transition: border-color 0.2s;
+  }
+  .step:hover { border-color: rgba(58,112,204,0.4); }
+  .step-num {
+    background: var(--blue);
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 800;
+    min-width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .step-content h4 { font-size: 14px; font-weight: 700; margin-bottom: 6px; color: var(--white); }
+  .step-content p, .step-content li { font-size: 13px; color: var(--lavender); }
+  .step-content ul { list-style: none; padding-left: 0; }
+  .step-content ul li { padding: 2px 0; padding-left: 14px; position: relative; }
+  .step-content ul li::before { content: '·'; position: absolute; left: 0; color: var(--lavender); }
+
+  /* PHASE BADGES */
+  .phase-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(15,252,160,0.1);
+    border: 1px solid rgba(15,252,160,0.25);
+    color: var(--green);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 6px;
+    margin: 20px 0 12px;
+  }
+
+  /* ALERT BOXES */
+  .alert {
+    border-radius: 10px;
+    padding: 14px 18px;
+    font-size: 13px;
+    margin-top: 10px;
+  }
+  .alert-warn {
+    background: rgba(255,180,0,0.08);
+    border: 1px solid rgba(255,180,0,0.25);
+    color: #f5c842;
+  }
+  .alert-good {
+    background: rgba(15,252,160,0.07);
+    border: 1px solid rgba(15,252,160,0.2);
+    color: var(--green);
+  }
+
+  /* DRYING */
+  .drying-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .dry-card {
+    background: var(--card);
+    border: 1px solid rgba(170,178,231,0.12);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .dry-card h4 {
+    color: var(--blue);
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .dry-card p, .dry-card li { font-size: 13px; color: var(--lavender); }
+  .dry-card ul { list-style: none; }
+  .dry-card ul li { padding: 3px 0 3px 14px; position: relative; }
+  .dry-card ul li::before { content: '›'; position: absolute; left: 0; color: var(--blue); font-weight: 700; }
+
+  /* METRIC CHIPS */
+  .metrics { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0; }
+  .metric {
+    background: rgba(170,178,231,0.1);
+    border: 1px solid rgba(170,178,231,0.2);
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: var(--white);
+  }
+  .metric span { color: var(--green); font-weight: 700; margin-right: 4px; }
+
+  footer {
+    text-align: center;
+    color: rgba(170,178,231,0.4);
+    font-size: 12px;
+    padding: 24px;
+    border-top: 1px solid rgba(170,178,231,0.1);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">Batangas Coffee Lab</div>
+  <h1>Fermentation Protocols</h1>
+  <p>Precision-controlled processing guidelines for Liberica and specialty coffee in tropical climate conditions.</p>
+</header>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('p1')">Protocol 1 — Natural</div>
+  <div class="tab" onclick="switchTab('p2')">Protocol 2 — Depulped</div>
+</div>
+
+<main>
+
+<!-- ===== PROTOCOL 1 ===== -->
+<div class="protocol active" id="p1">
+
+  <div class="proto-header">
+    <div class="proto-num">Protocol 01</div>
+    <h2>Natural · 80–96 Hours · Simple &amp; Controllable</h2>
+    <div class="obj-list">
+      <span class="obj-pill">Reach 80–96h safely</span>
+      <span class="obj-pill">Avoid mold &amp; acetic spikes</span>
+      <span class="obj-pill">Preserve fruit sweetness</span>
+      <span class="obj-pill">No starter needed</span>
+    </div>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-card">
+      <h4>Why It Works</h4>
+      <ul>
+        <li>Whole cherry = natural buffer</li>
+        <li>Semi-anaerobic tank controls O₂</li>
+        <li>Water layer stabilizes temp</li>
+        <li>Daily mixing prevents hot spots</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h4>General Considerations</h4>
+      <ul>
+        <li>Only fully ripe cherries (float test)</li>
+        <li>Target temp: 24–30 °C</li>
+        <li>Avoid sealed anaerobic w/o valve</li>
+        <li>Food-grade plastic tank with lid</li>
+        <li>No direct sun exposure</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h4>Ingredients (100 kg cherry)</h4>
+      <ul>
+        <li>100 kg ripe cherry</li>
+        <li>60–70 L clean water (non-chlorinated)</li>
+        <li>1 kg molasses (only if °Brix &lt;18)</li>
+        <li>No inoculum required</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-title">Fermentation Steps</div>
+
+  <div class="steps">
+
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-content">
+        <h4>Sorting — Day 0</h4>
+        <ul>
+          <li>Float cherries in water</li>
+          <li>Remove floaters and defects</li>
+          <li>Drain for 30 minutes</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-content">
+        <h4>Tank Loading</h4>
+        <ul>
+          <li>Add cherries to tank</li>
+          <li>Add water until cherries are 70–80% submerged</li>
+          <li>Do NOT fully flood — reduces acetic risk</li>
+          <li>Target headspace: 20–30%</li>
+          <li>Cover with lid (not airtight)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-content">
+        <h4>0–24 Hours</h4>
+        <div class="metrics">
+          <div class="metric"><span>Temp</span>26–32 °C</div>
+          <div class="metric"><span>pH</span>~5.5 → 4.8–5.0</div>
+          <div class="metric"><span>Stir</span>1× at 12h</div>
+        </div>
+        <p>Fermentation begins spontaneously — yeast-first. Stir once at 12h mark.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">04</div>
+      <div class="step-content">
+        <h4>24–48 Hours</h4>
+        <div class="metrics">
+          <div class="metric"><span>CO₂</span>Active</div>
+          <div class="metric"><span>Stir</span>2× daily</div>
+        </div>
+        <p>Light fruit alcohol aroma. Monitor temperature — avoid &gt;33 °C.</p>
+        <div class="alert alert-warn">⚠ If temp exceeds 33 °C: Move tank to shade + add 5–10 L cool water</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">05</div>
+      <div class="step-content">
+        <h4>48–80 Hours</h4>
+        <div class="metrics">
+          <div class="metric"><span>pH</span>4.0–4.2</div>
+          <div class="metric"><span>Stir</span>1× daily</div>
+        </div>
+        <p>LAB begins dominating. Fruit esters intensify.</p>
+        <div class="alert alert-good">✔ Sweet fermented fruit aroma = on track</div>
+        <div class="alert alert-warn">✘ Vinegar smell = too much oxygen — seal more tightly</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">06</div>
+      <div class="step-content">
+        <h4>80–96 Hours — Finish Window</h4>
+        <p>Stop fermentation when all conditions are met:</p>
+        <div class="metrics">
+          <div class="metric"><span>pH</span>3.9–4.1</div>
+          <div class="metric"><span>Mucilage</span>Slippery feel</div>
+          <div class="metric"><span>Smell</span>No acetic</div>
+        </div>
+        <p style="margin-top:8px;">Drain immediately once conditions are confirmed.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-title">Drying — Natural</div>
+
+  <div class="drying-grid">
+    <div class="dry-card">
+      <h4>📅 Day 1–2</h4>
+      <ul>
+        <li>Spread thin — 2–3 cm layer</li>
+        <li>Shade drying first 24h (critical)</li>
+        <li>Turn every hour</li>
+      </ul>
+    </div>
+    <div class="dry-card">
+      <h4>☀️ Day 3–7+</h4>
+      <ul>
+        <li>Gradually increase sun exposure</li>
+        <li>Never exceed 40 °C surface temp</li>
+        <li>Target 11–11.5% moisture</li>
+      </ul>
+    </div>
+    <div class="dry-card">
+      <h4>📊 Timeline</h4>
+      <p>Drying time in Batangas humidity: <strong style="color:var(--green)">10–16 days</strong></p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== PROTOCOL 2 ===== -->
+<div class="protocol" id="p2">
+
+  <div class="proto-header">
+    <div class="proto-num">Protocol 02</div>
+    <h2>Depulped · LAB → Wild Yeast Sequential</h2>
+    <div class="obj-list">
+      <span class="obj-pill">Reduce astringency</span>
+      <span class="obj-pill">Promote lactic smoothness</span>
+      <span class="obj-pill">Fruit complexity</span>
+      <span class="obj-pill">72–96h total</span>
+    </div>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-card">
+      <h4>General Considerations</h4>
+      <ul>
+        <li>Depulp same day</li>
+        <li>Avoid excessive washing (keep mucilage)</li>
+        <li>Strict temp control first 24–36h</li>
+        <li>Total target: 72–96h</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h4>Ingredients (100 kg cherry)</h4>
+      <ul>
+        <li>~55–60 kg depulped parchment</li>
+        <li>20 L clean water</li>
+        <li>1–2 L LAB culture (backslopped or yogurt whey 1:5)</li>
+        <li>500 g molasses (optional)</li>
+        <li>No commercial yeast needed</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-title">Fermentation Steps</div>
+
+  <div class="phase-label">⬡ Phase 1 — Lactic Stage · 0–36h</div>
+
+  <div class="steps">
+
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-content">
+        <h4>Depulp</h4>
+        <p>Remove skin — keep mucilage intact. Do not over-wash.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-content">
+        <h4>Tank Setup</h4>
+        <ul>
+          <li>Add parchment to tank</li>
+          <li>Add 20 L water</li>
+          <li>Add LAB inoculum (2–3%)</li>
+          <li>Mix thoroughly</li>
+          <li>Target: semi-anaerobic — close lid loosely</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-content">
+        <h4>0–24h · Critical Window</h4>
+        <div class="metrics">
+          <div class="metric"><span>Temp</span>28–32 °C</div>
+          <div class="metric"><span>pH</span>5.5 → 4.5 in ~18–24h</div>
+          <div class="metric"><span>Stir</span>None first 18h</div>
+        </div>
+        <p>LAB dominates early. Aroma: yogurt, mild sweetness. This stage degrades mucilage pectins, softens harsh phenolics, and reduces astringency.</p>
+        <div class="alert alert-warn">⚠ Do NOT stir during first 18h</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">04</div>
+      <div class="step-content">
+        <h4>24–36h</h4>
+        <div class="metrics">
+          <div class="metric"><span>pH target</span>4.2–4.4</div>
+        </div>
+        <p>Stir once. At 36h: open lid fully — introduce oxygen to transition to Phase 2.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="phase-label">⬡ Phase 2 — Wild Yeast Expression · 36–84h</div>
+
+  <div class="steps">
+
+    <div class="step">
+      <div class="step-num">05</div>
+      <div class="step-content">
+        <h4>36–60h</h4>
+        <div class="metrics">
+          <div class="metric"><span>Temp</span>26–30 °C</div>
+          <div class="metric"><span>pH</span>→ 3.8–4.0</div>
+          <div class="metric"><span>Stir</span>2× daily</div>
+        </div>
+        <p>Oxygen allows native yeast to develop fruit esters. Aroma becomes tropical / wine-like.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">06</div>
+      <div class="step-content">
+        <h4>60–84h — Finish Window</h4>
+        <p>Stop when all conditions are met:</p>
+        <div class="metrics">
+          <div class="metric"><span>Aroma</span>Clean fruit</div>
+          <div class="metric"><span>Smell</span>No acetic</div>
+          <div class="metric"><span>Mucilage</span>Partially broken</div>
+        </div>
+        <p style="margin-top:8px;">Total fermentation: 72–96h max. Drain and lightly rinse (optional).</p>
+        <div class="alert alert-good">✔ Maximum total fermentation: 72–96h</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-title">Drying — Depulped / Honey Style</div>
+
+  <div class="drying-grid">
+    <div class="dry-card">
+      <h4>📅 Day 1</h4>
+      <ul>
+        <li>Thick layer — 3–4 cm</li>
+        <li>Shade first 24h</li>
+        <li>Turn every 1–2 hours</li>
+      </ul>
+    </div>
+    <div class="dry-card">
+      <h4>☀️ Day 2–5</h4>
+      <ul>
+        <li>Gradual sun exposure</li>
+        <li>Avoid case hardening</li>
+        <li>If sticky → increase airflow (not sun)</li>
+      </ul>
+    </div>
+    <div class="dry-card">
+      <h4>📊 Target</h4>
+      <p>Moisture: <strong style="color:var(--green)">10.8–11.2%</strong></p>
+      <p style="margin-top:6px;">Timeline: <strong style="color:var(--green)">8–12 days</strong></p>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<footer>Batangas Coffee Fermentation Lab — Field Protocol Reference</footer>
+
+<script>
+  function switchTab(id) {
+    document.querySelectorAll('.protocol').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.target.classList.add('active');
+  }
+</script>
+</body>
+</html>
