@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Portafolio – Javier Chacón</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+  *{margin:0;padding:0;box-sizing:border-box}
+
+  :root{
+    --green:#1b4332;--green-mid:#2d6a4f;--green-light:#52b788;
+    --accent:#74c69d;--border:#b7d5c4;--muted:#4a5e52;--text:#1a1a1a;
+  }
+
+  body{
+    font-family:'Inter',sans-serif;
+    font-size:9.5pt;
+    color:var(--text);
+    line-height:1.55;
+    background:#fff;
+    max-width:780px;
+    margin:0 auto;
+    padding:2rem 2.5rem;
+  }
+
+  /* HEADER */
+  .header{border-bottom:2.5px solid var(--green);padding-bottom:1rem;margin-bottom:1.2rem;display:flex;justify-content:space-between;align-items:flex-end}
+  .header-left h1{font-size:20pt;font-weight:600;color:var(--green);letter-spacing:-.01em}
+  .header-left .role{font-size:9pt;color:var(--green-light);font-weight:500;margin-top:.15rem;letter-spacing:.04em;text-transform:uppercase}
+  .header-right{text-align:right;font-size:8pt;color:var(--muted);line-height:1.8}
+  .header-right a{color:var(--muted)}
+
+  /* SECTION TITLES */
+  h2{font-size:10pt;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border);padding-bottom:.25rem;margin-bottom:.6rem;margin-top:1.2rem}
+  h3{font-size:10pt;font-weight:600;color:var(--green-mid);margin-bottom:.2rem}
+  h3 span{font-size:8.5pt;font-weight:400;color:var(--muted);margin-left:.4rem}
+
+  p{margin-bottom:.45rem;color:#222}
+
+  .conviccion{border-left:3px solid var(--green-light);padding:.5rem .8rem;color:var(--muted);font-style:italic;font-size:9pt;margin:0.7rem 0;background:#f5fbf7}
+
+  /* GRID DOS COLUMNAS PARA PERFIL */
+  .profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+
+  /* CURSOS */
+  .curso{border:1px solid var(--border);border-radius:5px;padding:.7rem .9rem;margin-bottom:.75rem;break-inside:avoid}
+  .curso-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.3rem}
+  .tag{display:inline-block;background:#e8f5ee;color:var(--green-mid);font-size:7.5pt;font-weight:600;padding:.1rem .5rem;border-radius:3px;text-transform:uppercase;letter-spacing:.05em}
+  .curso-desc{color:#333;font-size:9pt;margin-bottom:.4rem}
+
+  /* LISTAS */
+  ul{padding-left:1.1rem;margin-bottom:.4rem}
+  ul li{margin-bottom:.15rem;font-size:9pt}
+
+  /* SUB-GRIDS DENTRO DE CURSO */
+  .curso-cols{display:grid;grid-template-columns:1fr 1fr;gap:.5rem .8rem;margin-top:.4rem}
+  .curso-col h4{font-size:8pt;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.2rem;border-bottom:1px solid #e0ede7;padding-bottom:.1rem}
+  .curso-col ul{padding-left:1rem}
+  .curso-col ul li{font-size:8.5pt;color:#333}
+
+  .formatos{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.35rem}
+  .fmt{background:var(--green);color:#fff;font-size:7.5pt;padding:.15rem .5rem;border-radius:3px}
+
+  .dur-row{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.3rem}
+  .dur{background:#f0f8f3;border:1px solid var(--border);border-radius:3px;padding:.2rem .5rem;font-size:8pt}
+  .dur strong{color:var(--green-mid);font-weight:600}
+
+  .pills{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.2rem}
+  .pill{border:1px solid var(--border);border-radius:20px;padding:.1rem .5rem;font-size:8pt;color:var(--muted)}
+
+  /* PRINT */
+  @media print{
+    body{padding:1.5cm 2cm;max-width:100%;font-size:9pt}
+    .curso{break-inside:avoid;page-break-inside:avoid}
+    h2{break-after:avoid}
+  }
+
+  /* BOTÓN IMPRIMIR — solo pantalla */
+  @media screen{
+    .print-btn{
+      position:fixed;bottom:1.5rem;right:1.5rem;
+      background:var(--green);color:#fff;border:none;
+      padding:.6rem 1.2rem;border-radius:6px;cursor:pointer;
+      font-size:.85rem;font-family:inherit;font-weight:500;
+      box-shadow:0 2px 8px rgba(0,0,0,.2)
+    }
+    .print-btn:hover{background:var(--green-mid)}
+  }
+  @media print{.print-btn{display:none}}
+</style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">Imprimir / Guardar PDF</button>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <h1>Javier Chacón</h1>
+    <div class="role">Datos · Tecnología · Innovación Agroalimentaria</div>
+  </div>
+  <div class="header-right">
+    linkedin.com/in/TU_USUARIO<br>
+    threads.net/@TU_USUARIO<br>
+    tu@email.com
+  </div>
+</div>
+
+<!-- PERFIL -->
+<h2>Perfil</h2>
+<div class="profile-grid">
+  <div>
+    <p>Trabajo en la intersección entre datos, tecnología e innovación aplicada al sector agroalimentario. Mi enfoque se centra en ayudar a organizaciones y equipos a comprender mejor sus sistemas productivos, diseñar procesos basados en evidencia y desarrollar soluciones que generen valor a partir del conocimiento disponible.</p>
+    <p>Durante más de una década he liderado proyectos de analítica, gestión de datos y optimización de procesos utilizando herramientas de Analítica, Inteligencia Artificial y Big Data, fortaleciendo capacidades organizacionales para tomar decisiones más informadas.</p>
+  </div>
+  <div>
+    <div class="conviccion">"Los datos por sí solos no generan impacto. El valor aparece cuando las organizaciones desarrollan las capacidades necesarias para interpretar información, formular buenas preguntas y experimentar de forma estructurada."</div>
+    <p>Una parte central de mi trabajo se enfoca en <strong>mentoría, formación y transferencia de conocimiento</strong>, acompañando a equipos en el desarrollo de habilidades analíticas y pensamiento experimental.</p>
+  </div>
+</div>
+
+<!-- CURSOS -->
+<h2>Portafolio de Cursos y Talleres</h2>
+<p style="font-size:8.5pt;color:var(--muted);margin-bottom:.8rem">Cada programa puede ofrecerse como <strong>seminario conceptual</strong>, <strong>curso corto</strong> o <strong>taller práctico hands-on</strong>, según las necesidades de la organización.</p>
+
+<!-- CURSO 1 -->
+<div class="curso">
+  <div class="curso-header">
+    <h3>Del dato al cultivo <span>Cómo tomar decisiones agrícolas basadas en datos</span></h3>
+    <span class="tag">Datos agrícolas</span>
+  </div>
+  <p class="curso-desc">Explora cómo estructurar sistemas simples de captura y análisis de datos para transformar información en decisiones productivas concretas. Diseño de sistemas de monitoreo agrícola, captura de datos en campo y análisis básico para optimización productiva.</p>
+  <div class="curso-cols">
+    <div class="curso-col">
+      <h4>Temáticas clave</h4>
+      <ul>
+        <li>Qué datos realmente importan en agricultura</li>
+        <li>Diseño de sistemas de monitoreo agrícola</li>
+        <li>Sensores, IoT y captura de datos en campo</li>
+        <li>Análisis simple para toma de decisiones</li>
+        <li>Casos: productividad, calidad, postcosecha</li>
+      </ul>
+    </div>
+    <div class="curso-col">
+      <h4>Objetivos de aprendizaje</h4>
+      <ul>
+        <li>Identificar variables críticas de monitoreo</li>
+        <li>Diseñar esquemas de captura de datos</li>
+        <li>Conectar datos con decisiones agronómicas</li>
+        <li>Evaluar oportunidades de digitalización</li>
+      </ul>
+      <h4 style="margin-top:.5rem">Participantes</h4>
+      <div class="pills">
+        <span class="pill">Productores</span><span class="pill">Agrónomos</span><span class="pill">Startups agtech</span><span class="pill">Investigadores</span>
+      </div>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:.5rem;flex-wrap:wrap;gap:.4rem">
+    <div class="formatos">
+      <span class="fmt">Seminario</span><span class="fmt">Curso</span><span class="fmt">Taller hands-on</span>
+    </div>
+    <div class="dur-row">
+      <span class="dur"><strong>Seminario:</strong> 2 h</span>
+      <span class="dur"><strong>Curso:</strong> 2 × 2 h</span>
+      <span class="dur"><strong>Curso + taller:</strong> 3 × 2 h</span>
+    </div>
+  </div>
+</div>
+
+<!-- CURSO 2 -->
+<div class="curso">
+  <div class="curso-header">
+    <h3>Innovación real en el agro <span>Cómo pasar de idea a piloto en campo</span></h3>
+    <span class="tag">Innovación</span>
+  </div>
+  <p class="curso-desc">Enfoque práctico para diseñar experimentos, pilotos y validaciones tecnológicas en entornos agrícolas. Los participantes aprenden a estructurar pruebas de campo pequeñas, medibles y replicables para evaluar tecnologías o nuevos modelos productivos.</p>
+  <div class="curso-cols">
+    <div class="curso-col">
+      <h4>Temáticas clave</h4>
+      <ul>
+        <li>Qué significa innovar realmente en agricultura</li>
+        <li>Diseño de hipótesis productivas</li>
+        <li>Pilotos agrícolas de bajo costo</li>
+        <li>Métricas de validación tecnológica</li>
+        <li>Escalamiento de innovación agrícola</li>
+      </ul>
+    </div>
+    <div class="curso-col">
+      <h4>Objetivos de aprendizaje</h4>
+      <ul>
+        <li>Estructurar pilotos tecnológicos en campo</li>
+        <li>Definir métricas de éxito para innovación</li>
+        <li>Diseñar experimentos productivos controlados</li>
+        <li>Evaluar cuándo escalar o abandonar</li>
+      </ul>
+      <h4 style="margin-top:.5rem">Participantes</h4>
+      <div class="pills">
+        <span class="pill">Agroindustria</span><span class="pill">Startups</span><span class="pill">Centros I+D</span><span class="pill">Equipos innovación</span>
+      </div>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:.5rem;flex-wrap:wrap;gap:.4rem">
+    <div class="formatos">
+      <span class="fmt">Seminario</span><span class="fmt">Curso</span><span class="fmt">Taller de pilotos</span>
+    </div>
+    <div class="dur-row">
+      <span class="dur"><strong>Seminario:</strong> 2 h</span>
+      <span class="dur"><strong>Curso:</strong> 3 × 2 h</span>
+      <span class="dur"><strong>Curso + taller:</strong> 4 × 2 h</span>
+    </div>
+  </div>
+</div>
+
+<!-- CURSO 3 -->
+<div class="curso">
+  <div class="curso-header">
+    <h3>Bioactivos agrícolas <span>Desarrollo de productos y optimización de extracciones</span></h3>
+    <span class="tag">Biotecnología</span>
+  </div>
+  <p class="curso-desc">Explora cómo identificar, extraer y optimizar compuestos bioactivos en cultivos agrícolas (alcaloides, polifenoles, antioxidantes, metabolitos secundarios) y cómo herramientas de datos e inteligencia artificial ayudan a optimizar procesos de extracción y desarrollo de productos de alto valor.</p>
+  <div class="curso-cols">
+    <div class="curso-col">
+      <h4>Temáticas clave</h4>
+      <ul>
+        <li>Compuestos bioactivos: café, cacao, mucuna</li>
+        <li>Métodos básicos de extracción</li>
+        <li>Variables que afectan el rendimiento</li>
+        <li>Diseño de experimentos de optimización</li>
+        <li>IA en optimización de procesos</li>
+      </ul>
+    </div>
+    <div class="curso-col">
+      <h4>Objetivos de aprendizaje</h4>
+      <ul>
+        <li>Identificar oportunidades en bioactivos</li>
+        <li>Comprender principios básicos de extracción</li>
+        <li>Diseñar experimentos de mejora de rendimiento</li>
+        <li>Explorar datos e IA en optimización</li>
+      </ul>
+      <h4 style="margin-top:.5rem">Participantes</h4>
+      <div class="pills">
+        <span class="pill">Agroindustria</span><span class="pill">Investigadores</span><span class="pill">Ingredientes funcionales</span><span class="pill">Biotech</span>
+      </div>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:.5rem;flex-wrap:wrap;gap:.4rem">
+    <div class="formatos">
+      <span class="fmt">Seminario conceptual</span><span class="fmt">Curso técnico</span><span class="fmt">Taller de procesos</span>
+    </div>
+    <div class="dur-row">
+      <span class="dur"><strong>Seminario:</strong> 2 h</span>
+      <span class="dur"><strong>Curso:</strong> 3 × 2 h</span>
+      <span class="dur"><strong>Curso + taller:</strong> 4 × 2 h</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
