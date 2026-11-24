@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Arcwork — geometric marks from photos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Fraunces:opsz,wght@9..144,600&family=Syne:wght@700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #E4E8E2;
+  --panel: #EEF1EC;
+  --sheet: #F7F8F5;
+  --graphite: #2F3337;
+  --pencil: #6B7176;
+  --rule: #C9CFC8;
+  --cobalt: #2E46C7;
+  --cobalt-soft: #DCE1F7;
+  --amber: #F2A516;
+  --danger: #B3261E;
+  --focus: #2E46C7;
+  color-scheme: light;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #1C1F22;
+    --panel: #23272B;
+    --sheet: #2A2F33;
+    --graphite: #E3E7E2;
+    --pencil: #9CA3A8;
+    --rule: #3B4146;
+    --cobalt: #8A9CFF;
+    --cobalt-soft: #2B3360;
+    --danger: #FF8A80;
+    --focus: #8A9CFF;
+    color-scheme: dark;
+  }
+}
+*, *::before, *::after { box-sizing: inherit; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: var(--paper);
+  color: var(--graphite);
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.45;
+  font-variation-settings: "wdth" 100;
+  -webkit-font-smoothing: antialiased;
+}
+button, input, select { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+.app { display: grid; grid-template-columns: 1fr 340px; grid-template-rows: auto 1fr; min-height: 100%; }
+header {
+  grid-column: 1 / -1;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 14px 22px; border-bottom: 1px solid var(--rule);
+}
+.brand { display: flex; align-items: baseline; gap: 14px; }
+.brand h1 {
+  margin: 0; font-size: 26px; line-height: 1; font-weight: 850;
+  font-variation-settings: "wdth" 125; letter-spacing: -0.01em;
+}
+.brand p { margin: 0; color: var(--pencil); font-size: 14px; }
+.export { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.btn {
+  border: 1px solid var(--graphite); background: transparent; border-radius: 6px;
+  padding: 8px 14px; cursor: pointer; font-weight: 600; white-space: nowrap;
+}
+.btn:hover { background: var(--panel); }
+.btn.primary { background: var(--graphite); color: var(--paper); }
+.btn.primary:hover { opacity: .88; background: var(--graphite); }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+.btn.small { padding: 5px 10px; font-size: 13px; }
+.btn.ghost { border-color: transparent; color: var(--pencil); }
+
+/* ---------- stage ---------- */
+.stage { padding: 22px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.tabs { display: none; gap: 4px; background: var(--panel); padding: 4px; border-radius: 8px; align-self: flex-start; }
+.tabs button { border: 0; background: transparent; padding: 6px 14px; border-radius: 5px; cursor: pointer; font-weight: 600; color: var(--pencil); }
+.tabs button[aria-selected="true"] { background: var(--sheet); color: var(--graphite); box-shadow: 0 0 0 1px var(--rule); }
+.panes { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; flex: 1; min-height: 0; }
+.pane { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.pane-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; min-height: 24px; }
+.pane-head h2 { margin: 0; font-size: 15px; font-weight: 700; }
+.pane-head .meta { color: var(--pencil); font-size: 13px; font-variant-numeric: tabular-nums; text-align: right; }
+.canvas {
+  position: relative; flex: 1; min-height: 360px; border-radius: 3px; overflow: hidden;
+  background-color: var(--sheet);
+  background-image: radial-gradient(var(--rule) 1px, transparent 1.2px);
+  background-size: 18px 18px;
+  display: grid; place-items: center;
+}
+.canvas svg { width: 100%; height: 100%; max-height: 74vh; display: block; }
+.canvas.picking { cursor: crosshair; outline: 2px dashed var(--cobalt); outline-offset: -2px; }
+.hint {
+  position: absolute; left: 12px; bottom: 12px; right: 12px;
+  background: var(--graphite); color: var(--paper); padding: 8px 12px; border-radius: 6px; font-size: 13px;
+}
+
+/* empty state */
+.empty { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; text-align: center; padding: 30px; }
+.empty svg { width: 220px; height: 220px; }
+.empty h2 { margin: 0; font-size: clamp(26px, 3.4vw, 40px); line-height: 1.05; font-weight: 850; font-variation-settings: "wdth" 118; max-width: 16ch; }
+.empty p { margin: 0; color: var(--pencil); max-width: 46ch; }
+.drop { border: 1.5px dashed var(--pencil); border-radius: 6px; }
+.drop.over { border-color: var(--cobalt); background-color: var(--cobalt-soft); }
+.draw circle, .draw line, .draw path { stroke-dasharray: 1200; stroke-dashoffset: 1200; animation: draw 2.4s ease-out forwards; }
+.draw .fill { opacity: 0; animation: fade .6s 2s ease-out forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes fade { to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .draw circle, .draw line, .draw path { animation: none; stroke-dashoffset: 0; }
+  .draw .fill { animation: none; opacity: 1; }
+}
+
+/* ---------- controls ---------- */
+aside { border-left: 1px solid var(--rule); background: var(--panel); overflow-y: auto; max-height: calc(100vh - 60px); }
+section.group { padding: 18px 20px; border-bottom: 1px solid var(--rule); display: flex; flex-direction: column; gap: 12px; }
+section.group h3 { margin: 0; font-size: 17px; font-weight: 800; font-variation-settings: "wdth" 112; }
+section.group > p { margin: 0; color: var(--pencil); font-size: 13.5px; }
+.row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.row label, .field > label { font-weight: 600; font-size: 14px; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.val { font-variant-numeric: tabular-nums; color: var(--pencil); font-size: 13px; }
+input[type="range"] { width: 100%; accent-color: var(--cobalt); }
+input[type="text"], select {
+  width: 100%; padding: 7px 9px; border: 1px solid var(--rule); border-radius: 5px; background: var(--sheet);
+}
+input[type="color"] { width: 44px; height: 32px; border: 1px solid var(--rule); border-radius: 5px; background: var(--sheet); padding: 2px; cursor: pointer; }
+.seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; background: var(--sheet); }
+.seg button { border: 0; background: transparent; padding: 7px 4px; cursor: pointer; font-size: 13.5px; font-weight: 600; color: var(--pencil); }
+.seg button + button { border-left: 1px solid var(--rule); }
+.seg button[aria-pressed="true"] { background: var(--graphite); color: var(--paper); }
+.check { display: flex; gap: 8px; align-items: center; font-size: 14px; cursor: pointer; }
+.check input { accent-color: var(--cobalt); width: 16px; height: 16px; }
+.status { font-size: 13px; color: var(--pencil); min-height: 1em; }
+.status.err { color: var(--danger); }
+.bar { height: 4px; background: var(--rule); border-radius: 2px; overflow: hidden; }
+.bar > i { display: block; height: 100%; width: 0; background: var(--cobalt); transition: width .2s; }
+.layer { border: 1px solid var(--rule); border-radius: 6px; padding: 10px; display: flex; flex-direction: column; gap: 8px; background: var(--sheet); }
+.layer .row strong { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+.swatch { width: 14px; height: 14px; border-radius: 3px; border: 1px solid var(--rule); display: inline-block; }
+.colors { display: flex; gap: 18px; }
+.colors .field { flex-direction: row; align-items: center; gap: 8px; }
+.palette { display: flex; gap: 6px; flex-wrap: wrap; }
+.palette button { width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--rule); cursor: pointer; padding: 0; }
+input[type="file"] { display: none; }
+
+@media (max-width: 1100px) { .app { grid-template-columns: 1fr 300px; } }
+@media (max-width: 880px) {
+  .app { grid-template-columns: 1fr; }
+  aside { border-left: 0; border-top: 1px solid var(--rule); max-height: none; }
+  .tabs { display: flex; }
+  .panes { grid-template-columns: 1fr; }
+  .pane[hidden-mobile] { display: none; }
+  .canvas { min-height: 56vh; }
+  header { padding: 12px 16px; flex-wrap: wrap; }
+  .brand p { display: none; }
+  .stage { padding: 14px; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">
+      <h1>Arcwork</h1>
+      <p>Turn a photo into a mark built from circles and lines.</p>
+    </div>
+    <div class="export">
+      <button class="btn" id="btnNew">Open photo</button>
+      <button class="btn" id="btnSvgCons" disabled>Construction SVG</button>
+      <button class="btn" id="btnPng" disabled>Mark PNG</button>
+      <button class="btn primary" id="btnSvg" disabled>Mark SVG</button>
+    </div>
+  </header>
+
+  <main class="stage">
+    <div class="tabs" role="tablist">
+      <button role="tab" aria-selected="true" data-tab="cons">Construction</button>
+      <button role="tab" aria-selected="false" data-tab="mark">Mark</button>
+    </div>
+    <div class="panes">
+      <div class="pane" id="paneCons">
+        <div class="pane-head"><h2>Construction</h2><span class="meta" id="stats"></span></div>
+        <div class="canvas drop" id="consBox">
+          <div class="empty" id="empty">
+            <svg class="draw" viewBox="0 0 220 220" aria-hidden="true">
+              <path class="fill" d="M70 40 L150 40 L128 92 A40 40 0 0 0 128 128 L162 176 A30 30 0 0 1 140 190 L80 190 A30 30 0 0 1 58 176 L92 128 A40 40 0 0 0 92 92 Z" fill="#F2A516"/>
+              <g fill="none" stroke="currentColor" stroke-width="1" opacity=".55">
+                <circle cx="160" cy="110" r="40"/><circle cx="60" cy="110" r="40"/>
+                <circle cx="140" cy="160" r="30"/><circle cx="80" cy="160" r="30"/>
+                <line x1="110" y1="10" x2="110" y2="210" stroke-dasharray="4 4"/>
+                <line x1="40" y1="40" x2="180" y2="40"/>
+              </g>
+              <path d="M70 40 L150 40 L128 92 A40 40 0 0 0 128 128 L162 176 A30 30 0 0 1 140 190 L80 190 A30 30 0 0 1 58 176 L92 128 A40 40 0 0 0 92 92 Z" fill="none" stroke="#2E46C7" stroke-width="2"/>
+            </svg>
+            <h2>Drop a photo of one object</h2>
+            <p>Single subjects on simple backgrounds work best. A transparent PNG cutout skips the background step.</p>
+            <button class="btn primary" id="btnOpen">Choose photo</button>
+          </div>
+        </div>
+      </div>
+      <div class="pane" id="paneMark" hidden-mobile>
+        <div class="pane-head"><h2>Mark</h2><span class="meta" id="markMeta"></span></div>
+        <div class="canvas" id="markBox"><div class="empty"><p>Your mark appears here.</p></div></div>
+      </div>
+    </div>
+  </main>
+
+  <aside>
+    <section class="group">
+      <h3>Cutout</h3>
+      <p id="cutNote">Separate the object from its background.</p>
+      <button class="btn primary" id="btnAI" disabled>Remove background with AI</button>
+      <div class="bar" id="aiBar" hidden><i></i></div>
+      <div class="status" id="aiStatus">Downloads a ~200 MB model the first time and runs on this device. Best on a laptop or desktop.</div>
+      <div class="field">
+        <div class="row"><label for="bgThr">Plain-background cutout</label><span class="val" id="bgThrVal"></span></div>
+        <input type="range" id="bgThr" min="4" max="60" value="18" disabled>
+      </div>
+      <label class="check"><input type="checkbox" id="showMask"> Show cutout area</label>
+    </section>
+
+    <section class="group">
+      <h3>Shape</h3>
+      <div class="field">
+        <label>Symmetry</label>
+        <div class="seg" id="modeSeg">
+          <button data-v="auto" aria-pressed="true">Auto</button>
+          <button data-v="mirror" aria-pressed="false">Mirror</button>
+          <button data-v="free" aria-pressed="false">Free</button>
+        </div>
+      </div>
+      <div class="field" id="sideField">
+        <label>Mirror from</label>
+        <div class="seg" id="sideSeg">
+          <button data-v="min" aria-pressed="true">Cleaner side</button>
+          <button data-v="left" aria-pressed="false">Left</button>
+          <button data-v="right" aria-pressed="false">Right</button>
+        </div>
+      </div>
+      <div class="field">
+        <div class="row"><label for="tol">Simplify</label><span class="val" id="tolVal"></span></div>
+        <input type="range" id="tol" min="2" max="60" value="10">
+      </div>
+    </section>
+
+    <section class="group">
+      <h3>Geometry</h3>
+      <div class="field">
+        <div class="row"><label for="grid">Snap points to grid</label><span class="val" id="gridVal"></span></div>
+        <input type="range" id="grid" min="0" max="4" step="1" value="2">
+      </div>
+      <label class="check"><input type="checkbox" id="golden" checked> Golden-ratio circle sizes</label>
+      <label class="check"><input type="checkbox" id="showCircles" checked> Show construction circles</label>
+    </section>
+
+    <section class="group">
+      <h3>Details</h3>
+      <p>Keep an inner part, like a band or a window, as its own shape. Tap it on the photo; it's picked by color.</p>
+      <button class="btn" id="btnPick" disabled>Add detail from photo</button>
+      <div id="layers" class="field"></div>
+    </section>
+
+    <section class="group">
+      <h3>Brand</h3>
+      <div class="colors">
+        <div class="field"><input type="color" id="fg" value="#000000"><label for="fg">Mark</label></div>
+        <div class="field"><input type="color" id="bg" value="#F2A516"><label for="bg">Background</label></div>
+      </div>
+      <div class="palette" id="palette" aria-label="Color pairs"></div>
+      <div class="field">
+        <label for="word">Wordmark</label>
+        <input type="text" id="word" value="Pour &amp; Co." placeholder="Leave empty for the symbol only">
+      </div>
+      <div class="field">
+        <label for="font">Typeface</label>
+        <select id="font">
+          <option value="Archivo">Archivo</option>
+          <option value="Archivo Expanded">Archivo Expanded</option>
+          <option value="Fraunces">Fraunces</option>
+          <option value="Syne">Syne</option>
+          <option value="Helvetica">Helvetica</option>
+        </select>
+      </div>
+    </section>
+  </aside>
+</div>
+<input type="file" id="file" accept="image/*">
+
+<script>
+"use strict";
+const PHI = (1 + Math.sqrt(5)) / 2;
+const MAXSIDE = 900;
+const $ = (id) => document.getElementById(id);
+
+const state = {
+  W: 0, H: 0, rgba: null, lab: null, mask: null, photoURL: null, maskURL: null,
+  mode: "auto", side: "min", tol: 0.010, grid: 48, golden: true, showCircles: true, showMask: false,
+  layers: [], picking: false, result: null, fileName: "mark",
+  fg: "#000000", bg: "#F2A516", word: "Pour & Co.", font: "Archivo",
+};
+
+/* ======================= image utils ======================= */
+function srgbToLab(r, g, b) {
+  const f = (c) => { c /= 255; return c > 0.04045 ? Math.pow((c + 0.055) / 1.055, 2.4) : c / 12.92; };
+  const R = f(r), G = f(g), B = f(b);
+  let X = (R * 0.4124 + G * 0.3576 + B * 0.1805) / 0.95047;
+  let Y = R * 0.2126 + G * 0.7152 + B * 0.0722;
+  let Z = (R * 0.0193 + G * 0.1192 + B * 0.9505) / 1.08883;
+  const g3 = (t) => t > 0.008856 ? Math.cbrt(t) : 7.787 * t + 16 / 116;
+  X = g3(X); Y = g3(Y); Z = g3(Z);
+  return [116 * Y - 16, 500 * (X - Y), 200 * (Y - Z)];
+}
+function computeLab() {
+  const { W, H, rgba } = state, lab = new Float32Array(W * H * 3);
+  for (let i = 0; i < W * H; i++) {
+    const [L, a, b] = srgbToLab(rgba[i * 4], rgba[i * 4 + 1], rgba[i * 4 + 2]);
+    lab[i * 3] = L; lab[i * 3 + 1] = a; lab[i * 3 + 2] = b;
+  }
+  state.lab = lab;
+}
+
+function morph(m, W, H, r, dilate) {
+  const tmp = new Uint8Array(W * H), out = new Uint8Array(W * H);
+  const pass = (src, dst, horiz) => {
+    const n = horiz ? W : H, lines = horiz ? H : W;
+    for (let l = 0; l < lines; l++) {
+      // running count of "on" pixels in window
+      let cnt = 0;
+      const idx = (k) => horiz ? l * W + k : k * W + l;
+      for (let k = 0; k < Math.min(r, n); k++) cnt += src[idx(k)];
+      for (let k = 0; k < n; k++) {
+        if (k + r < n) cnt += src[idx(k + r)];
+        if (k - r - 1 >= 0) cnt -= src[idx(k - r - 1)];
+        const win = Math.min(n - 1, k + r) - Math.max(0, k - r) + 1;
+        dst[idx(k)] = dilate ? (cnt > 0 ? 1 : 0) : (cnt === win ? 1 : 0);
+      }
+    }
+  };
+  pass(m, tmp, true); pass(tmp, out, false);
+  return out;
+}
+const closeMask = (m, W, H, r) => morph(morph(m, W, H, r, true), W, H, r, false);
+const openMask = (m, W, H, r) => morph(morph(m, W, H, r, false), W, H, r, true);
+
+function components(m, W, H) {
+  const lab = new Int32Array(W * H).fill(-1), sizes = [];
+  const stack = new Int32Array(W * H);
+  let id = 0;
+  for (let s = 0; s < W * H; s++) {
+    if (!m[s] || lab[s] >= 0) continue;
+    let sp = 0, size = 0; stack[sp++] = s; lab[s] = id;
+    while (sp) {
+      const p = stack[--sp]; size++;
+      const x = p % W, y = (p / W) | 0;
+      if (x > 0 && m[p - 1] && lab[p - 1] < 0) { lab[p - 1] = id; stack[sp++] = p - 1; }
+      if (x < W - 1 && m[p + 1] && lab[p + 1] < 0) { lab[p + 1] = id; stack[sp++] = p + 1; }
+      if (y > 0 && m[p - W] && lab[p - W] < 0) { lab[p - W] = id; stack[sp++] = p - W; }
+      if (y < H - 1 && m[p + W] && lab[p + W] < 0) { lab[p + W] = id; stack[sp++] = p + W; }
+    }
+    sizes.push(size); id++;
+  }
+  return { lab, sizes };
+}
+function keepComponent(m, W, H, which) {
+  const { lab, sizes } = components(m, W, H);
+  if (!sizes.length) return new Uint8Array(W * H);
+  const id = which === undefined ? sizes.indexOf(Math.max(...sizes)) : lab[which];
+  const out = new Uint8Array(W * H);
+  if (id < 0) return out;
+  for (let i = 0; i < W * H; i++) out[i] = lab[i] === id ? 1 : 0;
+  return out;
+}
+function fillHoles(m, W, H) {
+  const seen = new Uint8Array(W * H), stack = new Int32Array(W * H);
+  let sp = 0;
+  const push = (p) => { if (!m[p] && !seen[p]) { seen[p] = 1; stack[sp++] = p; } };
+  for (let x = 0; x < W; x++) { push(x); push((H - 1) * W + x); }
+  for (let y = 0; y < H; y++) { push(y * W); push(y * W + W - 1); }
+  while (sp) {
+    const p = stack[--sp], x = p % W, y = (p / W) | 0;
+    if (x > 0) push(p - 1); if (x < W - 1) push(p + 1);
+    if (y > 0) push(p - W); if (y < H - 1) push(p + W);
+  }
+  const out = new Uint8Array(W * H);
+  for (let i = 0; i < W * H; i++) out[i] = m[i] || !seen[i] ? 1 : 0;
+  return out;
+}
+function cleanMask(m) {
+  const { W, H } = state, r = Math.max(1, Math.round(Math.max(W, H) / 300));
+  let o = openMask(m, W, H, r);
+  o = closeMask(o, W, H, r * 2);
+  o = keepComponent(o, W, H);
+  return fillHoles(o, W, H);
+}
+
+function quickCutout(thr) {
+  const { W, H, lab } = state;
+  const samples = [];
+  const per = Math.max(1, Math.floor((2 * (W + H)) / 160));
+  const add = (x, y) => { const i = (y * W + x) * 3; samples.push([lab[i], lab[i + 1], lab[i + 2]]); };
+  for (let x = 0; x < W; x += per) { add(x, 0); add(x, H - 1); }
+  for (let y = 0; y < H; y += per) { add(0, y); add(W - 1, y); }
+  const m = new Uint8Array(W * H), t2 = thr * thr;
+  for (let i = 0; i < W * H; i++) {
+    const L = lab[i * 3], a = lab[i * 3 + 1], b = lab[i * 3 + 2];
+    let best = 1e9;
+    for (const s of samples) {
+      const d = (L - s[0]) ** 2 + (a - s[1]) ** 2 + (b - s[2]) ** 2;
+      if (d < best) { best = d; if (best < t2) break; }
+    }
+    m[i] = best >= t2 ? 1 : 0;
+  }
+  return cleanMask(m);
+}
+
+function maskToURL(m, color = [46, 70, 199], alpha = 70) {
+  const { W, H } = state, c = document.createElement("canvas");
+  c.width = W; c.height = H;
+  const ctx = c.getContext("2d"), id = ctx.createImageData(W, H);
+  for (let i = 0; i < W * H; i++) if (m[i]) {
+    id.data[i * 4] = color[0]; id.data[i * 4 + 1] = color[1]; id.data[i * 4 + 2] = color[2]; id.data[i * 4 + 3] = alpha;
+  }
+  ctx.putImageData(id, 0, 0);
+  return c.toDataURL("image/png");
+}
+
+/* ======================= profiles & contours ======================= */
+function rowExtents(m, W, H) {
+  const xmin = new Int32Array(H).fill(-1), xmax = new Int32Array(H).fill(-1);
+  let y0 = -1, y1 = -1;
+  for (let y = 0; y < H; y++) {
+    for (let x = 0; x < W; x++) if (m[y * W + x]) { if (xmin[y] < 0) xmin[y] = x; xmax[y] = x; }
+    if (xmin[y] >= 0) { if (y0 < 0) y0 = y; y1 = y; }
+  }
+  return { xmin, xmax, y0, y1 };
+}
+function findAxis(m, W, H) {
+  const { xmin, xmax, y0, y1 } = rowExtents(m, W, H);
+  const mids = [];
+  for (let y = Math.round(y0 + 0.6 * (y1 - y0)); y <= y1; y++) if (xmin[y] >= 0) mids.push((xmin[y] + xmax[y] + 1) / 2);
+  mids.sort((a, b) => a - b);
+  return mids[Math.floor(mids.length / 2)];
+}
+function symmetryScore(m, W, H) {
+  // IoU of the mask with its mirror image, on a downsampled copy, best axis
+  const s = Math.max(1, Math.round(Math.max(W, H) / 160)), w = Math.ceil(W / s), h = Math.ceil(H / s);
+  const d = new Uint8Array(w * h);
+  for (let y = 0; y < H; y += s) for (let x = 0; x < W; x += s) if (m[y * W + x]) d[(y / s | 0) * w + (x / s | 0)] = 1;
+  let best = 0;
+  for (let c2 = Math.floor(w * 0.5); c2 < Math.floor(w * 1.5); c2++) {
+    let inter = 0, uni = 0;
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+      const a = d[y * w + x], xm = c2 - x, b = xm >= 0 && xm < w ? d[y * w + xm] : 0;
+      if (a && b) inter++; if (a || b) uni++;
+    }
+    if (uni && inter / uni > best) best = inter / uni;
+  }
+  return best;
+}
+function medianFilter(a, k) {
+  const h = k >> 1, out = new Float64Array(a.length);
+  for (let i = 0; i < a.length; i++) {
+    const w = [];
+    for (let j = i - h; j <= i + h; j++) w.push(a[Math.min(a.length - 1, Math.max(0, j))]);
+    w.sort((x, y) => x - y); out[i] = w[h];
+  }
+  return out;
+}
+function gaussian1d(a, sigma) {
+  const r = Math.ceil(sigma * 3), ker = [];
+  let s = 0;
+  for (let i = -r; i <= r; i++) { const v = Math.exp(-(i * i) / (2 * sigma * sigma)); ker.push(v); s += v; }
+  const out = new Float64Array(a.length);
+  for (let i = 0; i < a.length; i++) {
+    let acc = 0;
+    for (let j = -r; j <= r; j++) acc += a[Math.min(a.length - 1, Math.max(0, i + j))] * ker[j + r];
+    out[i] = acc / s;
+  }
+  return out;
+}
+function halfProfile(m, W, H, axis, side, ya, yb, k = 9, sigma = 2) {
+  const { xmin, xmax, y0, y1 } = rowExtents(m, W, H);
+  const ys = [], hw = [];
+  const from = ya === undefined ? y0 : Math.max(ya, y0), to = yb === undefined ? y1 : Math.min(yb, y1);
+  for (let y = from; y <= to; y++) {
+    if (xmin[y] < 0) continue;
+    const L = axis - xmin[y], R = xmax[y] + 1 - axis;
+    ys.push(y); hw.push(Math.max(0, side === "left" ? L : side === "right" ? R : Math.min(L, R)));
+  }
+  const sm = gaussian1d(medianFilter(hw, k), sigma);
+  return { ys, hw: Array.from(sm) };
+}
+function trimFlatEnds(ys, hw, slope = 2.5) {
+  let a = 0, b = hw.length - 1;
+  while (b > a + 2 && hw[b - 1] - hw[b] > slope) b--;
+  while (b > a + 2 && hw[a + 1] - hw[a] > slope) a++;
+  return { ys: ys.slice(a, b + 1), hw: hw.slice(a, b + 1) };
+}
+
+function traceContour(m, W, H) {
+  // Moore-neighbour tracing of the outer boundary of the (single) component
+  const D = [[1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1], [0, -1], [1, -1]];
+  let start = -1;
+  for (let i = 0; i < W * H; i++) if (m[i]) { start = i; break; }
+  if (start < 0) return [];
+  const at = (x, y) => x >= 0 && y >= 0 && x < W && y < H && m[y * W + x];
+  let cx = start % W, cy = (start / W) | 0, back = 4;
+  const sx = cx, sy = cy, startBack = back;
+  const pts = [[cx, cy]];
+  for (let guard = 0; guard < W * H * 4; guard++) {
+    let found = -1;
+    for (let k = 1; k <= 8; k++) {
+      const d = (back + k) % 8;
+      if (at(cx + D[d][0], cy + D[d][1])) { found = d; break; }
+    }
+    if (found < 0) break;
+    const px = cx + D[(found + 7) % 8][0], py = cy + D[(found + 7) % 8][1];
+    cx += D[found][0]; cy += D[found][1];
+    const dx = px - cx, dy = py - cy;
+    back = D.findIndex((v) => v[0] === dx && v[1] === dy);
+    if (cx === sx && cy === sy && back === startBack) break;
+    if (cx === sx && cy === sy && pts.length > 2 && guard > 8) break;
+    pts.push([cx, cy]);
+  }
+  return pts.map(([x, y]) => [x + 0.5, y + 0.5]);
+}
+function smoothClosed(P, w) {
+  const n = P.length, out = [];
+  for (let i = 0; i < n; i++) {
+    let x = 0, y = 0;
+    for (let j = -w; j <= w; j++) { const q = P[(i + j + n) % n]; x += q[0]; y += q[1]; }
+    out.push([x / (2 * w + 1), y / (2 * w + 1)]);
+  }
+  return out;
+}
+function resample(P, step) {
+  const d = [0];
+  for (let i = 1; i < P.length; i++) d.push(d[i - 1] + Math.hypot(P[i][0] - P[i - 1][0], P[i][1] - P[i - 1][1]));
+  const total = d[d.length - 1], out = [];
+  let j = 0;
+  for (let t = 0; t < total; t += step) {
+    while (j < d.length - 2 && d[j + 1] < t) j++;
+    const u = (t - d[j]) / Math.max(1e-9, d[j + 1] - d[j]);
+    out.push([P[j][0] + u * (P[j + 1][0] - P[j][0]), P[j][1] + u * (P[j + 1][1] - P[j][1])]);
+  }
+  const last = P[P.length - 1], ol = out[out.length - 1];
+  if (!ol || Math.hypot(last[0] - ol[0], last[1] - ol[1]) > step * 0.25) out.push(last.slice());
+  return out;
+}
+
+/* ======================= fitting ======================= */
+const cross = (a, b) => a[0] * b[1] - a[1] * b[0];
+function chordDev(P, i, j) {
+  const p0 = P[i], d = [P[j][0] - p0[0], P[j][1] - p0[1]], L = Math.hypot(d[0], d[1]) || 1e-9;
+  let mx = 0, at = i;
+  for (let k = i + 1; k < j; k++) {
+    const v = Math.abs(cross(d, [P[k][0] - p0[0], P[k][1] - p0[1]])) / L;
+    if (v > mx) { mx = v; at = k; }
+  }
+  return { max: mx, at };
+}
+function arcFit(P, i, j) {
+  // circle through both endpoints; centre on the bisector, closed-form algebraic fit
+  const p0 = P[i], p1 = P[j];
+  const mid = [(p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2];
+  const d = [p1[0] - p0[0], p1[1] - p0[1]], L = Math.hypot(d[0], d[1]) || 1e-9;
+  const n = [-d[1] / L, d[0] / L];
+  let num = 0, den = 0;
+  const q0 = p0[0] ** 2 + p0[1] ** 2;
+  for (let k = i; k <= j; k++) {
+    const p = P[k], dp = [p[0] - p0[0], p[1] - p0[1]];
+    const A = p[0] ** 2 + p[1] ** 2 - q0 - 2 * (mid[0] * dp[0] + mid[1] * dp[1]);
+    const B = n[0] * dp[0] + n[1] * dp[1];
+    num += A * B; den += B * B;
+  }
+  const t = den > 1e-9 ? num / (2 * den) : 0;
+  const c = [mid[0] + t * n[0], mid[1] + t * n[1]], r = Math.hypot(p0[0] - c[0], p0[1] - c[1]);
+  let err = 0;
+  for (let k = i; k <= j; k++) err = Math.max(err, Math.abs(Math.hypot(P[k][0] - c[0], P[k][1] - c[1]) - r));
+  return { c, r, err };
+}
+function bulgeSide(P, i, j) {
+  const p0 = P[i], d = [P[j][0] - p0[0], P[j][1] - p0[1]], m = P[(i + j) >> 1];
+  return Math.sign(cross(d, [m[0] - p0[0], m[1] - p0[1]])) || 1;
+}
+function fitRange(P, i, j, tol, rmax) {
+  if (j - i > 3 && Math.hypot(P[j][0] - P[i][0], P[j][1] - P[i][1]) < 1e-6) return null; // a closed loop is never one piece
+  if (j - i < 3 || chordDev(P, i, j).max <= tol) return { type: "line", i, j };
+  const a = arcFit(P, i, j);
+  if (a.err <= tol && a.r <= rmax) return { type: "arc", i, j, r: a.r, side: bulgeSide(P, i, j) };
+  return null;
+}
+function fitPolyline(P, tol, rmax) {
+  const rec = (i, j) => {
+    const s = fitRange(P, i, j, tol, rmax);
+    if (s) return [s];
+    let k = chordDev(P, i, j).at;
+    if (Math.hypot(P[j][0] - P[i][0], P[j][1] - P[i][1]) < 1e-6) { // closed: split at the farthest point
+      let bd = -1;
+      for (let q = i + 1; q < j; q++) { const d = Math.hypot(P[q][0] - P[i][0], P[q][1] - P[i][1]); if (d > bd) { bd = d; k = q; } }
+    }
+    const kk = k <= i || k >= j ? (i + j) >> 1 : k;
+    return rec(i, kk).concat(rec(kk, j));
+  };
+  const segs = rec(0, P.length - 1);
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (let a = 0; a < segs.length - 1; a++) {
+      const s = fitRange(P, segs[a].i, segs[a + 1].j, tol, rmax);
+      if (s) { segs.splice(a, 2, s); changed = true; break; }
+    }
+  }
+  for (const s of segs) { s.p0 = P[s.i].slice(); s.p1 = P[s.j].slice(); s.pts = P.slice(s.i, s.j + 1); }
+  return segs;
+}
+
+function arcGeom(s) {
+  const { p0, p1, r } = s;
+  const d = [p1[0] - p0[0], p1[1] - p0[1]], L = Math.hypot(d[0], d[1]);
+  const mid = [(p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2], n = [-d[1] / L, d[0] / L];
+  const h = Math.sqrt(Math.max(r * r - (L / 2) ** 2, 0));
+  let best = null;
+  for (const sg of [1, -1]) {
+    const c = [mid[0] + sg * h * n[0], mid[1] + sg * h * n[1]];
+    const a0 = Math.atan2(p0[1] - c[1], p0[0] - c[0]), a1 = Math.atan2(p1[1] - c[1], p1[0] - c[0]);
+    for (const sweep of [1, 0]) {
+      let delta = ((a1 - a0) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
+      if (sweep === 0) delta -= 2 * Math.PI;
+      const am = a0 + delta / 2, pm = [c[0] + r * Math.cos(am), c[1] + r * Math.sin(am)];
+      const side = Math.sign(cross(d, [pm[0] - p0[0], pm[1] - p0[1]]));
+      const score = (side !== s.side ? 2 : 0) + (Math.abs(delta) > Math.PI ? 1 : 0);
+      if (!best || score < best.score) best = { score, c, sweep, large: Math.abs(delta) > Math.PI ? 1 : 0, a0, delta };
+    }
+  }
+  return best;
+}
+function arcDev(s, pts) {
+  const g = arcGeom(s);
+  let e = 0;
+  for (const p of pts) e = Math.max(e, Math.abs(Math.hypot(p[0] - g.c[0], p[1] - g.c[1]) - s.r));
+  return e;
+}
+function goldenBase(radii, steps) {
+  if (!radii.length) return 1;
+  const lr = radii.map((r) => steps * Math.log(r) / Math.log(PHI));
+  let best = 0, bestCost = Infinity;
+  for (let o = 0; o <= 1.0001; o += 0.01) {
+    let c = 0;
+    for (const v of lr) { const f = v - o - Math.round(v - o); c += f * f; }
+    if (c < bestCost) { bestCost = c; best = o; }
+  }
+  return Math.pow(PHI, best / steps);
+}
+function snapSegs(segs, grid, base, axis, tol, golden, steps = 2) {
+  const g = (p, onAxis) => {
+    if (!grid) return p.slice();
+    const ox = axis === null ? 0 : axis;
+    const x = onAxis ? axis : ox + Math.round((p[0] - ox) / grid) * grid;
+    return [x, Math.round(p[1] / grid) * grid];
+  };
+  for (const s of segs) {
+    s.p0 = g(s.p0, axis !== null && Math.abs(s.p0[0] - axis) < 1e-6);
+    s.p1 = g(s.p1, axis !== null && Math.abs(s.p1[0] - axis) < 1e-6);
+  }
+  for (let a = 0; a < segs.length - 1; a++) segs[a + 1].p0 = segs[a].p1;
+  const out = segs.filter((s) => Math.hypot(s.p1[0] - s.p0[0], s.p1[1] - s.p0[1]) > 1e-6);
+  for (const s of out) {
+    if (s.type !== "arc") continue;
+    const half = Math.hypot(s.p1[0] - s.p0[0], s.p1[1] - s.p0[1]) / 2;
+    const rFit = Math.max(s.r, half * 1.0001);
+    s.k = null;
+    if (golden) {
+      const kf = steps * Math.log(rFit / base) / Math.log(PHI), k0 = Math.round(kf);
+      const cands = [];
+      for (let k = k0 - 3; k <= k0 + 3; k++) cands.push(k);
+      cands.sort((a, b) => Math.abs(a - kf) - Math.abs(b - kf));
+      for (const k of cands) {
+        const r = base * Math.pow(PHI, k / steps);
+        if (r <= half) continue;
+        s.r = r;
+        if (arcDev(s, s.pts) <= 2 * tol) { s.k = k; break; }
+      }
+    }
+    if (s.k === null) s.r = rFit;
+  }
+  return out;
+}
+function mirrorSegs(segs, axis) {
+  return segs.slice().reverse().map((s) => ({
+    ...s, p0: [2 * axis - s.p1[0], s.p1[1]], p1: [2 * axis - s.p0[0], s.p0[1]],
+  }));
+}
+
+/* ======================= shape builders ======================= */
+function buildMirrorShape(ys, hw, axis, tol, rmax, step) {
+  if (ys.length < 4) return null;
+  const side = ys.map((y, i) => [axis - hw[i], y]);
+  const P = resample([[axis, ys[0]], ...side, [axis, ys[ys.length - 1]]], step);
+  const near = (q) => { let b = 0, bd = Infinity; P.forEach((p, i) => { const d = Math.hypot(p[0] - q[0], p[1] - q[1]); if (d < bd) { bd = d; b = i; } }); return b; };
+  const c0 = Math.max(1, near(side[0])), c1 = Math.min(P.length - 2, near(side[side.length - 1]));
+  const segs = [{ type: "line", i: 0, j: c0, p0: P[0].slice(), p1: P[c0].slice(), pts: P.slice(0, c0 + 1) }];
+  const mid = P.slice(c0, c1 + 1);
+  for (const s of fitPolyline(mid, tol, rmax)) segs.push(s);
+  segs.push({ type: "line", i: c1, j: P.length - 1, p0: P[c1].slice(), p1: P[P.length - 1].slice(), pts: P.slice(c1) });
+  return segs;
+}
+function buildFreeShape(m, W, H, tol, rmax, step) {
+  let C = traceContour(m, W, H);
+  if (C.length < 12) return null;
+  C = resample(smoothClosed(C, 3), step);
+  // start at the sharpest corner so the loop seam lands on a natural break
+  const n = C.length, k = Math.max(2, Math.round(n / 120));
+  let best = 0, bestA = -1;
+  for (let i = 0; i < n; i++) {
+    const a = C[(i - k + n) % n], b = C[i], c = C[(i + k) % n];
+    const v1 = [a[0] - b[0], a[1] - b[1]], v2 = [c[0] - b[0], c[1] - b[1]];
+    const ang = Math.PI - Math.acos(Math.max(-1, Math.min(1, (v1[0] * v2[0] + v1[1] * v2[1]) / (Math.hypot(...v1) * Math.hypot(...v2) || 1))));
+    if (ang > bestA) { bestA = ang; best = i; }
+  }
+  const P = C.slice(best).concat(C.slice(0, best)); P.push(P[0].slice());
+  return fitPolyline(P, tol, rmax);
+}
+
+function subjectBox(m, W, H) {
+  const { xmin, xmax, y0, y1 } = rowExtents(m, W, H);
+  let x0 = W, x1 = 0;
+  for (let y = y0; y <= y1; y++) if (xmin[y] >= 0) { x0 = Math.min(x0, xmin[y]); x1 = Math.max(x1, xmax[y]); }
+  return { x0, x1, y0, y1, w: x1 - x0 + 1, h: y1 - y0 + 1 };
+}
+
+function detailMask(layer) {
+  const { W, H, lab, mask } = state, t2 = layer.thr * layer.thr, [L0, a0, b0] = layer.color;
+  let m = new Uint8Array(W * H);
+  for (let i = 0; i < W * H; i++) {
+    if (!mask[i]) continue;
+    const d = (lab[i * 3] - L0) ** 2 + (lab[i * 3 + 1] - a0) ** 2 + (lab[i * 3 + 2] - b0) ** 2;
+    m[i] = d < t2 ? 1 : 0;
+  }
+  const r = Math.max(2, Math.round(Math.max(W, H) / 110));
+  m = closeMask(m, W, H, r);
+  for (let i = 0; i < W * H; i++) m[i] &= mask[i];
+  return m;
+}
+function nearestOn(m, x, y, W, H, rad) {
+  if (m[y * W + x]) return y * W + x;
+  let best = -1, bd = Infinity;
+  for (let yy = Math.max(0, y - rad); yy <= Math.min(H - 1, y + rad); yy++)
+    for (let xx = Math.max(0, x - rad); xx <= Math.min(W - 1, x + rad); xx++)
+      if (m[yy * W + xx]) { const d = (xx - x) ** 2 + (yy - y) ** 2; if (d < bd) { bd = d; best = yy * W + xx; } }
+  return best;
+}
+
+function buildLayer(layer, ctx) {
+  const { W, H, mask } = state;
+  const dm = detailMask(layer);
+  const seed = nearestOn(dm, layer.x, layer.y, W, H, Math.round(Math.max(W, H) / 40));
+  if (seed < 0) return { error: "No matching color near that spot. Raise the color range." };
+  if (ctx.mirror) {
+    // rows where this color fills most of the object's width; take the run around the tap
+    const { xmin, xmax } = rowExtents(mask, W, H);
+    const on = new Uint8Array(H);
+    for (let y = 0; y < H; y++) {
+      if (xmin[y] < 0) continue;
+      let c = 0; for (let x = xmin[y]; x <= xmax[y]; x++) c += dm[y * W + x];
+      on[y] = c / (xmax[y] - xmin[y] + 1) > 0.6 ? 1 : 0;
+    }
+    const gap = Math.round(ctx.bh * 0.022), sy = (seed / W) | 0;
+    let a = -1, b = -1;
+    for (let y = sy, miss = 0; y >= 0 && miss <= gap; y--) { if (on[y]) { a = y; miss = 0; } else miss++; }
+    for (let y = sy, miss = 0; y < H && miss <= gap; y++) { if (on[y]) { b = y; miss = 0; } else miss++; }
+    if (a < 0 || b < 0 || b - a < 6) return { error: "That color doesn't form a band across the object. Try Free symmetry for this detail." };
+    const pr = halfProfile(dm, W, H, ctx.axis, state.side, a, b, 15, 3);
+    const t = trimFlatEnds(pr.ys, pr.hw);
+    if (t.ys.length < 4) return { error: "That band is too thin to trace." };
+    return { segs: buildMirrorShape(t.ys, t.hw, ctx.axis, ctx.tol, ctx.rmax, ctx.step), dm };
+  }
+  const comp = keepComponent(dm, W, H, seed);
+  const segs = buildFreeShape(fillHoles(comp, W, H), W, H, ctx.tol, ctx.rmax, ctx.step);
+  if (!segs) return { error: "That area is too small to trace." };
+  return { segs, dm: comp };
+}
+
+function compute() {
+  const { W, H, mask } = state;
+  if (!mask) return null;
+  const box = subjectBox(mask, W, H);
+  if (box.w > 0.97 * W && box.h > 0.97 * H) return { error: "The cutout fills the whole photo, so the background wasn't separated. Use the AI cutout, or try a different plain-background value." };
+  if (box.w < 10 || box.h < 10) return { error: "The cutout is empty. Try the AI cutout or adjust the plain-background slider." };
+  if (state.symScore === undefined) state.symScore = symmetryScore(mask, W, H);
+  const mirror = state.mode === "mirror" || (state.mode === "auto" && state.symScore > 0.8);
+  const size = mirror ? box.h : Math.max(box.w, box.h);
+  const tol = state.tol * size, rmax = 4 * size, step = Math.max(1.5, size / 300);
+  const grid = state.grid ? size / state.grid : 0;
+  const ctx = { mirror, tol, rmax, step, bh: box.h, axis: null };
+  const shapes = [];
+  if (mirror) {
+    ctx.axis = findAxis(mask, W, H);
+    const pr = halfProfile(mask, W, H, ctx.axis, state.side);
+    const t = trimFlatEnds(pr.ys.slice(3), pr.hw.slice(3));
+    const segs = buildMirrorShape(t.ys, t.hw, ctx.axis, tol, rmax, step);
+    if (!segs) return { error: "The cutout is too thin to mirror. Try Free symmetry or another cutout." };
+    shapes.push({ name: "body", segs });
+  } else {
+    const segs = buildFreeShape(mask, W, H, tol, rmax, step);
+    if (!segs) return { error: "The cutout is too small to trace." };
+    shapes.push({ name: "body", segs });
+  }
+  for (const layer of state.layers) {
+    const r = buildLayer(layer, ctx);
+    layer.error = r.error || null;
+    if (r.segs) shapes.push({ name: "layer", layer, segs: r.segs });
+    else if (!r.error) layer.error = "That band is too thin to trace.";
+  }
+  const radii = shapes.flatMap((s) => s.segs.filter((q) => q.type === "arc").map((q) => q.r));
+  const base = goldenBase(radii, 2);
+  for (const sh of shapes) {
+    const left = snapSegs(sh.segs, grid, base, mirror ? ctx.axis : null, tol, state.golden);
+    sh.segs = mirror ? left.concat(mirrorSegs(left, ctx.axis)) : left;
+  }
+  if (shapes[0].segs.length < 2) return { error: "The outline collapsed after snapping. Turn the grid down or lower Simplify." };
+  for (let i = shapes.length - 1; i > 0; i--) if (shapes[i].segs.length < 2) { shapes[i].layer.error = "This detail collapsed after snapping."; shapes.splice(i, 1); }
+  const arcs = shapes.flatMap((s) => s.segs.filter((q) => q.type === "arc"));
+  const sizes = new Set(arcs.map((a) => a.k === null ? "f" + Math.round(a.r) : a.k));
+  return {
+    shapes, mirror, axis: ctx.axis, grid: grid || size / 48, size,
+    stats: { pieces: shapes.reduce((n, s) => n + s.segs.length, 0), arcs: arcs.length, sizes: sizes.size },
+  };
+}
+
+/* ======================= rendering ======================= */
+const f2 = (v) => (Math.round(v * 100) / 100).toString();
+function pathD(segs) {
+  let d = `M${f2(segs[0].p0[0])},${f2(segs[0].p0[1])}`;
+  for (const s of segs) {
+    if (s.type === "line") d += ` L${f2(s.p1[0])},${f2(s.p1[1])}`;
+    else { const g = arcGeom(s); d += ` A${f2(s.r)},${f2(s.r)} 0 ${g.large} ${g.sweep} ${f2(s.p1[0])},${f2(s.p1[1])}`; }
+  }
+  return d + " Z";
+}
+function shapeBounds(segs) {
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  const add = (p) => { x0 = Math.min(x0, p[0]); y0 = Math.min(y0, p[1]); x1 = Math.max(x1, p[0]); y1 = Math.max(y1, p[1]); };
+  for (const s of segs) {
+    add(s.p0); add(s.p1);
+    if (s.type === "arc") {
+      const g = arcGeom(s);
+      for (let t = 0; t <= 1; t += 0.05) { const a = g.a0 + g.delta * t; add([g.c[0] + s.r * Math.cos(a), g.c[1] + s.r * Math.sin(a)]); }
+    }
+  }
+  return { x0, y0, x1, y1, w: x1 - x0, h: y1 - y0 };
+}
+const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+function constructionSVG(res, forExport) {
+  const { W, H } = state, sw = Math.max(W, H) / 600;
+  const o = [`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">`];
+  o.push(`<image href="${state.photoURL}" width="${W}" height="${H}" opacity="0.32"/>`);
+  if (state.showMask && state.maskURL && !forExport) o.push(`<image href="${state.maskURL}" width="${W}" height="${H}"/>`);
+  if (res && !res.error) {
+    if (res.mirror) o.push(`<line x1="${f2(res.axis)}" y1="0" x2="${f2(res.axis)}" y2="${H}" stroke="#F2A516" stroke-width="${f2(sw * 1.4)}" stroke-dasharray="${f2(sw * 7)} ${f2(sw * 6)}"/>`);
+    if (state.showCircles) {
+      const seen = new Set();
+      o.push(`<g fill="none" stroke="currentColor" stroke-width="${f2(sw)}" opacity="0.55">`);
+      for (const sh of res.shapes) for (const s of sh.segs) {
+        if (s.type === "arc") {
+          const g = arcGeom(s), key = `${Math.round(g.c[0])},${Math.round(g.c[1])},${Math.round(s.r)}`;
+          if (seen.has(key)) continue; seen.add(key);
+          o.push(`<circle cx="${f2(g.c[0])}" cy="${f2(g.c[1])}" r="${f2(s.r)}"/>`);
+        } else {
+          const d = [s.p1[0] - s.p0[0], s.p1[1] - s.p0[1]], L = Math.hypot(...d) || 1, e = 18 * sw;
+          o.push(`<line x1="${f2(s.p0[0] - d[0] / L * e)}" y1="${f2(s.p0[1] - d[1] / L * e)}" x2="${f2(s.p1[0] + d[0] / L * e)}" y2="${f2(s.p1[1] + d[1] / L * e)}"/>`);
+        }
+      }
+      o.push(`</g>`);
+    }
+    for (const sh of res.shapes) {
+      const col = sh.name === "body" ? "#2E46C7" : "#E8590C";
+      o.push(`<path d="${pathD(sh.segs)}" fill="none" stroke="${col}" stroke-width="${f2(sw * 2.4)}" stroke-linejoin="round"/>`);
+    }
+  }
+  o.push(`</svg>`);
+  let s = o.join("\n");
+  if (forExport) s = s.replace('stroke="currentColor"', 'stroke="#2F3337"');
+  return s;
+}
+
+const FONTS = {
+  "Archivo": { family: "Archivo", weight: 800, wdth: 100, css: "Archivo:wdth,wght@62..125,100..900" },
+  "Archivo Expanded": { family: "Archivo", weight: 850, wdth: 125, css: "Archivo:wdth,wght@62..125,100..900" },
+  "Fraunces": { family: "Fraunces", weight: 600, wdth: 100, css: "Fraunces:opsz,wght@9..144,600" },
+  "Syne": { family: "Syne", weight: 700, wdth: 100, css: "Syne:wght@700" },
+  "Helvetica": { family: "Helvetica", weight: 700, wdth: 100, css: null },
+};
+function markLayout(res) {
+  const body = res.shapes[0], b = shapeBounds(body.segs);
+  const word = state.word.trim();
+  const pad = b.h * 0.2, textSize = b.h * 0.13, gapT = b.h * 0.16;
+  const contentH = b.h + (word ? gapT + textSize : 0);
+  const S = Math.max(b.w, contentH) + 2 * pad;
+  const cx = (b.x0 + b.x1) / 2, top = b.y0 - (S - contentH) / 2;
+  return { b, word, textSize, textY: b.y1 + gapT + textSize * 0.78, S, vx: cx - S / 2, vy: top, cx };
+}
+function markSVG(res, forExport) {
+  const L = markLayout(res), gapW = res.grid * 0.9, fnt = FONTS[state.font];
+  const o = [`<svg xmlns="http://www.w3.org/2000/svg" viewBox="${f2(L.vx)} ${f2(L.vy)} ${f2(L.S)} ${f2(L.S)}"${forExport ? ' width="1024" height="1024"' : ""} preserveAspectRatio="xMidYMid meet">`];
+  if (forExport && L.word && fnt.css) o.push(`<style>@import url('https://fonts.googleapis.com/css2?family=${fnt.css}&amp;display=swap');</style>`);
+  o.push(`<rect x="${f2(L.vx)}" y="${f2(L.vy)}" width="${f2(L.S)}" height="${f2(L.S)}" fill="${state.bg}"/>`);
+  o.push(`<path d="${pathD(res.shapes[0].segs)}" fill="${state.fg}"/>`);
+  for (const sh of res.shapes.slice(1)) {
+    if (sh.layer.style === "knock") o.push(`<path d="${pathD(sh.segs)}" fill="${state.bg}"/>`);
+    else o.push(`<path d="${pathD(sh.segs)}" fill="${state.fg}" stroke="${state.bg}" stroke-width="${f2(gapW)}" stroke-linejoin="round" paint-order="stroke"/>`);
+  }
+  if (L.word) {
+    o.push(`<text x="${f2(L.cx)}" y="${f2(L.textY)}" text-anchor="middle" font-family="'${fnt.family}', Helvetica, Arial, sans-serif" font-weight="${fnt.weight}" font-size="${f2(L.textSize)}" style="font-variation-settings:'wdth' ${fnt.wdth}" fill="${state.fg}">${esc(L.word)}</text>`);
+  }
+  o.push(`</svg>`);
+  return o.join("\n");
+}
+
+function render() {
+  if (!state.mask) return;
+  let res;
+  try { res = compute(); } catch (e) { console.error(e); res = { error: "This cutout couldn't be traced. Try the AI cutout, a different plain-background value, or Free symmetry." }; }
+  state.result = res;
+  const cons = $("consBox"), mark = $("markBox");
+  cons.innerHTML = constructionSVG(res, false);
+  if (state.picking) cons.insertAdjacentHTML("beforeend", `<div class="hint">Tap the part you want to keep as a detail.</div>`);
+  if (!res || res.error) {
+    mark.innerHTML = `<div class="empty"><p>${res ? res.error : ""}</p></div>`;
+    $("stats").textContent = "";
+    ["btnSvg", "btnPng", "btnSvgCons"].forEach((b) => ($(b).disabled = true));
+  } else {
+    mark.innerHTML = markSVG(res, false);
+    $("stats").textContent = `${res.stats.pieces} pieces, ${res.stats.arcs} arcs, ${res.stats.sizes} circle sizes`;
+    $("markMeta").textContent = res.mirror ? "Mirrored" : "Free outline";
+    ["btnSvg", "btnPng", "btnSvgCons"].forEach((b) => ($(b).disabled = false));
+  }
+  $("sideField").style.display = res && res.mirror ? "" : "none";
+  renderLayers();
+}
+let raf = 0;
+const schedule = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(render); };
+
+function renderLayers() {
+  const box = $("layers");
+  box.innerHTML = "";
+  state.layers.forEach((L, idx) => {
+    const el = document.createElement("div");
+    el.className = "layer";
+    el.innerHTML = `
+      <div class="row"><strong><span class="swatch" style="background:${L.hex}"></span>Detail ${idx + 1}</strong>
+        <button class="btn small ghost" data-act="del">Remove</button></div>
+      <div class="field"><div class="row"><label>Color range</label><span class="val">${L.thr}</span></div>
+        <input type="range" min="4" max="45" value="${L.thr}" data-act="thr" aria-label="Color range for detail ${idx + 1}"></div>
+      <div class="seg" role="group" aria-label="Detail style">
+        <button data-act="style" data-v="gap" aria-pressed="${L.style === "gap"}">Outline gap</button>
+        <button data-act="style" data-v="knock" aria-pressed="${L.style === "knock"}">Cut out</button>
+      </div>
+      ${L.error ? `<div class="status err">${L.error}</div>` : ""}`;
+    el.querySelector('[data-act="del"]').onclick = () => { state.layers.splice(idx, 1); schedule(); };
+    const thr = el.querySelector('[data-act="thr"]');
+    thr.oninput = () => { L.thr = +thr.value; el.querySelector(".val").textContent = L.thr; schedule(); };
+    el.querySelectorAll('[data-act="style"]').forEach((b) => (b.onclick = () => { L.style = b.dataset.v; schedule(); }));
+    box.appendChild(el);
+  });
+}
+
+/* ======================= loading ======================= */
+async function loadFile(file) {
+  if (!file || !file.type.startsWith("image/")) { setStatus("That file isn't an image. Choose a JPG, PNG or WebP.", true); return; }
+  state.fileName = (file.name || "mark").replace(/\.[^.]+$/, "");
+  const bmp = await createImageBitmap(file);
+  const s = Math.min(1, MAXSIDE / Math.max(bmp.width, bmp.height));
+  const W = Math.round(bmp.width * s), H = Math.round(bmp.height * s);
+  const c = document.createElement("canvas"); c.width = W; c.height = H;
+  const ctx = c.getContext("2d"); ctx.drawImage(bmp, 0, 0, W, H);
+  const rgba = ctx.getImageData(0, 0, W, H).data;
+  // flatten transparency onto white for the faded photo
+  const flat = document.createElement("canvas"); flat.width = W; flat.height = H;
+  const fctx = flat.getContext("2d"); fctx.fillStyle = "#fff"; fctx.fillRect(0, 0, W, H); fctx.drawImage(c, 0, 0);
+  Object.assign(state, { W, H, rgba, photoURL: flat.toDataURL("image/jpeg", 0.85), layers: [], symScore: undefined, mask: null, sourceFile: file });
+  computeLab();
+  $("consBox").classList.remove("drop");
+  let transparent = 0;
+  for (let i = 3; i < rgba.length; i += 4) if (rgba[i] < 128) transparent++;
+  $("btnAI").disabled = false; $("bgThr").disabled = false; $("btnPick").disabled = false;
+  if (transparent > W * H * 0.02) {
+    const m = new Uint8Array(W * H);
+    for (let i = 0; i < W * H; i++) m[i] = rgba[i * 4 + 3] >= 128 ? 1 : 0;
+    setMask(cleanMask(m));
+    $("cutNote").textContent = "Using the transparent areas of your PNG as the cutout.";
+  } else {
+    setMask(quickCutout(+$("bgThr").value));
+    $("cutNote").textContent = "Showing a quick plain-background cutout. If the outline looks wrong, use the AI cutout.";
+  }
+  setStatus("Downloads a ~200 MB model the first time and runs on this device. Best on a laptop or desktop.");
+}
+function setMask(m) {
+  state.mask = m; state.symScore = undefined;
+  state.maskURL = maskToURL(m);
+  schedule();
+}
+function setStatus(msg, err) { const s = $("aiStatus"); s.textContent = msg; s.classList.toggle("err", !!err); }
+
+/* ======================= AI cutout (BiRefNet lite, in-browser) ======================= */
+let aiModel = null;
+async function loadAI(T, device, onProgress) {
+  const id = "onnx-community/BiRefNet_lite-ONNX";
+  const model = await T.AutoModel.from_pretrained(id, { dtype: "fp32", device, progress_callback: onProgress });
+  const processor = await T.AutoProcessor.from_pretrained(id);
+  return { model, processor, device };
+}
+async function inferAI(T) {
+  const image = await T.RawImage.fromBlob(state.sourceFile);
+  const { pixel_values } = await aiModel.processor(image);
+  const { output_image } = await aiModel.model({ input_image: pixel_values });
+  const raw = await T.RawImage.fromTensor(output_image[0].sigmoid().mul(255).to("uint8")).resize(state.W, state.H);
+  const ch = raw.channels || 1, m = new Uint8Array(state.W * state.H);
+  for (let i = 0; i < m.length; i++) m[i] = raw.data[i * ch] > 127 ? 1 : 0;
+  return m;
+}
+async function runAI() {
+  const btn = $("btnAI"), bar = $("aiBar"), fill = bar.firstElementChild;
+  btn.disabled = true; bar.hidden = false; fill.style.width = "3%";
+  try {
+    const T = await import("https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.5.1");
+    const files = {};
+    const onProgress = (p) => {
+      if (p.status === "progress" && p.total) {
+        files[p.file] = [p.loaded, p.total];
+        const all = Object.values(files), got = all.reduce((a, v) => a + v[0], 0), tot = all.reduce((a, v) => a + v[1], 0);
+        fill.style.width = `${Math.max(3, Math.round((got / tot) * 90))}%`;
+        setStatus(`Downloading the model… ${Math.round(got / 1e6)} of ${Math.round(tot / 1e6)} MB`);
+      }
+    };
+    let m = null;
+    if (!aiModel) {
+      setStatus("Downloading the model…");
+      let gpu = false;
+      try { gpu = !!(navigator.gpu && (await navigator.gpu.requestAdapter())); } catch (e) { gpu = false; }
+      if (gpu) {
+        try {
+          aiModel = await loadAI(T, "webgpu", onProgress);
+          setStatus("Finding the object on the GPU…"); fill.style.width = "94%";
+          m = await inferAI(T);
+        } catch (e) {
+          console.warn("WebGPU failed, using CPU", e);
+          aiModel = null;
+        }
+      }
+      if (!aiModel) aiModel = await loadAI(T, "wasm", onProgress);
+    }
+    if (!m) {
+      setStatus(aiModel.device === "webgpu" ? "Finding the object on the GPU…" : "Finding the object on the CPU. This can take a minute…");
+      fill.style.width = "94%";
+      await new Promise((r) => setTimeout(r, 40));
+      m = await inferAI(T);
+    }
+    setMask(cleanMask(m));
+    fill.style.width = "100%";
+    $("cutNote").textContent = "Using the AI cutout.";
+    setStatus("Done. The model stays loaded for your next photo while this page is open.");
+  } catch (e) {
+    console.error(e);
+    setStatus(`The AI cutout failed (${e.message || e}). Check your connection, or open a transparent PNG cutout instead.`, true);
+  } finally {
+    btn.disabled = false; setTimeout(() => (bar.hidden = true), 800);
+  }
+}
+
+/* ======================= export ======================= */
+function download(name, blob) {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+}
+async function exportPNG() {
+  const res = state.result; if (!res || res.error) return;
+  const L = markLayout(res), N = 2048, c = document.createElement("canvas");
+  c.width = N; c.height = N;
+  const ctx = c.getContext("2d"), k = N / L.S;
+  ctx.setTransform(k, 0, 0, k, -L.vx * k, -L.vy * k);
+  ctx.fillStyle = state.bg; ctx.fillRect(L.vx, L.vy, L.S, L.S);
+  ctx.fillStyle = state.fg; ctx.fill(new Path2D(pathD(res.shapes[0].segs)));
+  for (const sh of res.shapes.slice(1)) {
+    const p = new Path2D(pathD(sh.segs));
+    if (sh.layer.style === "knock") { ctx.fillStyle = state.bg; ctx.fill(p); }
+    else { ctx.strokeStyle = state.bg; ctx.lineWidth = res.grid * 0.9; ctx.lineJoin = "round"; ctx.stroke(p); ctx.fillStyle = state.fg; ctx.fill(p); }
+  }
+  if (L.word) {
+    const f = FONTS[state.font];
+    const fam = f.family === "Helvetica" ? "Helvetica, Arial, sans-serif" : `"${f.family}", Helvetica, Arial, sans-serif`;
+    if (f.wdth !== 100) c.style.fontStretch = "125%";
+    try { await document.fonts.load(`${f.weight} 40px "${f.family}"`); } catch (e) { /* fallback font */ }
+    ctx.font = `${f.wdth === 125 ? "expanded " : ""}${f.weight} ${L.textSize}px ${fam}`;
+    if ("fontStretch" in ctx && f.wdth === 125) ctx.fontStretch = "expanded";
+    ctx.textAlign = "center"; ctx.fillStyle = state.fg;
+    ctx.fillText(L.word, L.cx, L.textY);
+  }
+  c.toBlob((b) => download(`${state.fileName}-mark.png`, b), "image/png");
+}
+
+/* ======================= wiring ======================= */
+function bindSeg(id, key, after) {
+  const seg = $(id);
+  seg.querySelectorAll("button").forEach((b) => (b.onclick = () => {
+    seg.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", x === b));
+    state[key] = b.dataset.v; if (after) after(); schedule();
+  }));
+}
+bindSeg("modeSeg", "mode");
+bindSeg("sideSeg", "side");
+
+const gridSteps = [0, 24, 48, 96, 192];
+const gridLabel = (v) => (v ? `${v} rows` : "Off");
+function syncLabels() {
+  $("tolVal").textContent = `${(state.tol * 100).toFixed(1)}% of height`;
+  $("gridVal").textContent = gridLabel(state.grid);
+  $("bgThrVal").textContent = $("bgThr").value;
+}
+$("tol").oninput = (e) => { state.tol = +e.target.value / 1000; syncLabels(); schedule(); };
+$("grid").oninput = (e) => { state.grid = gridSteps[+e.target.value]; syncLabels(); schedule(); };
+$("golden").onchange = (e) => { state.golden = e.target.checked; schedule(); };
+$("showCircles").onchange = (e) => { state.showCircles = e.target.checked; schedule(); };
+$("showMask").onchange = (e) => { state.showMask = e.target.checked; schedule(); };
+let bgT = 0;
+$("bgThr").oninput = () => {
+  syncLabels();
+  clearTimeout(bgT);
+  bgT = setTimeout(() => { if (state.lab) { setMask(quickCutout(+$("bgThr").value)); $("cutNote").textContent = "Using the plain-background cutout."; } }, 120);
+};
+$("fg").oninput = (e) => { state.fg = e.target.value; schedule(); };
+$("bg").oninput = (e) => { state.bg = e.target.value; schedule(); };
+$("word").oninput = (e) => { state.word = e.target.value; schedule(); };
+$("font").onchange = (e) => { state.font = e.target.value; document.fonts.ready.then(schedule); schedule(); };
+
+const PAIRS = [["#000000", "#F2A516"], ["#F7F3E8", "#1F3A2E"], ["#1B1B1B", "#E9E4DA"], ["#FFFFFF", "#2E46C7"], ["#3B1F14", "#E8B7A1"]];
+PAIRS.forEach(([fg, bg]) => {
+  const b = document.createElement("button");
+  b.style.background = `linear-gradient(135deg, ${bg} 50%, ${fg} 50%)`;
+  b.setAttribute("aria-label", `Mark ${fg} on ${bg}`);
+  b.onclick = () => { state.fg = fg; state.bg = bg; $("fg").value = fg; $("bg").value = bg; schedule(); };
+  $("palette").appendChild(b);
+});
+
+$("btnOpen").onclick = $("btnNew").onclick = () => $("file").click();
+$("file").onchange = (e) => { if (e.target.files[0]) loadFile(e.target.files[0]); e.target.value = ""; };
+$("btnAI").onclick = runAI;
+$("btnPick").onclick = () => {
+  state.picking = !state.picking;
+  $("btnPick").textContent = state.picking ? "Cancel" : "Add detail from photo";
+  $("consBox").classList.toggle("picking", state.picking);
+  showTab("cons"); schedule();
+};
+$("consBox").addEventListener("pointerdown", (e) => {
+  if (!state.picking || !state.mask) return;
+  const svg = $("consBox").querySelector("svg"); if (!svg) return;
+  const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
+  const p = pt.matrixTransform(svg.getScreenCTM().inverse());
+  const x = Math.round(p.x), y = Math.round(p.y), { W, H, lab, rgba } = state;
+  if (x < 0 || y < 0 || x >= W || y >= H) return;
+  let L = 0, a = 0, b = 0, R = 0, G = 0, B = 0, n = 0;
+  for (let yy = Math.max(0, y - 2); yy <= Math.min(H - 1, y + 2); yy++)
+    for (let xx = Math.max(0, x - 2); xx <= Math.min(W - 1, x + 2); xx++) {
+      const i = yy * W + xx; L += lab[i * 3]; a += lab[i * 3 + 1]; b += lab[i * 3 + 2];
+      R += rgba[i * 4]; G += rgba[i * 4 + 1]; B += rgba[i * 4 + 2]; n++;
+    }
+  const hex = "#" + [R, G, B].map((v) => Math.round(v / n).toString(16).padStart(2, "0")).join("");
+  state.layers.push({ x, y, color: [L / n, a / n, b / n], hex, thr: 18, style: "gap" });
+  state.picking = false; $("btnPick").textContent = "Add detail from photo"; $("consBox").classList.remove("picking");
+  schedule();
+});
+
+$("btnSvg").onclick = () => download(`${state.fileName}-mark.svg`, new Blob([markSVG(state.result, true)], { type: "image/svg+xml" }));
+$("btnSvgCons").onclick = () => download(`${state.fileName}-construction.svg`, new Blob([constructionSVG(state.result, true)], { type: "image/svg+xml" }));
+$("btnPng").onclick = exportPNG;
+
+function showTab(t) {
+  document.querySelectorAll(".tabs button").forEach((b) => b.setAttribute("aria-selected", b.dataset.tab === t));
+  $("paneCons").toggleAttribute("hidden-mobile", t !== "cons");
+  $("paneMark").toggleAttribute("hidden-mobile", t !== "mark");
+}
+document.querySelectorAll(".tabs button").forEach((b) => (b.onclick = () => showTab(b.dataset.tab)));
+
+const drop = $("consBox");
+["dragenter", "dragover"].forEach((ev) => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.add("over"); }));
+["dragleave", "drop"].forEach((ev) => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.remove("over"); }));
+drop.addEventListener("drop", (e) => { const f = e.dataTransfer.files[0]; if (f) loadFile(f); });
+window.addEventListener("dragover", (e) => e.preventDefault());
+window.addEventListener("drop", (e) => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f) loadFile(f); });
+
+syncLabels();
+</script>
+</body>
+</html>
